@@ -1,4 +1,4 @@
-package enteties.utils;
+package by.fpmibsu.edudocs.enteties.utils;
 
 public enum LessonType {
     Lecture,

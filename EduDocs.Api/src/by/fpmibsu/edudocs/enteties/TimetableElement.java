@@ -1,7 +1,7 @@
-package enteties;
+package by.fpmibsu.edudocs.enteties;
 
-import enteties.utils.LessonType;
-import enteties.utils.WeekDay;
+import by.fpmibsu.edudocs.enteties.utils.LessonType;
+import by.fpmibsu.edudocs.enteties.utils.WeekDay;
 
 import java.util.UUID;
 

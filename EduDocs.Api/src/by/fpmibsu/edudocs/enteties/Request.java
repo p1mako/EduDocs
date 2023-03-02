@@ -1,6 +1,6 @@
-package enteties;
+package by.fpmibsu.edudocs.enteties;
 
-import enteties.utils.RequestStatus;
+import by.fpmibsu.edudocs.enteties.utils.RequestStatus;
 
 import java.sql.Timestamp;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package enteties;
+package by.fpmibsu.edudocs.enteties;
 
 import java.util.UUID;
 

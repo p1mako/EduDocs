@@ -1,6 +1,6 @@
-package enteties;
+package by.fpmibsu.edudocs.enteties;
 
-import enteties.utils.DocumentType;
+import by.fpmibsu.edudocs.enteties.utils.DocumentType;
 
 import java.sql.Date;
 import java.sql.Timestamp;
