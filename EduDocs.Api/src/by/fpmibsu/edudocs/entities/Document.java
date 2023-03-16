@@ -1,6 +1,5 @@
-package by.fpmibsu.edudocs.enteties;
+package by.fpmibsu.edudocs.entities;
 
-import by.fpmibsu.edudocs.enteties.utils.DocumentType;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -8,8 +7,9 @@ import java.util.UUID;
 
 public class Document {
     UUID uuid;
-    DocumentType type;
+    Template template;
     Timestamp created;
     Date validThrough;
-    AdministrationMember origin;
+    AdministrationMember author;
+    User initiator;
 }
