@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs.enteties;
+package by.fpmibsu.edudocs.entities;
 
 public class Professor extends User{
     String degree;
