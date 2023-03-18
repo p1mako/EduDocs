@@ -2,8 +2,8 @@ package by.fpmibsu.edudocs.entities;
 
 import java.util.UUID;
 
-public abstract class User {
-    UUID uuid;
+public class User {
+    UUID id;
     String login;
     String password;
     String name;
