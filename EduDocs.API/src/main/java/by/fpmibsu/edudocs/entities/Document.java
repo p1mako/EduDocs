@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Document {
-    UUID uuid;
+    UUID id;
     Template template;
     Timestamp created;
     Date validThrough;
