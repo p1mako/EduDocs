@@ -9,6 +9,4 @@ public class Request extends Entity{
     RequestStatus status = RequestStatus.Sent;
     Timestamp created;
     Document document;
-    String message;
-
 }
