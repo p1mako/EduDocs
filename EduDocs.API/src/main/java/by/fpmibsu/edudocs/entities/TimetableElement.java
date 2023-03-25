@@ -5,8 +5,7 @@ import by.fpmibsu.edudocs.entities.utils.WeekDay;
 
 import java.util.UUID;
 
-public class TimetableElement {
-    UUID id;
+public class TimetableElement extends Entity {
     Discipline subject;
     WeekDay dayOfWeek;
     int lessonNum;
