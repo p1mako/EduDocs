@@ -5,8 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class Document {
-    UUID id;
+public class Document extends Entity{
     Template template;
     Timestamp created;
     Date validThrough;

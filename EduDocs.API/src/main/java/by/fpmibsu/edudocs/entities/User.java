@@ -2,8 +2,7 @@ package by.fpmibsu.edudocs.entities;
 
 import java.util.UUID;
 
-public class User {
-    UUID id;
+public class User extends Entity{
     String login;
     String password;
     String name;

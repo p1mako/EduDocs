@@ -2,8 +2,7 @@ package by.fpmibsu.edudocs.entities;
 
 import java.util.UUID;
 
-public class Location {
-    UUID id;
+public class Location extends Entity{
     String address;
     String auditorium;
 }
