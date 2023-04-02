@@ -55,26 +55,3 @@ CREATE TABLE Messages(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
                       time DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
                       request UNIQUEIDENTIFIER NOT NULL ,
                       FOREIGN KEY (request) REFERENCES Requests(id));
-CREATE TABLE Disciplines(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                            nam NVARCHAR(128) NOT NULL ,
-                            year CHAR(4) NOT NULL ,
-                            lecturer UNIQUEIDENTIFIER NOT NULL ,
-                            specialization UNIQUEIDENTIFIER NOT NULL,
-                            FOREIGN KEY (lecturer) REFERENCES Professors(id),
-                            FOREIGN KEY (specialization) REFERENCES Specializations(id))
-CREATE TABLE Locations(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                        address NVARCHAR(128) NOT NULL,
-                        auditorium NVARCHAR(4) NOT NULL);
-
-CREATE TABLE TimetableElements(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                                day_of_week TINYINT NOT NULL ,
-                                location UNIQUEIDENTIFIER NOT NULL ,
-                                lesson_type TINYINT NOT NULL,
-                                professor UNIQUEIDENTIFIER NOT NULL,
-                                lesson_num CHAR(1),
-                                discipline UNIQUEIDENTIFIER,
-                                start_time TIME NOT NULL ,
-                                end_time TIME NOT NULL ,
-                                FOREIGN KEY (location) REFERENCES Locations(id),
-                                FOREIGN KEY (professor) REFERENCES  Professors(id),
-                                FOREIGN KEY (discipline) REFERENCES Disciplines(id));
