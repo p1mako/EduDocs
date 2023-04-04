@@ -13,11 +13,11 @@ CREATE TABLE Admins(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
                     role TINYINT NOT NULL,
                     FOREIGN KEY (id) REFERENCES Users (id));
 CREATE TABLE Professors(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-                        degree NVARCHAR(128),
+                        degree NVARCHAR(128) NOT NULL,
                        FOREIGN KEY (id) REFERENCES Users (id));
 CREATE TABLE Specializations(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                             name NVARCHAR(128),
-                             registerNumber NVARCHAR(30));
+                             name NVARCHAR(128) NOT NULL ,
+                             registerNumber NVARCHAR(30) NOT NULL);
 CREATE TABLE Students(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
                         group_num TINYINT,
                         status TINYINT NOT NULL,
@@ -46,8 +46,8 @@ CREATE TABLE Documents(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID())
                         FOREIGN KEY (author) REFERENCES Admins(id),
                         FOREIGN KEY (initiator) REFERENCES Users(id));
 CREATE TABLE Requests(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                        created DATETIME2,
-                        status TINYINT,
+                        created DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+                        status TINYINT NOT NULL,
                         document UNIQUEIDENTIFIER,
                         FOREIGN KEY (document) REFERENCES Documents(id));
 CREATE TABLE Messages(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
