@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 

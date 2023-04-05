@@ -1,9 +1,7 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public abstract class AbstractUserDao extends AbstractDao<User> {

@@ -1,18 +1,18 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public class SpecializationDao extends AbstractDao{
+public class TemplatesDao<T extends User> extends AbstractDao<T> {
     @Override
-    public List findAll() {
+    public List<T> findAll() {
         return null;
     }
 
     @Override
-    public User findEntityById(UUID id) {
+    public T findEntityById(UUID id) {
         return null;
     }
 
@@ -22,17 +22,17 @@ public class SpecializationDao extends AbstractDao{
     }
 
     @Override
-    public boolean delete(User entity) {
+    public boolean delete(T entity) {
         return false;
     }
 
     @Override
-    public boolean create(User entity) {
+    public boolean create(T entity) {
         return false;
     }
 
     @Override
-    public User update(User entity) {
+    public T update(T entity) {
         return null;
     }
 }
