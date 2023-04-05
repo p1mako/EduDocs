@@ -5,14 +5,14 @@ import by.fpmibsu.edudocs.entities.User;
 import java.util.List;
 import java.util.UUID;
 
-public class MessageDao<T extends User> extends AbstractDao<T> {
+public class SpecializationDao extends AbstractDao{
     @Override
-    public List<T> findAll() {
+    public List findAll() {
         return null;
     }
 
     @Override
-    public T findEntityById(UUID id) {
+    public User findEntityById(UUID id) {
         return null;
     }
 
@@ -22,17 +22,17 @@ public class MessageDao<T extends User> extends AbstractDao<T> {
     }
 
     @Override
-    public boolean delete(T entity) {
+    public boolean delete(User entity) {
         return false;
     }
 
     @Override
-    public boolean create(T entity) {
+    public boolean create(User entity) {
         return false;
     }
 
     @Override
-    public T update(T entity) {
+    public User update(User entity) {
         return null;
     }
 }
