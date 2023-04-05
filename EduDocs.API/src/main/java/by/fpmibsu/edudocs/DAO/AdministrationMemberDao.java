@@ -5,10 +5,10 @@ import by.fpmibsu.edudocs.entities.User;
 import java.util.List;
 import java.util.UUID;
 
-public class AdministratorDao extends AbstractUserDao{
+public class AdministrationMemberDao extends AbstractUserDao{
     @Override
     public List<User> findAll() {
-        //Add sql
+        //TODO Add sql
         return null;
     }
 
