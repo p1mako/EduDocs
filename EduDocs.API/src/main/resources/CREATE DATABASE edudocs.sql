@@ -55,8 +55,3 @@ CREATE TABLE Requests(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
                         status TINYINT NOT NULL,
                         document UNIQUEIDENTIFIER,
                         FOREIGN KEY (document) REFERENCES Documents(id));
-CREATE TABLE Messages(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
-                      text NVARCHAR(128) NOT NULL ,
-                      time DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-                      request UNIQUEIDENTIFIER NOT NULL ,
-                      FOREIGN KEY (request) REFERENCES Requests(id));

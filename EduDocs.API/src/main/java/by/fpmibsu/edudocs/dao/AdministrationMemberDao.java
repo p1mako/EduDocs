@@ -1,14 +1,14 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public class UserDao extends AbstractDao<User> {
+public class AdministrationMemberDao extends AbstractUserDao{
     @Override
     public List<User> findAll() {
-        //TODO add sql
+        //TODO Add sql
         return null;
     }
 
@@ -20,7 +20,7 @@ public class UserDao extends AbstractDao<User> {
 
     @Override
     public boolean delete(UUID id) {
-        //TODO TODO add sql
+        //TODO add sql
         //else return false;
         return true;
     }

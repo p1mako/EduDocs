@@ -1,11 +1,11 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public class AdministratorDao extends AbstractUserDao{
+public class ProfessorDao extends AbstractUserDao{
     @Override
     public List<User> findAll() {
         //Add sql

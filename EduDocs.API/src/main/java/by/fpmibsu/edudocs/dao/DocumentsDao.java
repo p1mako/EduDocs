@@ -1,11 +1,11 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public class MessageDao<T extends User> extends AbstractDao<T> {
+public class DocumentsDao<T extends User> extends AbstractDao<T> {
     @Override
     public List<T> findAll() {
         return null;
