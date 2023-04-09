@@ -1,8 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.entities.Entity;
 import by.fpmibsu.edudocs.entities.Specialization;
-import by.fpmibsu.edudocs.entities.User;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -26,13 +26,13 @@ public class StudentDao extends AbstractUserDao {
             String id = result.getString("id");
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, id.toString());
+            statementUser.setString(1, id);
             ResultSet resultUser = statementUser.executeQuery();
 
             String idSpec = result.getString("specialization");
             String sqlSpec = "SELECT * FROM Specializations Where id = ?";
             PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
-            statementUser.setString(1, idSpec.toString());
+            statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
             User user = new Student(UUID.fromString(id),
@@ -74,7 +74,7 @@ public class StudentDao extends AbstractUserDao {
         String idSpec = result.getString("specialization");
         String sqlSpec = "SELECT * FROM Specializations Where id = ?";
         PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
-        statementUser.setString(1, idSpec.toString());
+        statementUser.setString(1, idSpec);
         ResultSet resultSpec = statementUser.executeQuery();
 
         User user = new Student(id,
@@ -102,7 +102,7 @@ public class StudentDao extends AbstractUserDao {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Students WHERE id = ?";
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
             statement.setString(1, id.toString());
