@@ -142,7 +142,7 @@ public class StudentDao extends AbstractUserDao {
 
     @Override
     public User update(User entity) throws SQLException {
-        String sql = "UPDATE Student SET group_num = ?, status = ?, entry_date = ?, uniqueNumber = ?, specialization = ? WHERE id = ?";
+        String sql = "UPDATE Students SET group_num = ?, status = ?, entry_date = ?, uniqueNumber = ?, specialization = ? WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         Student student = (Student)entity;
         statement.setString(1, String.valueOf(student.getGroup()));

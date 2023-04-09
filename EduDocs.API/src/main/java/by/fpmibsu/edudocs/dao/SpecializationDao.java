@@ -1,18 +1,22 @@
 package by.fpmibsu.edudocs.dao;
 
+import by.fpmibsu.edudocs.entities.Entity;
+import by.fpmibsu.edudocs.entities.Specialization;
 import by.fpmibsu.edudocs.entities.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-public class SpecializationDao extends AbstractDao{
+public class SpecializationDao extends AbstractDao<Specialization>{
+
     @Override
-    public List findAll() {
+    public List<Specialization> findAll() throws SQLException {
         return null;
     }
 
     @Override
-    public User findEntityById(UUID id) {
+    public Specialization findEntityById(UUID id) throws SQLException {
         return null;
     }
 
@@ -22,17 +26,17 @@ public class SpecializationDao extends AbstractDao{
     }
 
     @Override
-    public boolean delete(User entity) {
+    public boolean delete(Specialization entity) {
         return false;
     }
 
     @Override
-    public boolean create(User entity) {
+    public boolean create(Specialization entity) throws SQLException {
         return false;
     }
 
     @Override
-    public User update(User entity) {
+    public Specialization update(Specialization entity) throws SQLException {
         return null;
     }
 }
