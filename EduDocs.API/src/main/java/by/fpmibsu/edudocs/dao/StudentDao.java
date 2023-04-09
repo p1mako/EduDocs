@@ -65,6 +65,7 @@ public class StudentDao extends AbstractUserDao {
         statement.setString(1, id.toString());
         ResultSet result = statement.executeQuery();
         StudentStatus[] statuses = StudentStatus.values();
+
         String sqlUser = "SELECT * FROM Users Where id = ?";
         PreparedStatement statementUser = connection.prepareStatement(sqlUser);
         statementUser.setString(1, id.toString());
@@ -107,6 +108,8 @@ public class StudentDao extends AbstractUserDao {
             statement.setString(1, id.toString());
             statement.executeUpdate();
             statement.close();
+            UserDao UD = new UserDao();
+            UD.delete(id);
         } catch (SQLException e) {
             return false;
         }
