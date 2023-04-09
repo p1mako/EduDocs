@@ -24,4 +24,44 @@ public class Document extends Entity {
         this.author = author;
         this.initiator = initiator;
     }
+
+    public Template getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(Template template) {
+        this.template = template;
+    }
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public Date getValidThrough() {
+        return validThrough;
+    }
+
+    public void setValidThrough(Date validThrough) {
+        this.validThrough = validThrough;
+    }
+
+    public AdministrationMember getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(AdministrationMember author) {
+        this.author = author;
+    }
+
+    public User getInitiator() {
+        return initiator;
+    }
+
+    public void setInitiator(User initiator) {
+        this.initiator = initiator;
+    }
 }

@@ -14,4 +14,20 @@ public class Template extends Entity {
         this.name = name;
         this.routeToDocument = routeToDocument;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRouteToDocument() {
+        return routeToDocument;
+    }
+
+    public void setRouteToDocument(String routeToDocument) {
+        this.routeToDocument = routeToDocument;
+    }
 }
