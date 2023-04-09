@@ -30,7 +30,7 @@ public class StudentDao extends AbstractUserDao {
             ResultSet resultUser = statementUser.executeQuery();
 
             String idSpec = result.getString("specialization");
-            String sqlSpec = "SELECT * Specializations Users Where id = ?";
+            String sqlSpec = "SELECT * FROM Specializations Where id = ?";
             PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
             statementUser.setString(1, idSpec.toString());
             ResultSet resultSpec = statementUser.executeQuery();
@@ -72,7 +72,7 @@ public class StudentDao extends AbstractUserDao {
         ResultSet resultUser = statementUser.executeQuery();
 
         String idSpec = result.getString("specialization");
-        String sqlSpec = "SELECT * Specializations Users Where id = ?";
+        String sqlSpec = "SELECT * FROM Specializations Where id = ?";
         PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
         statementUser.setString(1, idSpec.toString());
         ResultSet resultSpec = statementUser.executeQuery();
@@ -126,7 +126,7 @@ public class StudentDao extends AbstractUserDao {
         UserDao UD = new UserDao();
         UD.create(entity);
         UUID id = entity.getId();
-        String sql = "INSERT INTO Users(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Students(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
         Student student = (Student)entity;
         statement.setString(1, String.valueOf(student.getGroup()));
