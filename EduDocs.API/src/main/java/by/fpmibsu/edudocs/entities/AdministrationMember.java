@@ -15,6 +15,8 @@ public class AdministrationMember extends User {
     Timestamp until;
     List<Template> availableTemplates;
 
+    public AdministrationMember(){}
+
     public AdministrationMember(@Nullable UUID id, @NotNull AdministrationRole role, @NotNull Timestamp from,
                                 @Nullable Timestamp until, @NotNull String login, @NotNull String password,
                                 @NotNull String name, @NotNull String surname, @Nullable String lastName,

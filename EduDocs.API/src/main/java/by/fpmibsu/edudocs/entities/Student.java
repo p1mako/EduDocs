@@ -14,6 +14,7 @@ public class Student extends User {
     int uniqueNumber;
     Specialization specialization;
 
+    public Student(){}
 
     public Student(@Nullable UUID id, @NotNull String login, @NotNull String password, @NotNull String name,
                    @NotNull String surname, @Nullable String lastName, @NotNull Timestamp entryDate,

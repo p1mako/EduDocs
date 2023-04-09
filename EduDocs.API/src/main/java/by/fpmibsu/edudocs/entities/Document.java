@@ -15,6 +15,8 @@ public class Document extends Entity {
     AdministrationMember author;
     User initiator;
 
+    public Document(){}
+
     public Document(@Nullable UUID id, @NotNull Template template, @NotNull Timestamp created,
                     @Nullable Date validThrough, @Nullable AdministrationMember author, @NotNull User initiator) {
         super(id);

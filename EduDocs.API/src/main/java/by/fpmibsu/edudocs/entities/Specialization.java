@@ -9,6 +9,7 @@ public class Specialization extends Entity {
     String name;
     int registerNumber;
 
+    public Specialization(){}
 
     public Specialization(@Nullable UUID id, @NotNull String name, int registerNumber) {
         super(id);

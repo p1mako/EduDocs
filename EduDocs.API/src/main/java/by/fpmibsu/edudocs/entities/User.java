@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class User extends Entity{
+public class User extends Entity {
 
     String login;
     String password;
@@ -13,8 +13,10 @@ public class User extends Entity{
     String surname;
     String lastName;
 
+    public User() {}
+
     public User(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
-                @Nullable String lastName, @Nullable UUID id){
+                @Nullable String lastName, @Nullable UUID id) {
         super(id);
         this.login = login;
         this.password = password;

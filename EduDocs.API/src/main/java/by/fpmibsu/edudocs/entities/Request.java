@@ -12,6 +12,8 @@ public class Request extends Entity {
     Timestamp created;
     Document document;
 
+    public Request(){}
+
     public Request(@Nullable UUID id, @NotNull RequestStatus status, @Nullable Timestamp created,
                    @Nullable Document document) {
         super(id);
