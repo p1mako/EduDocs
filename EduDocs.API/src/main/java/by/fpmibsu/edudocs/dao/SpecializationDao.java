@@ -1,47 +1,38 @@
-package by.fpmibsu.edudocs.DAO;
+package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public class AdministratorDao extends AbstractUserDao{
+public class SpecializationDao extends AbstractDao{
     @Override
-    public List<User> findAll() {
-        //Add sql
+    public List findAll() {
         return null;
     }
 
     @Override
     public User findEntityById(UUID id) {
-        //TODO add sql
         return null;
     }
 
     @Override
     public boolean delete(UUID id) {
-        //TODO add sql
-        //else return false;
-        return true;
+        return false;
     }
 
     @Override
     public boolean delete(User entity) {
-        //TODO add sql
-        //else return false;
-        return true;
+        return false;
     }
 
     @Override
     public boolean create(User entity) {
-        //TODO add sql
-        //else return false;
-        return true;
+        return false;
     }
 
     @Override
     public User update(User entity) {
-        //TODO add sql
-        return entity;
+        return null;
     }
 }
