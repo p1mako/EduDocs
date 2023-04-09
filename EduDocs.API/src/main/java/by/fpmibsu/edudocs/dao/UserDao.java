@@ -34,7 +34,7 @@ public class UserDao extends AbstractDao<User> {
 
     @Override
     public User findEntityById(UUID id) throws SQLException{
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM Users WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, id.toString());
         ResultSet result = statement.executeQuery();
@@ -54,7 +54,7 @@ public class UserDao extends AbstractDao<User> {
 
     @Override
     public boolean delete(UUID id) {
-        String sql = "DELETE FROM users WHERE id = ?";
+        String sql = "DELETE FROM Users WHERE id = ?";
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
@@ -74,7 +74,7 @@ public class UserDao extends AbstractDao<User> {
 
     @Override
     public boolean create(User entity) throws SQLException {
-        String sql = "INSERT INTO users(login, password, name, surname, lastName) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users(login, password, name, surname, lastName) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, entity.getLogin());
         statement.setString(2, entity.getPassword());
@@ -88,7 +88,7 @@ public class UserDao extends AbstractDao<User> {
 
     @Override
     public User update(User entity) throws SQLException {
-        String sql = "UPDATE users SET login = ?, password = ?, name = ?, surname = ?, lastName = ? WHERE id = ?";
+        String sql = "UPDATE Users SET login = ?, password = ?, name = ?, surname = ?, lastName = ? WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, entity.getLogin());
         statement.setString(2, entity.getPassword());
