@@ -55,7 +55,7 @@ public class UserDao extends AbstractDao<User> {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Users WHERE id = ?";
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
             statement.setString(1, id.toString());

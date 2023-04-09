@@ -69,7 +69,7 @@ public class ProfessorDao extends AbstractUserDao {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Professors WHERE id = ?";
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
             statement.setString(1, id.toString());

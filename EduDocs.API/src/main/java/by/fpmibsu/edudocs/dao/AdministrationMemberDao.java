@@ -2,7 +2,6 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
-import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class AdministrationMemberDao extends AbstractUserDao {
 
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
-                TemplatesDao<Template> TD = new TemplatesDao<Template>();
+                TemplatesDao<Template> TD = new TemplatesDao<>();
                 templates.add(TD.findEntityById(UUID.fromString(docId)));
             }
             statementAdminDoc.close();
@@ -36,7 +35,7 @@ public class AdministrationMemberDao extends AbstractUserDao {
 
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, id.toString());
+            statementUser.setString(1, id);
             ResultSet resultUser = statementUser.executeQuery();
 
             User user = new AdministrationMember(UUID.fromString(id),
@@ -74,7 +73,7 @@ public class AdministrationMemberDao extends AbstractUserDao {
         ArrayList<Template> templates = new ArrayList<>();
         while (resultAdminDoc.next()) {
             String docId = resultAdminDoc.getString("template");
-            TemplatesDao<Template> TD = new TemplatesDao<Template>();
+            TemplatesDao<Template> TD = new TemplatesDao<>();
             templates.add(TD.findEntityById(UUID.fromString(docId)));
         }
         statementAdminDoc.close();
@@ -106,7 +105,7 @@ public class AdministrationMemberDao extends AbstractUserDao {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Admins WHERE id = ?";
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
             statement.setString(1, id.toString());
@@ -139,11 +138,11 @@ public class AdministrationMemberDao extends AbstractUserDao {
         statement.setString(4, AdministrationRole.valueOf(admin.getRole().toString()).toString());
 
         ArrayList<Template> templates = (ArrayList<Template>) admin.getAvailableTemplates();
-        for(int i = 0; i < templates.size(); i++){
+        for (Template template : templates) {
             String sqlTemp = "INSERT INTO AdministrationDocuments(administration_member, template) VALUES (?, ?)";
             PreparedStatement statementTemp = connection.prepareStatement(sqlTemp);
             statementTemp.setString(1, id.toString());
-            statementTemp.setString(2, templates.get(i).getId().toString());
+            statementTemp.setString(2, template.getId().toString());
             statementTemp.executeUpdate();
             statementTemp.close();
         }
@@ -164,11 +163,11 @@ public class AdministrationMemberDao extends AbstractUserDao {
         statement.setString(4, id.toString());
 
         ArrayList<Template> templates = (ArrayList<Template>) admin.getAvailableTemplates();
-        for(int i = 0; i < templates.size(); i++){
+        for (Template template : templates) {
             String sqlTemp = "INSERT INTO AdministrationDocuments(administration_member, template) VALUES (?, ?)";
             PreparedStatement statementTemp = connection.prepareStatement(sqlTemp);
             statementTemp.setString(1, id.toString());
-            statementTemp.setString(2, templates.get(i).getId().toString());
+            statementTemp.setString(2, template.getId().toString());
             statementTemp.executeUpdate();
             statementTemp.close();
         }

@@ -1,6 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.entities.User;
+import by.fpmibsu.edudocs.entities.Entity;
 
 
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class AbstractDao<T extends User> {
+public abstract class AbstractDao<T extends Entity> {
     protected Connection connection;
 
     public abstract List<T> findAll() throws SQLException;
