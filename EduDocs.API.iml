@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/EduDocs.API/target/classes" />
-    <output-test url="file://$MODULE_DIR$/EduDocs.API/target/test-classes" />
-    <content url="file://$MODULE_DIR$/EduDocs.API">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/EduDocs.API" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/EduDocs.API/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/EduDocs.API/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/EduDocs.API/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/EduDocs.API/target" />
     </content>
-    <orderEntry type="jdk" jdkName="18" jdkType="JavaSDK" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
-    <orderEntry type="library" name="Maven: com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre11" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations-java5:24.0.1" level="project" />
   </component>
 </module>
