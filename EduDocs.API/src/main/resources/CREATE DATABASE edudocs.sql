@@ -54,4 +54,8 @@ CREATE TABLE Requests(id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT(NEWID()),
                         created DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
                         status TINYINT NOT NULL,
                         document UNIQUEIDENTIFIER,
+                        initiator UNIQUEIDENTIFIER NOT NULL,
+                        template UNIQUEIDENTIFIER,
+			            FOREIGN KEY (template) REFERENCES Templates (id),
+			            FOREIGN KEY (Initiator) REFERENCES Users (id),
                         FOREIGN KEY (document) REFERENCES Documents(id));
