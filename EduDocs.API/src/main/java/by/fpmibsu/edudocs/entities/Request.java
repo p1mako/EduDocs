@@ -11,12 +11,16 @@ public class Request extends Entity {
     RequestStatus status;
     Timestamp created;
     Document document;
+    Template template;
+    User initiator;
 
     public Request(){}
 
-    public Request(@Nullable UUID id, @NotNull RequestStatus status, @Nullable Timestamp created,
+    public Request(@Nullable UUID id, @NotNull RequestStatus status, @NotNull Template template, @NotNull User initiator, @Nullable Timestamp created,
                    @Nullable Document document) {
         super(id);
+        this.template = template;
+        this.initiator = initiator;
         this.status = status;
         this.created = created;
         this.document = document;
