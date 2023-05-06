@@ -5,8 +5,8 @@ import by.fpmibsu.edudocs.entities.User;
 
 import java.util.UUID;
 
-public abstract class AbstractUserDao extends AbstractDao<User> {
-    public UUID GetUUIDByLogin(Entity entity){
+public abstract class AbstractUserDao<T extends User> extends AbstractDao<T> {
+    public UUID GetUUIDByLogin(Entity entity) {
         return entity.getId();
     }
 }

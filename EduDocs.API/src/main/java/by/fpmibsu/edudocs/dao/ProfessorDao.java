@@ -1,7 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.Professor;
-import by.fpmibsu.edudocs.entities.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,58 +10,67 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProfessorDao extends AbstractUserDao {
+public class ProfessorDao extends AbstractUserDao<Professor> {
     @Override
-    public List<User> findAll() throws SQLException {
+    public List<Professor> findAll() throws DaoException {
         String sql = "SELECT * FROM Professors";
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery(sql);
-        List<User> users = new ArrayList<>();
-        while (result.next()) {
-            String id = result.getString("id");
-            String sqlUser = "SELECT * FROM Users Where id = ?";
-            PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, id);
-            ResultSet resultUser = statementUser.executeQuery();
+        List<Professor> users = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                String id = result.getString("id");
+                String sqlUser = "SELECT * FROM Users Where id = ?";
+                PreparedStatement statementUser = connection.prepareStatement(sqlUser);
+                statementUser.setString(1, id);
+                ResultSet resultUser = statementUser.executeQuery();
 
-            User user = new Professor(resultUser.getString("login"),
-                    resultUser.getString("password"),
-                    resultUser.getString("name"),
-                    resultUser.getString("surname"),
-                    resultUser.getString("lastName"),
-                    UUID.fromString(id),
-                    result.getString("degree"));
-            users.add(user);
-            resultUser.close();
-            statementUser.close();
+                Professor user = new Professor(resultUser.getString("login"),
+                        resultUser.getString("password"),
+                        resultUser.getString("name"),
+                        resultUser.getString("surname"),
+                        resultUser.getString("lastName"),
+                        UUID.fromString(id),
+                        result.getString("degree"));
+                users.add(user);
+                resultUser.close();
+                statementUser.close();
+            }
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
         }
-        result.close();
-        statement.close();
         return users;
     }
 
     @Override
-    public User findEntityById(UUID id) throws SQLException {
+    public Professor findEntityById(UUID id) throws DaoException {
         String sql = "SELECT * FROM Professors";
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery(sql);
+        Professor user;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
 
-        String sqlUser = "SELECT * FROM Users Where id = ?";
-        PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-        statementUser.setString(1, id.toString());
-        ResultSet resultUser = statementUser.executeQuery();
+            String sqlUser = "SELECT * FROM Users Where id = ?";
+            PreparedStatement statementUser = connection.prepareStatement(sqlUser);
+            statementUser.setString(1, id.toString());
+            ResultSet resultUser = statementUser.executeQuery();
 
-        User user = new Professor(resultUser.getString("login"),
-                resultUser.getString("password"),
-                resultUser.getString("name"),
-                resultUser.getString("surname"),
-                resultUser.getString("lastName"),
-                id,
-                result.getString("degree"));
-        resultUser.close();
-        statementUser.close();
-        result.close();
-        statement.close();
+            user = new Professor(resultUser.getString("login"),
+                    resultUser.getString("password"),
+                    resultUser.getString("name"),
+                    resultUser.getString("surname"),
+                    resultUser.getString("lastName"),
+                    id,
+                    result.getString("degree"));
+            resultUser.close();
+            statementUser.close();
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
         return user;
     }
 
@@ -84,35 +92,43 @@ public class ProfessorDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean delete(User entity) {
+    public boolean delete(Professor entity) {
         return delete(entity.getId());
     }
 
     @Override
-    public boolean create(User entity) throws SQLException {
+    public boolean create(Professor entity) throws DaoException {
         UserDao UD = new UserDao();
-        UD.create(entity);
-        UUID id = entity.getId();
-        String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        Professor professor = (Professor) entity;
-        statement.setString(1, id.toString());
-        statement.setString(1, professor.getDegree());
-        statement.executeUpdate();
-        statement.close();
+        try {
+            UD.create(entity);
+            UUID id = entity.getId();
+            String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            Professor professor = (Professor) entity;
+            statement.setString(1, id.toString());
+            statement.setString(1, professor.getDegree());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
         return true;
     }
 
     @Override
-    public User update(User entity) throws SQLException {
+    public Professor update(Professor entity) throws DaoException {
         String sql = "UPDATE Professors SET degree = ? WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        Professor professor = (Professor) entity;
-        statement.setString(1, professor.getDegree());
-        statement.executeUpdate();
-        statement.close();
-        UserDao UD = new UserDao();
-        UD.update(entity);
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            Professor professor = (Professor) entity;
+            statement.setString(1, professor.getDegree());
+            statement.executeUpdate();
+            statement.close();
+            UserDao UD = new UserDao();
+            UD.update(entity);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
         return entity;
     }
 }

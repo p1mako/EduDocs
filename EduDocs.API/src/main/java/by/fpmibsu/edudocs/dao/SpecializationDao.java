@@ -6,15 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-public class SpecializationDao extends AbstractDao<Specialization>{
+public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
-    public List<Specialization> findAll() throws SQLException {
+    public List<Specialization> findAll() throws DaoException {
         return null;
     }
 
     @Override
-    public Specialization findEntityById(UUID id) throws SQLException {
+    public Specialization findEntityById(UUID id) throws DaoException {
         return null;
     }
 
@@ -29,12 +29,12 @@ public class SpecializationDao extends AbstractDao<Specialization>{
     }
 
     @Override
-    public boolean create(Specialization entity) throws SQLException {
+    public boolean create(Specialization entity) throws DaoException {
         return false;
     }
 
     @Override
-    public Specialization update(Specialization entity) throws SQLException {
+    public Specialization update(Specialization entity) throws DaoException {
         return null;
     }
 }

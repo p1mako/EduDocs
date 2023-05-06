@@ -1,18 +1,19 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.Entity;
+import by.fpmibsu.edudocs.entities.Template;
 
 import java.util.List;
 import java.util.UUID;
 
-public class TemplatesDao<T extends Entity> extends AbstractDao<T> {
+public class TemplatesDao extends AbstractDao<Template> {
     @Override
-    public List<T> findAll() {
+    public List<Template> findAll() {
         return null;
     }
 
     @Override
-    public T findEntityById(UUID id) {
+    public Template findEntityById(UUID id) {
         return null;
     }
 
@@ -22,17 +23,17 @@ public class TemplatesDao<T extends Entity> extends AbstractDao<T> {
     }
 
     @Override
-    public boolean delete(T entity) {
+    public boolean delete(Template entity) {
         return false;
     }
 
     @Override
-    public boolean create(T entity) {
+    public boolean create(Template entity) {
         return false;
     }
 
     @Override
-    public T update(T entity) {
+    public Template update(Template entity) {
         return null;
     }
 }
