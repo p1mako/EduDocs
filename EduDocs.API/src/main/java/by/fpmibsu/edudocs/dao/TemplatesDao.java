@@ -1,8 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.entities.Entity;
 import by.fpmibsu.edudocs.entities.Template;
-import by.fpmibsu.edudocs.entities.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,7 +87,7 @@ public class TemplatesDao extends AbstractDao<Template> {
     }
 
     @Override
-    public Template update(Template entity) throws DaoException {
+    public void update(Template entity) throws DaoException {
         String sql = "UPDATE Templates SET id = ?, name = ?, route = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -101,6 +99,5 @@ public class TemplatesDao extends AbstractDao<Template> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }

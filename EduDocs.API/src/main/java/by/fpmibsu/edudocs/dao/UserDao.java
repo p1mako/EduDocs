@@ -99,7 +99,7 @@ public class UserDao extends AbstractDao<User> {
     }
 
     @Override
-    public User update(User entity) throws DaoException {
+    public void update(User entity) throws DaoException {
         String sql = "UPDATE Users SET login = ?, password = ?, name = ?, surname = ?, lastName = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -114,6 +114,5 @@ public class UserDao extends AbstractDao<User> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }

@@ -1,7 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.*;
-import by.fpmibsu.edudocs.entities.utils.RequestStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class DocumentsDao extends AbstractDao<Document> {
         TemplatesDao templatesDao = new TemplatesDao();
         UserDao userDao = new UserDao();
         AdministrationMemberDao administrationMemberDao = new AdministrationMemberDao();
-        Document document = null;
+        Document document;
         String sql = "SELECT * FROM Documents WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, id.toString());
@@ -97,9 +96,9 @@ public class DocumentsDao extends AbstractDao<Document> {
     }
 
     @Override
-    public Document update(Document entity) throws DaoException {
+    public void update(Document entity) throws DaoException {
         if (entity.getId() == null) {
-            return null;
+            return;
         }
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE documents SET template_id = ?, created = ?, valid_through = ?, author_id = ?, initiator_id = ? WHERE id = ?");
@@ -113,6 +112,5 @@ public class DocumentsDao extends AbstractDao<Document> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }

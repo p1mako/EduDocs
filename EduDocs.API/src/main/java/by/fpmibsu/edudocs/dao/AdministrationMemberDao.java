@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static by.fpmibsu.edudocs.dao.ProfessorDao.setStatement;
+
 public class AdministrationMemberDao extends AbstractUserDao<AdministrationMember> {
     @Override
     public List<AdministrationMember> findAll() throws DaoException {
@@ -114,18 +116,12 @@ public class AdministrationMemberDao extends AbstractUserDao<AdministrationMembe
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Admins WHERE id = ?";
-        PreparedStatement statement;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
-            statement.executeUpdate();
-            statement.close();
-            UserDao UD = new UserDao();
-            UD.delete(id);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            return setStatement(id, statement);
         } catch (SQLException e) {
-            return false;
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -141,23 +137,13 @@ public class AdministrationMemberDao extends AbstractUserDao<AdministrationMembe
             UUID id = entity.getId();
             String sql = "INSERT INTO Admins(id, assignment_start, assignment_end, role) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            AdministrationMember admin = (AdministrationMember) entity;
             statement.setString(1, id.toString());
-            statement.setString(2, admin.getFrom().toString());
-            statement.setString(3, admin.getUntil().toString());
-            statement.setString(4, AdministrationRole.valueOf(admin.getRole().toString()).toString());
+            statement.setString(2, entity.getFrom().toString());
+            statement.setString(3, entity.getUntil().toString());
+            statement.setString(4, AdministrationRole.valueOf(entity.getRole().toString()).toString());
 
-            ArrayList<Template> templates = (ArrayList<Template>) admin.getAvailableTemplates();
-            for (Template template : templates) {
-                String sqlTemp = "INSERT INTO AdministrationDocuments(administration_member, template) VALUES (?, ?)";
-                PreparedStatement statementTemp = connection.prepareStatement(sqlTemp);
-                statementTemp.setString(1, id.toString());
-                statementTemp.setString(2, template.getId().toString());
-                statementTemp.executeUpdate();
-                statementTemp.close();
-            }
-            statement.executeUpdate();
-            statement.close();
+            ArrayList<Template> templates = (ArrayList<Template>) entity.getAvailableTemplates();
+            func(id, statement, templates);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -165,33 +151,35 @@ public class AdministrationMemberDao extends AbstractUserDao<AdministrationMembe
     }
 
     @Override
-    public AdministrationMember update(AdministrationMember entity) throws DaoException {
+    public void update(AdministrationMember entity) throws DaoException {
         try {
             UUID id = entity.getId();
             String sql = "UPDATE Admins SET  assignment_start = ?,  assignment_end = ?, role = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            AdministrationMember admin = (AdministrationMember) entity;
-            statement.setString(1, admin.getFrom().toString());
-            statement.setString(2, admin.getUntil().toString());
-            statement.setString(3, AdministrationRole.valueOf(admin.getRole().toString()).toString());
+            statement.setString(1, entity.getFrom().toString());
+            statement.setString(2, entity.getUntil().toString());
+            statement.setString(3, AdministrationRole.valueOf((entity).getRole().toString()).toString());
             statement.setString(4, id.toString());
 
-            List<Template> templates = admin.getAvailableTemplates();
-            for (Template template : templates) {
-                String sqlTemp = "INSERT INTO AdministrationDocuments(administration_member, template) VALUES (?, ?)";
-                PreparedStatement statementTemp = connection.prepareStatement(sqlTemp);
-                statementTemp.setString(1, id.toString());
-                statementTemp.setString(2, template.getId().toString());
-                statementTemp.executeUpdate();
-                statementTemp.close();
-            }
-            statement.executeUpdate();
-            statement.close();
+            List<Template> templates = entity.getAvailableTemplates();
+            func(id, statement, templates);
             UserDao UD = new UserDao();
             UD.update(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
+    }
+
+    private void func(UUID id, PreparedStatement statement, List<Template> templates) throws SQLException {
+        for (Template template : templates) {
+            String sqlTemp = "INSERT INTO AdministrationDocuments(administration_member, template) VALUES (?, ?)";
+            PreparedStatement statementTemp = connection.prepareStatement(sqlTemp);
+            statementTemp.setString(1, id.toString());
+            statementTemp.setString(2, template.getId().toString());
+            statementTemp.executeUpdate();
+            statementTemp.close();
+        }
+        statement.executeUpdate();
+        statement.close();
     }
 }

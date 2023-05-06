@@ -1,7 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.Specialization;
-import by.fpmibsu.edudocs.entities.Template;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,7 +88,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
     }
 
     @Override
-    public Specialization update(Specialization entity) throws DaoException {
+    public void update(Specialization entity) throws DaoException {
         String sql = "UPDATE Specialization SET id = ?, name = ?, registerNumber = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -101,6 +100,5 @@ public class SpecializationDao extends AbstractDao<Specialization> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }

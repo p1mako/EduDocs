@@ -77,15 +77,25 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Professors WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            return setStatement(id, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    static boolean setStatement(UUID id, PreparedStatement preparedStatement) {
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(sql);
+            statement = preparedStatement;
             statement.setString(1, id.toString());
             statement.executeUpdate();
             statement.close();
-            UserDao UD = new UserDao();
-            UD.delete(id);
+            UserDao ud = new UserDao();
+            ud.delete(id);
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -104,9 +114,8 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
             UUID id = entity.getId();
             String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            Professor professor = (Professor) entity;
             statement.setString(1, id.toString());
-            statement.setString(1, professor.getDegree());
+            statement.setString(1, entity.getDegree());
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
@@ -116,12 +125,11 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
     }
 
     @Override
-    public Professor update(Professor entity) throws DaoException {
+    public void update(Professor entity) throws DaoException {
         String sql = "UPDATE Professors SET degree = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            Professor professor = (Professor) entity;
-            statement.setString(1, professor.getDegree());
+            statement.setString(1, entity.getDegree());
             statement.executeUpdate();
             statement.close();
             UserDao UD = new UserDao();
@@ -129,6 +137,5 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }

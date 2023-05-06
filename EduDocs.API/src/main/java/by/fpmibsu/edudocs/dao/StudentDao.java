@@ -2,7 +2,6 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.entities.Specialization;
 import by.fpmibsu.edudocs.entities.Student;
-import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 
 import java.sql.PreparedStatement;
@@ -12,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static by.fpmibsu.edudocs.dao.ProfessorDao.setStatement;
 
 public class StudentDao extends AbstractUserDao<Student> {
     @Override
@@ -111,18 +112,12 @@ public class StudentDao extends AbstractUserDao<Student> {
     @Override
     public boolean delete(UUID id) {
         String sql = "DELETE FROM Students WHERE id = ?";
-        PreparedStatement statement;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
-            statement.executeUpdate();
-            statement.close();
-            UserDao UD = new UserDao();
-            UD.delete(id);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            return setStatement(id, statement);
         } catch (SQLException e) {
-            return false;
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -153,7 +148,7 @@ public class StudentDao extends AbstractUserDao<Student> {
     }
 
     @Override
-    public Student update(Student entity) throws DaoException {
+    public void update(Student entity) throws DaoException {
         String sql = "UPDATE Students SET group_num = ?, status = ?, entry_date = ?, uniqueNumber = ?, specialization = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -169,6 +164,5 @@ public class StudentDao extends AbstractUserDao<Student> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return entity;
     }
 }
