@@ -26,12 +26,11 @@ public class DocumentsDao extends AbstractDao<Document> {
                 Template template = templatesDao.findEntityById(UUID.fromString(result.getString("template")));
                 Timestamp created = result.getTimestamp("created");
                 Date date = result.getDate("date");
-                AdministrationMember administrationMember = (AdministrationMember) administrationMemberDao.findEntityById(uuid);
+                AdministrationMember administrationMember = administrationMemberDao.findEntityById(uuid);
                 User initiator = userDao.findEntityById(UUID.fromString(result.getString("initiator")));
                 document = new Document(uuid, template, created, date, administrationMember, initiator);
                 documents.add(document);
             }
-
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -41,23 +40,23 @@ public class DocumentsDao extends AbstractDao<Document> {
     }
 
     @Override
-    public Document findEntityById(UUID id) {
+    public Document findEntityById(UUID id) throws DaoException {
+        TemplatesDao templatesDao = new TemplatesDao();
+        UserDao userDao = new UserDao();
+        AdministrationMemberDao administrationMemberDao = new AdministrationMemberDao();
         Document document = null;
-        String sql = "SELECT * FROM documents WHERE id = ?";
+        String sql = "SELECT * FROM Documents WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, id.toString());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                document = new Document(
-                        UUID.fromString(resultSet.getString("id")), null,
-                        resultSet.getTimestamp("created"),
-                        resultSet.getDate("valid_through"),
-                        null, //author
-                        null //initiator//template
-                );
-            }
+            ResultSet result = statement.executeQuery();
+            Template template = templatesDao.findEntityById(UUID.fromString(result.getString("template")));
+            Timestamp created = result.getTimestamp("created");
+            Date date = result.getDate("date");
+            AdministrationMember administrationMember = administrationMemberDao.findEntityById(id);
+            User initiator = userDao.findEntityById(id);
+            document = new Document(id, template, created, date, administrationMember, initiator);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
         return document;
     }
