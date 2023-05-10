@@ -92,7 +92,7 @@ public class TemplatesDao extends AbstractDao<Template> {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());
-            statement.setString(2, entity.getName().toString());
+            statement.setString(2, entity.getName());
             statement.setString(3, entity.getRouteToDocument());
             statement.executeUpdate();
             statement.close();
