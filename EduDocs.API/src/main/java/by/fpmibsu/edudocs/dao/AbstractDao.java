@@ -12,17 +12,17 @@ import java.util.UUID;
 public abstract class AbstractDao<T extends Entity> {
     protected Connection connection;
 
-    public abstract List<T> findAll() throws SQLException;
+    public abstract List<T> findAll() throws DaoException;
 
-    public abstract T findEntityById(UUID id) throws SQLException;
+    public abstract T findEntityById(UUID id) throws DaoException;
 
     public abstract boolean delete(UUID id);
 
     public abstract boolean delete(T entity);
 
-    public abstract boolean create(T entity) throws SQLException;
+    public abstract boolean create(T entity) throws DaoException;
 
-    public abstract T update(T entity) throws SQLException;
+    public abstract void update(T entity) throws DaoException;
 
     public void close(Statement statement) {
         try {
@@ -30,7 +30,7 @@ public abstract class AbstractDao<T extends Entity> {
                 statement.close();
             }
         } catch (SQLException e) {
-            // log
+            //log
         }
     }
 

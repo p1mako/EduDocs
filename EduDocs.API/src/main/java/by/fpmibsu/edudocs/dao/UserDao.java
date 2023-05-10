@@ -12,43 +12,51 @@ import java.util.UUID;
 
 public class UserDao extends AbstractDao<User> {
     @Override
-    public List<User> findAll() throws SQLException {
+    public List<User> findAll() throws DaoException {
         String sql = "SELECT * FROM Users";
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery(sql);
         List<User> users = new ArrayList<>();
-        while (result.next()) {
-            User user = new User(result.getString("login"),
-                    result.getString("password"),
-                    result.getString("name"),
-                    result.getString("surname"),
-                    result.getString("lastName"),
-                    UUID.fromString(result.getString("id")));
-            users.add(user);
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                User user = new User(result.getString("login"),
+                        result.getString("password"),
+                        result.getString("name"),
+                        result.getString("surname"),
+                        result.getString("lastName"),
+                        UUID.fromString(result.getString("id")));
+                users.add(user);
+            }
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
         }
-        result.close();
-        statement.close();
         return users;
 
     }
 
     @Override
-    public User findEntityById(UUID id) throws SQLException{
+    public User findEntityById(UUID id) throws DaoException {
         String sql = "SELECT * FROM Users WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, id.toString());
-        ResultSet result = statement.executeQuery();
         User user = null;
-        if (result.next()) {
-            user = new User(result.getString("login"),
-                    result.getString("password"),
-                    result.getString("name"),
-                    result.getString("surname"),
-                    result.getString("lastName"),
-                    UUID.fromString(result.getString("id")));
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, id.toString());
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                user = new User(result.getString("login"),
+                        result.getString("password"),
+                        result.getString("name"),
+                        result.getString("surname"),
+                        result.getString("lastName"),
+                        UUID.fromString(result.getString("id")));
+            }
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
         }
-        result.close();
-        statement.close();
         return user;
     }
 
@@ -73,31 +81,38 @@ public class UserDao extends AbstractDao<User> {
     }
 
     @Override
-    public boolean create(User entity) throws SQLException {
+    public boolean create(User entity) throws DaoException {
         String sql = "INSERT INTO Users(login, password, name, surname, lastName) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, entity.getLogin());
-        statement.setString(2, entity.getPassword());
-        statement.setString(3, entity.getName());
-        statement.setString(4, entity.getSurname());
-        statement.setString(5, entity.getLastName());
-        statement.executeUpdate();
-        statement.close();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, entity.getLogin());
+            statement.setString(2, entity.getPassword());
+            statement.setString(3, entity.getName());
+            statement.setString(4, entity.getSurname());
+            statement.setString(5, entity.getLastName());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
         return true;
     }
 
     @Override
-    public User update(User entity) throws SQLException {
+    public void update(User entity) throws DaoException {
         String sql = "UPDATE Users SET login = ?, password = ?, name = ?, surname = ?, lastName = ? WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, entity.getLogin());
-        statement.setString(2, entity.getPassword());
-        statement.setString(3, entity.getName());
-        statement.setString(4, entity.getSurname());
-        statement.setString(5, entity.getLastName());
-        statement.setString(6, entity.getId().toString());
-        statement.executeUpdate();
-        statement.close();
-        return entity;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, entity.getLogin());
+            statement.setString(2, entity.getPassword());
+            statement.setString(3, entity.getName());
+            statement.setString(4, entity.getSurname());
+            statement.setString(5, entity.getLastName());
+            statement.setString(6, entity.getId().toString());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 }
