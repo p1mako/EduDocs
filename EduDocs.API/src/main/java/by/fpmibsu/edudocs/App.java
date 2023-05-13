@@ -1,13 +1,44 @@
 package by.fpmibsu.edudocs;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import by.fpmibsu.edudocs.dao.DaoException;
+import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.entities.User;
+
+import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Properties;
+
+public class App {
+
+    public static void main(String[] args) {
+        try {
+            DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+        String url = "jdbc:sqlserver://localhost";
+        Properties prop = new Properties();
+        InputStream stream = App.class.getClassLoader().getResourceAsStream("config.properties");
+        try {
+            prop.load(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        try {
+            Connection con = DriverManager.getConnection(url, prop);
+            UserDao dao = new UserDao();
+            dao.setConnection(con);
+            ArrayList<User> list = (ArrayList<User>) dao.findAll();
+            for (User user : list) {
+                System.out.println(user.getLogin());
+            }
+        } catch (SQLException | DaoException e) {
+            e.printStackTrace();
+        }
     }
 }
