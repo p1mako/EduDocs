@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="EduDocsAPI:Web">
+    <output-path>$PROJECT_DIR$/out/artifacts/EduDocsAPI_Web</output-path>
+    <root id="archive" name="EduDocsAPI_Web.war">
+      <element id="artifact" artifact-name="EduDocsAPI:Web exploded" />
+    </root>
+  </artifact>
+</component>
