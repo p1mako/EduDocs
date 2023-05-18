@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/EduDocs.iml" filepath="$PROJECT_DIR$/.idea/EduDocs.iml" />
       <module fileurl="file://$PROJECT_DIR$/EduDocs-Front.iml" filepath="$PROJECT_DIR$/EduDocs-Front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EduDocsAPI.iml" filepath="$PROJECT_DIR$/EduDocsAPI.iml" />
     </modules>
   </component>
 </project>
