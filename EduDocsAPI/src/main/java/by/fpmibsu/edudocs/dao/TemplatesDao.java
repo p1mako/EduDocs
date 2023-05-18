@@ -72,7 +72,7 @@ public class TemplatesDao extends AbstractDao<Template> {
 
     @Override
     public boolean create(Template entity) throws DaoException {
-        String sql = "INSERT INTO Templates(id, name, route) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Templates(id, name, route_to_document) VALUES (?, ?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());
@@ -88,7 +88,7 @@ public class TemplatesDao extends AbstractDao<Template> {
 
     @Override
     public void update(Template entity) throws DaoException {
-        String sql = "UPDATE Templates SET id = ?, name = ?, route = ?";
+        String sql = "UPDATE Templates SET id = ?, name = ?, route_to_document = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());

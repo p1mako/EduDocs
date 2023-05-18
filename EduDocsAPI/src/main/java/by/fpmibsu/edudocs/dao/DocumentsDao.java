@@ -101,7 +101,7 @@ public class DocumentsDao extends AbstractDao<Document> {
             return;
         }
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE documents SET template_id = ?, created = ?, valid_through = ?, author_id = ?, initiator_id = ? WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE Documents SET template = ?, created = ?, valid_through = ?, author = ?, initiator = ? WHERE id = ?");
             statement.setString(1, entity.getTemplate().getId().toString());
             statement.setString(2, entity.getCreated().toString());
             statement.setDate(3, entity.getValidThrough());

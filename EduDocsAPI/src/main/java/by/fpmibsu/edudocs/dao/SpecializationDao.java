@@ -14,7 +14,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
     public List<Specialization> findAll() throws DaoException {
-        String sql = "SELECT * FROM Specialization";
+        String sql = "SELECT * FROM Specializations";
         List<Specialization> users = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
@@ -35,7 +35,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
     public Specialization findEntityById(UUID id) throws DaoException {
-        String sql = "SELECT * FROM Specialization WHERE id = ?";
+        String sql = "SELECT * FROM Specializations WHERE id = ?";
         Specialization user = null;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -56,7 +56,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
     public boolean delete(UUID id) {
-        String sql = "DELETE FROM Specialization WHERE id = ?";
+        String sql = "DELETE FROM Specializations WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, id.toString());
             statement.executeUpdate();
@@ -73,7 +73,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
     public boolean create(Specialization entity) throws DaoException {
-        String sql = "INSERT INTO Specialization(id, name, registerNumber) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Specializations(id, name, registerNumber) VALUES (?, ?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());
@@ -89,7 +89,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
 
     @Override
     public void update(Specialization entity) throws DaoException {
-        String sql = "UPDATE Specialization SET id = ?, name = ?, registerNumber = ?";
+        String sql = "UPDATE Specializations SET id = ?, name = ?, registerNumber = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());
