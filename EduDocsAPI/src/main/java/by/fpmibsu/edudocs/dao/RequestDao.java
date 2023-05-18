@@ -17,7 +17,7 @@ public class RequestDao extends AbstractDao<Request> {
     final String SQL_GET_BY_UwU = "SELECT * FROM Requests WHERE id = ?";
     final String SQL_DELETE_BY_Uwu = "DELETE FROM Requests WHERE id = ?";
     final String SQL_INSERT_REQUEST = "INSERT INTO Requests(id, status, template, initiator, created, document) VALUES (?, ?, ?, ?, ?, ?)";
-    final String SQL_UPDATE_REQUEST = "UPDATE Requests SET id = ?, status = ?, template = ?, initiator = ?, created = ?, document = ?)";
+    final String SQL_UPDATE_REQUEST = "UPDATE Requests SET id = ?, status = ?, template = ?, initiator = ?, created = ?, document = ?";
 
     @Override
     public List<Request> findAll() throws DaoException {
