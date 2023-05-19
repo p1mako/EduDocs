@@ -2,7 +2,7 @@
   <artifact type="war" name="EduDocsAPI:Web">
     <output-path>$PROJECT_DIR$/out/artifacts/EduDocsAPI_Web</output-path>
     <root id="archive" name="EduDocsAPI_Web.war">
-      <element id="artifact" artifact-name="EduDocsAPI:Web exploded" />
+      <element id="artifact" artifact-name="EduDocsAPI" />
       <element id="javaee-facet-resources" facet="EduDocs/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UserDao extends AbstractDao<User> {
+public class UserDao extends AbstractUserDao<User> {
     @Override
     public List<User> findAll() throws DaoException {
         String sql = "SELECT * FROM Users";
