@@ -67,19 +67,6 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user;
-        UserDao userDao = new UserDao();
-        try {
-            user = userDao.findEntityByLogin(request.getParameter("login"));
-        } catch (DaoException e) {
-            response.setStatus(401);
-            return;
-        }
-        if (user.getPassword() == request.getParameter("password")){
-            var session = request.getSession(true);
-        }
-        else {
-            response.setStatus(401);
-        }
+        doGet(request, response);
     }
 }
