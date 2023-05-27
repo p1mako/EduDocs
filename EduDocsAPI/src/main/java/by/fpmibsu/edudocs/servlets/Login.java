@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 @WebServlet(name = "Login", value = "/login")
@@ -66,18 +65,6 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user;
-        UserDao userDao = new UserDao();
-        try {
-            user = userDao.findEntityByLogin(request.getParameter("login"));
-        } catch (DaoException e) {
-            response.setStatus(401);
-            return;
-        }
-        if (user.getPassword() == request.getParameter("password")) {
-            HttpSession session = request.getSession(true);
-        } else {
-            response.setStatus(401);
-        }
+        doGet(request, response);
     }
 }

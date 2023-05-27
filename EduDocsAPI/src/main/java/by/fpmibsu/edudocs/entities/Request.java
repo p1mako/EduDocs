@@ -60,4 +60,12 @@ public class Request extends Entity {
     public User getInitiator() {
         return initiator;
     }
+
+    public void setTemplate(Template template) {
+        this.template = template;
+    }
+
+    public void setInitiator(User initiator) {
+        this.initiator = initiator;
+    }
 }
