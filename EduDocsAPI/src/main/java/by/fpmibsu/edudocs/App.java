@@ -33,7 +33,7 @@ public class App {
             Connection con = DriverManager.getConnection(url, prop);
             UserDaoImpl dao = new UserDaoImpl();
             dao.setConnection(con);
-            ArrayList<User> list = (ArrayList<User>) dao.findAll();
+            ArrayList<User> list = (ArrayList<User>) dao.read();
             for (User user : list) {
                 System.out.println(user.getLogin());
             }

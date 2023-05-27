@@ -49,7 +49,7 @@ public class CheckRequestStatusServlet extends HttpServlet {
     private RequestStatus getRequestStatusFromDataSource(UUID requestId) {
         RequestDaoImpl rd = new RequestDaoImpl();
         try {
-            var request = rd.findEntityById(requestId);
+            var request = rd.read(requestId);
             return request.getStatus();
         } catch (DaoException e) {
             return null;

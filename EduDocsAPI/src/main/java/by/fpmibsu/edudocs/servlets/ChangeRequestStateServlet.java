@@ -58,7 +58,7 @@ public class ChangeRequestStateServlet extends HttpServlet {
     private boolean updateRequestStatusInDataSource(UUID requestId, RequestStatus newStatus) {
         RequestDaoImpl rd = new RequestDaoImpl();
         try {
-            var request = rd.findEntityById(requestId);
+            var request = rd.read(requestId);
             request.setStatus(newStatus);
             rd.update(request);
         } catch (DaoException e) {

@@ -49,7 +49,7 @@ public class Login extends HttpServlet {
             return;
         }
         try {
-            user = userDao.findEntityByLogin(request.getParameter("login"));
+            user = userDao.findUserByLogin(request.getParameter("login"));
         } catch (DaoException e) {
             response.setStatus(401);
             return;

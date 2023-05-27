@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Properties;
 
 @WebServlet(name = "AddProfessor", value = "/add-professor")
@@ -81,12 +82,12 @@ public class AddProfessor extends HttpServlet {
         User user;
         UserDaoImpl userDao = new UserDaoImpl();
         try {
-            user = userDao.findEntityByLogin(request.getParameter("login"));
+            user = userDao.findUserByLogin(request.getParameter("login"));
         } catch (DaoException e) {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword() == request.getParameter("password")) {
+        if (Objects.equals(user.getPassword(), request.getParameter("password"))) {
             HttpSession session = request.getSession(true);
         } else {
             response.setStatus(401);

@@ -110,4 +110,27 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
             throw new DaoException(e);
         }
     }
+
+    public User findUserByLogin(String login) throws DaoException {
+        String sql = "SELECT * FROM Users WHERE login = ?";
+        User user = null;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, login);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                user = new User(result.getString("login"),
+                        result.getString("password"),
+                        result.getString("name"),
+                        result.getString("surname"),
+                        result.getString("lastName"),
+                        UUID.fromString(result.getString("id")));
+            }
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return user;
+    }
 }

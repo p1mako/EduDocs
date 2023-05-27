@@ -53,7 +53,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 while (resultAdminDoc.next()) {
                     String docId = resultAdminDoc.getString("template");
                     TemplateDaoImpl TD = new TemplateDaoImpl();
-                    templates.add(TD.findEntityById(UUID.fromString(docId)));
+                    templates.add(TD.read(UUID.fromString(docId)));
                 }
                 statementAdminDoc.close();
                 resultAdminDoc.close();
@@ -104,7 +104,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
                 TemplateDaoImpl TD = new TemplateDaoImpl();
-                templates.add(TD.findEntityById(UUID.fromString(docId)));
+                templates.add(TD.read(UUID.fromString(docId)));
             }
             statementAdminDoc.close();
             resultAdminDoc.close();

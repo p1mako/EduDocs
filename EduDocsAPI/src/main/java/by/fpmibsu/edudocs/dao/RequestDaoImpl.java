@@ -99,7 +99,7 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
         UserDaoImpl userDao = new UserDaoImpl();
         RequestStatus status = RequestStatus.values()[result.getInt("status")];
         Template template = templateDao.read(UUID.fromString(result.getString("template")));
-        User initiator = userDao.findEntityById(UUID.fromString(result.getString("initiator")));
+        User initiator = userDao.read(UUID.fromString(result.getString("initiator")));
         Timestamp created = result.getTimestamp("created");
         Document document = documentsDaoImpl.read(UUID.fromString(result.getString("document")));
         return new Request(uuid, status, template, initiator, created, document);

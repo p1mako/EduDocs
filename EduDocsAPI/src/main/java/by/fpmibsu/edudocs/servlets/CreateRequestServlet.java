@@ -63,7 +63,7 @@ public class CreateRequestServlet extends HttpServlet {
         newRequest.setCreated(new Timestamp(System.currentTimeMillis()));
         TemplateDaoImpl td = new TemplateDaoImpl();
         try {
-            newRequest.setTemplate(td.findEntityById(templateUUID));
+            newRequest.setTemplate(td.read(templateUUID));
         } catch (DaoException e) {
             response.setStatus(500);
             throw new RuntimeException(e);
@@ -71,7 +71,7 @@ public class CreateRequestServlet extends HttpServlet {
         UserDaoImpl ud = new UserDaoImpl();
 
         try {
-            newRequest.setInitiator(ud.findEntityById(initiatorUUID));
+            newRequest.setInitiator(ud.read(initiatorUUID));
         } catch (DaoException e) {
             response.setStatus(500);
             throw new RuntimeException(e);

@@ -37,11 +37,11 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
             Document document;
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("author"));
-                Template template = templateDao.findEntityById(UUID.fromString(result.getString("template")));
+                Template template = templateDao.read(UUID.fromString(result.getString("template")));
                 Timestamp created = result.getTimestamp("created");
                 Date date = result.getDate("date");
                 AdministrationMember administrationMember = administrationMemberDaoImpl.read(uuid);
-                User initiator = userDao.findEntityById(UUID.fromString(result.getString("initiator")));
+                User initiator = userDao.read(UUID.fromString(result.getString("initiator")));
                 document = new Document(uuid, template, created, date, administrationMember, initiator);
                 documents.add(document);
             }
@@ -63,11 +63,11 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
-            Template template = templateDao.findEntityById(UUID.fromString(result.getString("template")));
+            Template template = templateDao.read(UUID.fromString(result.getString("template")));
             Timestamp created = result.getTimestamp("created");
             Date date = result.getDate("date");
             AdministrationMember administrationMember = administrationMemberDaoImpl.read(identity);
-            User initiator = userDao.findEntityById(identity);
+            User initiator = userDao.read(identity);
             document = new Document(identity, template, created, date, administrationMember, initiator);
         } catch (SQLException e) {
             throw new DaoException(e);

@@ -11,7 +11,7 @@ public class WrapperConnection {
         this.connection = connection;
     }
 
-    static boolean setStatement(UUID id, PreparedStatement preparedStatement) {
+    static void setStatement(UUID id, PreparedStatement preparedStatement) throws DaoException {
         PreparedStatement statement;
         try {
             statement = preparedStatement;
@@ -21,9 +21,7 @@ public class WrapperConnection {
             UserDaoImpl ud = new UserDaoImpl();
             ud.delete(id);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DaoException(e);
         }
-        return true;
     }
 }

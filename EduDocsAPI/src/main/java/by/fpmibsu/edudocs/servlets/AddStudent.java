@@ -74,7 +74,7 @@ public class AddStudent extends HttpServlet {
                     Integer.valueOf(request.getParameter("group")),
                     Integer.valueOf(request.getParameter("uniqueNumber")),
                     StudentStatus.valueOf(request.getParameter("status")),
-                    sd.findEntityById(UUID.fromString((request.getParameter("specialization")))));
+                    sd.read(UUID.fromString((request.getParameter("specialization")))));
             if(userDao.create((Student) user)){
                 java.io.PrintWriter writer = response.getWriter();
                 writer.println("Success!");
