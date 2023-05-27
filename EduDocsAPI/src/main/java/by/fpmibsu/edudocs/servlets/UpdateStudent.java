@@ -2,8 +2,8 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.SpecializationDao;
-import by.fpmibsu.edudocs.dao.StudentDao;
+import by.fpmibsu.edudocs.dao.SpecializationDaoImpl;
+import by.fpmibsu.edudocs.dao.StudentDaoImpl;
 import by.fpmibsu.edudocs.entities.Student;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
@@ -25,8 +25,8 @@ public class UpdateStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        StudentDao studentDao = new StudentDao();
-        SpecializationDao sd = new SpecializationDao();
+        StudentDaoImpl studentDao = new StudentDaoImpl();
+        SpecializationDaoImpl sd = new SpecializationDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

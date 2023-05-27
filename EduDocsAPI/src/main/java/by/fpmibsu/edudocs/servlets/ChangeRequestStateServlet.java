@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.RequestDao;
+import by.fpmibsu.edudocs.dao.RequestDaoImpl;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
 
 import javax.servlet.*;
@@ -56,9 +56,9 @@ public class ChangeRequestStateServlet extends HttpServlet {
     }
 
     private boolean updateRequestStatusInDataSource(UUID requestId, RequestStatus newStatus) {
-        RequestDao rd = new RequestDao();
+        RequestDaoImpl rd = new RequestDaoImpl();
         try {
-            var request = rd.findEntityById(requestId);
+            var request = rd.read(requestId);
             request.setStatus(newStatus);
             rd.update(request);
         } catch (DaoException e) {

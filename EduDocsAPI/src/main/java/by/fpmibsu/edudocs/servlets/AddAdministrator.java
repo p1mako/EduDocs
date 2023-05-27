@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
-import by.fpmibsu.edudocs.dao.AdministrationMemberDao;
+import by.fpmibsu.edudocs.dao.AdministrationMemberDaoImpl;
 import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.entities.AdministrationMember;
 import by.fpmibsu.edudocs.entities.Template;
@@ -17,7 +17,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class AddAdministrator extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        AdministrationMemberDao adminMemberDao = new AdministrationMemberDao();
+        AdministrationMemberDaoImpl adminMemberDao = new AdministrationMemberDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

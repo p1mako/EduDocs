@@ -1,8 +1,8 @@
 package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.TemplatesDao;
-import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.dao.TemplateDaoImpl;
+import by.fpmibsu.edudocs.dao.UserDaoImpl;
 import by.fpmibsu.edudocs.entities.Request;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
 
@@ -61,17 +61,17 @@ public class CreateRequestServlet extends HttpServlet {
         Request newRequest = new Request();
         newRequest.setStatus(requestStatus);
         newRequest.setCreated(new Timestamp(System.currentTimeMillis()));
-        TemplatesDao td = new TemplatesDao();
+        TemplateDaoImpl td = new TemplateDaoImpl();
         try {
-            newRequest.setTemplate(td.findEntityById(templateUUID));
+            newRequest.setTemplate(td.read(templateUUID));
         } catch (DaoException e) {
             response.setStatus(500);
             throw new RuntimeException(e);
         }
-        UserDao ud = new UserDao();
+        UserDaoImpl ud = new UserDaoImpl();
 
         try {
-            newRequest.setInitiator(ud.findEntityById(initiatorUUID));
+            newRequest.setInitiator(ud.read(initiatorUUID));
         } catch (DaoException e) {
             response.setStatus(500);
             throw new RuntimeException(e);

@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.RequestDao;
+import by.fpmibsu.edudocs.dao.RequestDaoImpl;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
 
 import javax.servlet.*;
@@ -47,9 +47,9 @@ public class CheckRequestStatusServlet extends HttpServlet {
     }
 
     private RequestStatus getRequestStatusFromDataSource(UUID requestId) {
-        RequestDao rd = new RequestDao();
+        RequestDaoImpl rd = new RequestDaoImpl();
         try {
-            var request = rd.findEntityById(requestId);
+            var request = rd.read(requestId);
             return request.getStatus();
         } catch (DaoException e) {
             return null;

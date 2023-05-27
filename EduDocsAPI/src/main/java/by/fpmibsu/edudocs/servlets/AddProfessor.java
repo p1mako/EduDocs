@@ -2,8 +2,8 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.ProfessorDao;
-import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.dao.ProfessorDaoImpl;
+import by.fpmibsu.edudocs.dao.UserDaoImpl;
 import by.fpmibsu.edudocs.entities.Professor;
 import by.fpmibsu.edudocs.entities.User;
 
@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Properties;
 
 @WebServlet(name = "AddProfessor", value = "/add-professor")
@@ -23,7 +23,7 @@ public class AddProfessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-        ProfessorDao userDao = new ProfessorDao();
+        ProfessorDaoImpl userDao = new ProfessorDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
@@ -80,14 +80,14 @@ public class AddProfessor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-        UserDao userDao = new UserDao();
+        UserDaoImpl userDao = new UserDaoImpl();
         try {
-            user = userDao.findEntityByLogin(request.getParameter("login"));
+            user = userDao.findUserByLogin(request.getParameter("login"));
         } catch (DaoException e) {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword() == request.getParameter("password")) {
+        if (Objects.equals(user.getPassword(), request.getParameter("password"))) {
             HttpSession session = request.getSession(true);
         } else {
             response.setStatus(401);

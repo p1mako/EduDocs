@@ -2,7 +2,7 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.ProfessorDao;
+import by.fpmibsu.edudocs.dao.ProfessorDaoImpl;
 import by.fpmibsu.edudocs.entities.Professor;
 
 import javax.servlet.*;
@@ -21,7 +21,7 @@ public class UpdateProfessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ProfessorDao professorDao = new ProfessorDao();
+        ProfessorDaoImpl professorDaoImpl = new ProfessorDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
@@ -40,7 +40,7 @@ public class UpdateProfessor extends HttpServlet {
         }
         try {
             Connection con = DriverManager.getConnection(url, prop);
-            professorDao.setConnection(con);
+            professorDaoImpl.setConnection(con);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ public class UpdateProfessor extends HttpServlet {
                     UUID.fromString(request.getParameter("id")),
                     request.getParameter("degree")
             );
-            if (professorDao.update(professor)) {
+            if (professorDaoImpl.update(professor)) {
                 response.setStatus(200);
             } else {
                 response.setStatus(422);
