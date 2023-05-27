@@ -151,7 +151,7 @@ public class AdministrationMemberDao extends AbstractUserDao<AdministrationMembe
     }
 
     @Override
-    public boolean update(AdministrationMember entity) throws DaoException {
+    public void update(AdministrationMember entity) throws DaoException {
         try {
             UUID id = entity.getId();
             String sql = "UPDATE Admins SET  assignment_start = ?,  assignment_end = ?, role = ? WHERE id = ?";
@@ -168,7 +168,6 @@ public class AdministrationMemberDao extends AbstractUserDao<AdministrationMembe
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
     }
 
     private void func(UUID id, PreparedStatement statement, List<Template> templates) throws SQLException {

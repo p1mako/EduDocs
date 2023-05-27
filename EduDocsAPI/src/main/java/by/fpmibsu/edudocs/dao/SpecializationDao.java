@@ -88,7 +88,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
     }
 
     @Override
-    public boolean update(Specialization entity) throws DaoException {
+    public void update(Specialization entity) throws DaoException {
         String sql = "UPDATE Specializations SET id = ?, name = ?, registerNumber = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -100,6 +100,5 @@ public class SpecializationDao extends AbstractDao<Specialization> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
     }
 }

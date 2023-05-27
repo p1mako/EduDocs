@@ -87,7 +87,7 @@ public class TemplatesDao extends AbstractDao<Template> {
     }
 
     @Override
-    public boolean update(Template entity) throws DaoException {
+    public void update(Template entity) throws DaoException {
         String sql = "UPDATE Templates SET id = ?, name = ?, route_to_document = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -99,6 +99,5 @@ public class TemplatesDao extends AbstractDao<Template> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
     }
 }

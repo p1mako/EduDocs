@@ -125,7 +125,7 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
     }
 
     @Override
-    public boolean update(Professor entity) throws DaoException {
+    public void update(Professor entity) throws DaoException {
         String sql = "UPDATE Professors SET degree = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -137,6 +137,5 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
     }
 }
