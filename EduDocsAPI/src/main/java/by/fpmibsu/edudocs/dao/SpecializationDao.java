@@ -22,7 +22,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
             while (result.next()) {
                 Specialization user = new Specialization(UUID.fromString(result.getString("id")),
                         result.getString("name"),
-                        Integer.parseInt(result.getString("registerNumber")));
+                        result.getString("registerNumber"));
                 users.add(user);
             }
             result.close();
@@ -44,7 +44,7 @@ public class SpecializationDao extends AbstractDao<Specialization> {
             if (result.next()) {
                 user = new Specialization(id,
                         result.getString("name"),
-                        Integer.parseInt(result.getString("registerNumber")));
+                        result.getString("registerNumber"));
             }
             result.close();
             statement.close();

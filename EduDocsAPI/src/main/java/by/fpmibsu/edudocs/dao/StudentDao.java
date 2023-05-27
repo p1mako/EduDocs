@@ -47,7 +47,7 @@ public class StudentDao extends AbstractUserDao<Student> {
                         result.getInt("group"),
                         result.getInt("uniqueNumber"),
                         statuses[result.getInt("status")],
-                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getInt("registerNumber"))
+                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
                 );
                 resultSpec.close();
                 resultUser.close();
@@ -94,7 +94,7 @@ public class StudentDao extends AbstractUserDao<Student> {
                     result.getInt("group"),
                     result.getInt("uniqueNumber"),
                     statuses[result.getInt("status")],
-                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getInt("registerNumber"))
+                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
             );
 
             resultSpec.close();

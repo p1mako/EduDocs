@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public class Specialization extends Entity {
     String name;
-    int registerNumber;
+    String registerNumber;
 
     public Specialization(){}
 
-    public Specialization(@Nullable UUID id, @NotNull String name, int registerNumber) {
+    public Specialization(@Nullable UUID id, @NotNull String name, String registerNumber) {
         super(id);
         this.name = name;
         this.registerNumber = registerNumber;
@@ -25,11 +25,11 @@ public class Specialization extends Entity {
         this.name = name;
     }
 
-    public int getRegisterNumber() {
+    public String getRegisterNumber() {
         return registerNumber;
     }
 
-    public void setRegisterNumber(int registerNumber) {
+    public void setRegisterNumber(String registerNumber) {
         this.registerNumber = registerNumber;
     }
 }
