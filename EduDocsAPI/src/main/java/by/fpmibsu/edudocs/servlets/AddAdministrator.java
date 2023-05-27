@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -70,7 +71,7 @@ public class AddAdministrator extends HttpServlet {
                     request.getParameter("name"),
                     request.getParameter("surname"),
                     request.getParameter("lastName"),
-                    null
+                    new ArrayList<Template>()
             );
             if(adminMemberDao.create(adminMember)){
                 response.setStatus(201);

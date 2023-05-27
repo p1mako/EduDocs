@@ -4,9 +4,7 @@ import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.dao.SpecializationDao;
 import by.fpmibsu.edudocs.dao.StudentDao;
-import by.fpmibsu.edudocs.dao.UserDao;
 import by.fpmibsu.edudocs.entities.Student;
-import by.fpmibsu.edudocs.entities.Template;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 
@@ -19,17 +17,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
-@WebServlet(name = "AddUser", value = "/add-student")
-public class AddStudent extends HttpServlet {
+@WebServlet(name = "UpdateStudent", value = "/update-student")
+public class UpdateStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        StudentDao userDao = new StudentDao();
+        StudentDao studentDao = new StudentDao();
         SpecializationDao sd = new SpecializationDao();
 
         try {
@@ -49,9 +45,10 @@ public class AddStudent extends HttpServlet {
         }
         try {
             Connection con = DriverManager.getConnection(url, prop);
-            userDao.setConnection(con);
+            studentDao.setConnection(con);
             sd.setConnection(con);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e){
             e.printStackTrace();
         }
 
@@ -67,7 +64,7 @@ public class AddStudent extends HttpServlet {
             response.setStatus(422);
             return;
         }
-       try {
+        try {
             User user = new Student(null,
                     request.getParameter("login"),
                     request.getParameter("password"),
@@ -79,7 +76,7 @@ public class AddStudent extends HttpServlet {
                     Integer.valueOf(request.getParameter("uniqueNumber")),
                     StudentStatus.valueOf(request.getParameter("status")),
                     sd.findEntityById(UUID.fromString((request.getParameter("specialization")))));
-            if(userDao.create((Student) user)){
+            if(studentDao.update((Student) user)){
                 java.io.PrintWriter writer = response.getWriter();
                 writer.println("Success!");
             }
@@ -91,5 +88,6 @@ public class AddStudent extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
     }
 }
