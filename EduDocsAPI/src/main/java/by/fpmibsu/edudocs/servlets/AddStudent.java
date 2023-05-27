@@ -2,11 +2,9 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.SpecializationDao;
-import by.fpmibsu.edudocs.dao.StudentDao;
-import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.dao.SpecializationDaoImpl;
+import by.fpmibsu.edudocs.dao.StudentDaoImpl;
 import by.fpmibsu.edudocs.entities.Student;
-import by.fpmibsu.edudocs.entities.Template;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 
@@ -19,9 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
 @WebServlet(name = "AddUser", value = "/add-student")
@@ -29,8 +25,8 @@ public class AddStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        StudentDao userDao = new StudentDao();
-        SpecializationDao sd = new SpecializationDao();
+        StudentDaoImpl userDao = new StudentDaoImpl();
+        SpecializationDaoImpl sd = new SpecializationDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

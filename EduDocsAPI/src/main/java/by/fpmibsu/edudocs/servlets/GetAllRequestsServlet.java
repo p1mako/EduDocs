@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.RequestDao;
+import by.fpmibsu.edudocs.dao.RequestDaoImpl;
 import by.fpmibsu.edudocs.entities.Request;
 
 import javax.servlet.*;
@@ -24,7 +24,7 @@ public class GetAllRequestsServlet extends HttpServlet {
                 response.setStatus(403);
                 return;
             }
-            var rd = new RequestDao();
+            var rd = new RequestDaoImpl();
             var list = rd.findAll();
             List<Request> result = new ArrayList<>();
             for (var req : list) {

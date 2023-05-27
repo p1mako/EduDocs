@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.dao.UserDaoImpl;
 import by.fpmibsu.edudocs.entities.User;
 
 import java.io.*;
@@ -31,7 +31,7 @@ public class App {
         }
         try {
             Connection con = DriverManager.getConnection(url, prop);
-            UserDao dao = new UserDao();
+            UserDaoImpl dao = new UserDaoImpl();
             dao.setConnection(con);
             ArrayList<User> list = (ArrayList<User>) dao.findAll();
             for (User user : list) {

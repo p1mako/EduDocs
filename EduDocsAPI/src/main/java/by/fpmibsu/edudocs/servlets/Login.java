@@ -2,7 +2,7 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.dao.UserDaoImpl;
 import by.fpmibsu.edudocs.entities.User;
 
 import javax.servlet.*;
@@ -20,7 +20,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-        UserDao userDao = new UserDao();
+        UserDaoImpl userDao = new UserDaoImpl();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());

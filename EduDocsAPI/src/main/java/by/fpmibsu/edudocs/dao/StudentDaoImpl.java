@@ -1,5 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
+import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
 import by.fpmibsu.edudocs.entities.Specialization;
 import by.fpmibsu.edudocs.entities.Student;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
@@ -12,11 +13,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static by.fpmibsu.edudocs.dao.ProfessorDao.setStatement;
+public class StudentDaoImpl extends WrapperConnection implements StudentDao {
 
-public class StudentDao extends AbstractUserDao<Student> {
     @Override
-    public List<Student> findAll() throws DaoException {
+    public boolean create(Student entity) throws DaoException {
+        UserDaoImpl UD = new UserDaoImpl();
+        try {
+            UD.create(entity);
+            UUID id = entity.getId();
+            String sql = "INSERT INTO Students(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);;
+            updateStudents(entity, statement);
+            statement.setString(6, id.toString());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return true;
+    }
+
+    @Override
+    public List<Student> read() throws DaoException {
         String sql = "SELECT * FROM Students";
         List<Student> users = new ArrayList<>();
         try {
@@ -64,18 +82,18 @@ public class StudentDao extends AbstractUserDao<Student> {
     }
 
     @Override
-    public Student findEntityById(UUID id) throws DaoException {
+    public Student read(UUID identity) throws DaoException {
         String sql = "SELECT * FROM Students  WHERE id = ?";
         Student student;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
+            statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
             StudentStatus[] statuses = StudentStatus.values();
 
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, id.toString());
+            statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
             String idSpec = result.getString("specialization");
@@ -84,7 +102,7 @@ public class StudentDao extends AbstractUserDao<Student> {
             statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
-            student = new Student(id,
+            student = new Student(identity,
                     resultUser.getString("login"),
                     resultUser.getString("password"),
                     resultUser.getString("name"),
@@ -110,60 +128,36 @@ public class StudentDao extends AbstractUserDao<Student> {
     }
 
     @Override
-    public boolean delete(UUID id) {
-        String sql = "DELETE FROM Students WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            return setStatement(id, statement);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean delete(Student entity) {
-        return delete(entity.getId());
-    }
-
-    @Override
-    public boolean create(Student student) throws DaoException {
-        UserDao UD = new UserDao();
-        try {
-            UD.create(student);
-            UUID id = student.getId();
-            String sql = "INSERT INTO Students(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);;
-            statement.setString(1, String.valueOf(student.getGroup()));
-            statement.setString(2, String.valueOf(StudentStatus.valueOf(String.valueOf(student.getStatus()))));
-            statement.setString(3, student.getEntryDate().toString());
-            statement.setString(4, String.valueOf(student.getUniqueNumber()));
-            statement.setString(5, student.getSpecialization().getId().toString());
-            statement.setString(6, id.toString());
-            statement.executeUpdate();
-            statement.close();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean update(Student entity) throws DaoException {
+    public void update(Student entity) throws DaoException {
         String sql = "UPDATE Students SET group_num = ?, status = ?, entry_date = ?, uniqueNumber = ?, specialization = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, String.valueOf(entity.getGroup()));
-            statement.setString(2, String.valueOf(StudentStatus.valueOf(String.valueOf(entity.getStatus()))));
-            statement.setString(3, entity.getEntryDate().toString());
-            statement.setString(4, String.valueOf(entity.getUniqueNumber()));
-            statement.setString(5, entity.getSpecialization().getId().toString());
+            updateStudents(entity, statement);
             statement.executeUpdate();
             statement.close();
-            UserDao UD = new UserDao();
+            UserDaoImpl UD = new UserDaoImpl();
             UD.update(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
+
+    }
+
+    @Override
+    public void delete(UUID identity) throws DaoException {
+        String sql = "DELETE FROM Students WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            setStatement(identity, statement);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    private void updateStudents(Student entity, PreparedStatement statement) throws SQLException {
+        statement.setString(1, String.valueOf(entity.getGroup()));
+        statement.setString(2, String.valueOf(StudentStatus.valueOf(String.valueOf(entity.getStatus()))));
+        statement.setString(3, entity.getEntryDate().toString());
+        statement.setString(4, String.valueOf(entity.getUniqueNumber()));
+        statement.setString(5, entity.getSpecialization().getId().toString());
     }
 }

@@ -1,5 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
+import by.fpmibsu.edudocs.dao.interfaces.ProfessorDao;
 import by.fpmibsu.edudocs.entities.Professor;
 
 import java.sql.PreparedStatement;
@@ -10,9 +11,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProfessorDao extends AbstractUserDao<Professor> {
+public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao {
+
     @Override
-    public List<Professor> findAll() throws DaoException {
+    public boolean create(Professor entity) throws DaoException {
+        UserDaoImpl UD = new UserDaoImpl();
+        try {
+            UD.create(entity);
+            UUID id = entity.getId();
+            String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, id.toString());
+            statement.setString(1, entity.getDegree());
+            int rows = statement.executeUpdate();
+            statement.close();
+            return rows > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public List<Professor> read() throws DaoException {
         String sql = "SELECT * FROM Professors";
         List<Professor> users = new ArrayList<>();
         try {
@@ -45,7 +65,7 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
     }
 
     @Override
-    public Professor findEntityById(UUID id) throws DaoException {
+    public Professor read(UUID identity) throws DaoException {
         String sql = "SELECT * FROM Professors";
         Professor user;
         try {
@@ -54,7 +74,7 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
 
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, id.toString());
+            statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
             user = new Professor(resultUser.getString("login"),
@@ -62,7 +82,7 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
                     resultUser.getString("name"),
                     resultUser.getString("surname"),
                     resultUser.getString("lastName"),
-                    id,
+                    identity,
                     result.getString("degree"));
             resultUser.close();
             statementUser.close();
@@ -75,68 +95,27 @@ public class ProfessorDao extends AbstractUserDao<Professor> {
     }
 
     @Override
-    public boolean delete(UUID id) {
-        String sql = "DELETE FROM Professors WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            return setStatement(id, statement);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    static boolean setStatement(UUID id, PreparedStatement preparedStatement) {
-        PreparedStatement statement;
-        try {
-            statement = preparedStatement;
-            statement.setString(1, id.toString());
-            statement.executeUpdate();
-            statement.close();
-            UserDao ud = new UserDao();
-            ud.delete(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean delete(Professor entity) {
-        return delete(entity.getId());
-    }
-
-    @Override
-    public boolean create(Professor entity) throws DaoException {
-        UserDao UD = new UserDao();
-        try {
-            UD.create(entity);
-            UUID id = entity.getId();
-            String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
-            statement.setString(1, entity.getDegree());
-            statement.executeUpdate();
-            statement.close();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean update(Professor entity) throws DaoException {
+    public void update(Professor entity) throws DaoException {
         String sql = "UPDATE Professors SET degree = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getDegree());
             statement.executeUpdate();
             statement.close();
-            UserDao UD = new UserDao();
+            UserDaoImpl UD = new UserDaoImpl();
             UD.update(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return false;
+    }
+
+    @Override
+    public void delete(UUID identity) throws DaoException {
+        String sql = "DELETE FROM Professors WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            setStatement(identity, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
