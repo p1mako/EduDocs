@@ -9,7 +9,8 @@ public class Template extends Entity {
     String name;
     String routeToDocument;
 
-    Template(){}
+    Template() {
+    }
 
     public Template(@Nullable UUID id, @NotNull String name, @Nullable String routeToDocument) {
         super(id);
@@ -32,4 +33,14 @@ public class Template extends Entity {
     public void setRouteToDocument(String routeToDocument) {
         this.routeToDocument = routeToDocument;
     }
+
+    @Override
+    public String toString() {
+        return "Template{" +
+                "name='" + name + '\'' +
+                ", routeToDocument='" + routeToDocument + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
 }

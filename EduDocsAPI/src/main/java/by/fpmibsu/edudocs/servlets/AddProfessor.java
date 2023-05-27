@@ -2,7 +2,9 @@ package by.fpmibsu.edudocs.servlets;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
+import by.fpmibsu.edudocs.dao.ProfessorDao;
 import by.fpmibsu.edudocs.dao.UserDao;
+import by.fpmibsu.edudocs.entities.Professor;
 import by.fpmibsu.edudocs.entities.User;
 
 import javax.servlet.*;
@@ -13,14 +15,15 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
-@WebServlet(name = "Login", value = "/login")
-public class Login extends HttpServlet {
+@WebServlet(name = "AddProfessor", value = "/add-professor")
+public class AddProfessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-        UserDao userDao = new UserDao();
+        ProfessorDao userDao = new ProfessorDao();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
@@ -44,27 +47,50 @@ public class Login extends HttpServlet {
             e.printStackTrace();
         }
 
-        if (request.getParameter("login") == null || request.getParameter("password") == null) {
-            response.setStatus(401);
+        if (request.getParameter("login") == null ||
+                request.getParameter("password") == null ||
+                request.getParameter("name") == null ||
+                request.getParameter("surname") == null ||
+                request.getParameter("degree") == null) {
+            response.setStatus(422);
             return;
         }
+
+        try {
+            Professor professor = new Professor(
+                    request.getParameter("login"),
+                    request.getParameter("password"),
+                    request.getParameter("name"),
+                    request.getParameter("surname"),
+                    request.getParameter("lastName"),
+                    null,
+                    request.getParameter("degree")
+            );
+            if (userDao.create(professor)) {
+                response.setStatus(201);
+            } else {
+                response.setStatus(422);
+            }
+        } catch (DaoException e) {
+            response.setStatus(422);
+            return;
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user;
+        UserDao userDao = new UserDao();
         try {
             user = userDao.findEntityByLogin(request.getParameter("login"));
         } catch (DaoException e) {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword().equals(request.getParameter("password"))) {
+        if (user.getPassword() == request.getParameter("password")) {
             HttpSession session = request.getSession(true);
-            java.io.PrintWriter writer = response.getWriter();
-            writer.println("Success!");
         } else {
             response.setStatus(401);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
     }
 }

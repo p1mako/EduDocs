@@ -108,7 +108,7 @@ public class RequestDao extends AbstractDao<Request> {
     }
 
     @Override
-    public void update(Request entity) throws DaoException{
+    public boolean update(Request entity) throws DaoException{
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_REQUEST);
             preparedStatement.setString(1, entity.getId().toString());
@@ -120,5 +120,6 @@ public class RequestDao extends AbstractDao<Request> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return false;
     }
 }

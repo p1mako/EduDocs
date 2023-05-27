@@ -96,9 +96,9 @@ public class DocumentsDao extends AbstractDao<Document> {
     }
 
     @Override
-    public void update(Document entity) throws DaoException {
+    public boolean update(Document entity) throws DaoException {
         if (entity.getId() == null) {
-            return;
+            return false;
         }
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE Documents SET template = ?, created = ?, valid_through = ?, author = ?, initiator = ? WHERE id = ?");
@@ -112,5 +112,6 @@ public class DocumentsDao extends AbstractDao<Document> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return false;
     }
 }
