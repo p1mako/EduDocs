@@ -2,7 +2,7 @@ package by.fpmibsu.edudocs.action;
 
 import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.entities.User;
-import by.fpmibsu.edudocs.service.ServiceFactory;
+import by.fpmibsu.edudocs.service.utils.ServiceFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;

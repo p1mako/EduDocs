@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs.service;
+package by.fpmibsu.edudocs.service.utils;
 
 import by.fpmibsu.edudocs.dao.DaoException;
 import org.apache.logging.log4j.LogManager;

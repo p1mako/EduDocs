@@ -55,6 +55,7 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
         return users;
     }
 
+
     @Override
     public User read(UUID identity) throws DaoException {
         String sql = "SELECT * FROM Users WHERE id = ?";

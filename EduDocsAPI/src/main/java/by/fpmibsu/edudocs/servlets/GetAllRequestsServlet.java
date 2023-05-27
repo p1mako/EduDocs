@@ -25,7 +25,7 @@ public class GetAllRequestsServlet extends HttpServlet {
                 return;
             }
             var rd = new RequestDaoImpl();
-            var list = rd.findAll();
+            var list = rd.read();
             List<Request> result = new ArrayList<>();
             for (var req : list) {
                 if (req.getId().equals(UUID.fromString(id))) {

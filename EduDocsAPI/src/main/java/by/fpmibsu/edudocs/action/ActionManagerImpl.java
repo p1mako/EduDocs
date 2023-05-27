@@ -1,7 +1,7 @@
 package by.fpmibsu.edudocs.action;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.service.ServiceFactory;
+import by.fpmibsu.edudocs.service.utils.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

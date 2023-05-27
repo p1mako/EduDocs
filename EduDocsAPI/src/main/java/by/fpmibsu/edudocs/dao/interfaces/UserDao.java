@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface UserDao extends Dao<User> {
     List<User> read() throws DaoException;
-
-
+    public User findUserByLogin(String login) throws DaoException;
 }
