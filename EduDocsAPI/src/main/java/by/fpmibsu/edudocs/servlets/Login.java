@@ -56,8 +56,8 @@ public class Login extends HttpServlet {
             return;
         }
         if (user.getPassword().equals(request.getParameter("password"))){
-            var session = request.getSession(true);
-            var writer = response.getWriter();
+            HttpSession session = request.getSession(true);
+            java.io.PrintWriter writer = response.getWriter();
             writer.println("Success!");
         }
         else {
@@ -76,7 +76,7 @@ public class Login extends HttpServlet {
             return;
         }
         if (user.getPassword() == request.getParameter("password")){
-            var session = request.getSession(true);
+            HttpSession session = request.getSession(true);
         }
         else {
             response.setStatus(401);
