@@ -23,7 +23,7 @@ public class AddProfessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-       ProfessorDao userDao = new ProfessorDao();
+        ProfessorDao userDao = new ProfessorDao();
 
         try {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
@@ -51,7 +51,7 @@ public class AddProfessor extends HttpServlet {
                 request.getParameter("password") == null ||
                 request.getParameter("name") == null ||
                 request.getParameter("surname") == null ||
-                request.getParameter("degree") == null){
+                request.getParameter("degree") == null) {
             response.setStatus(422);
             return;
         }
@@ -66,9 +66,9 @@ public class AddProfessor extends HttpServlet {
                     null,
                     request.getParameter("degree")
             );
-            if(userDao.create(professor)){
+            if (userDao.create(professor)) {
                 response.setStatus(201);
-            }else{
+            } else {
                 response.setStatus(422);
             }
         } catch (DaoException e) {
@@ -87,10 +87,9 @@ public class AddProfessor extends HttpServlet {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword() == request.getParameter("password")){
+        if (user.getPassword() == request.getParameter("password")) {
             HttpSession session = request.getSession(true);
-        }
-        else {
+        } else {
             response.setStatus(401);
         }
     }

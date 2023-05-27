@@ -47,8 +47,7 @@ public class UpdateStudent extends HttpServlet {
             Connection con = DriverManager.getConnection(url, prop);
             studentDao.setConnection(con);
             sd.setConnection(con);
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -60,7 +59,7 @@ public class UpdateStudent extends HttpServlet {
                 request.getParameter("group") == null ||
                 request.getParameter("status") == null ||
                 request.getParameter("uniqueNumber") == null ||
-                request.getParameter("specialization") == null){
+                request.getParameter("specialization") == null) {
             response.setStatus(422);
             return;
         }
@@ -76,7 +75,7 @@ public class UpdateStudent extends HttpServlet {
                     Integer.valueOf(request.getParameter("uniqueNumber")),
                     StudentStatus.valueOf(request.getParameter("status")),
                     sd.findEntityById(UUID.fromString((request.getParameter("specialization")))));
-            if(studentDao.update((Student) user)){
+            if (studentDao.update((Student) user)) {
                 java.io.PrintWriter writer = response.getWriter();
                 writer.println("Success!");
             }

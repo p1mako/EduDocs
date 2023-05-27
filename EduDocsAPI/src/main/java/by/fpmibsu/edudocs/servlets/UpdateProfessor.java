@@ -41,7 +41,7 @@ public class UpdateProfessor extends HttpServlet {
         try {
             Connection con = DriverManager.getConnection(url, prop);
             professorDao.setConnection(con);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -50,7 +50,7 @@ public class UpdateProfessor extends HttpServlet {
                 request.getParameter("password") == null ||
                 request.getParameter("name") == null ||
                 request.getParameter("surname") == null ||
-                request.getParameter("degree") == null){
+                request.getParameter("degree") == null) {
             response.setStatus(422);
             return;
         }
@@ -63,11 +63,11 @@ public class UpdateProfessor extends HttpServlet {
                     request.getParameter("surname"),
                     request.getParameter("lastName"),
                     UUID.fromString(request.getParameter("id")),
-                   request.getParameter("degree")
+                    request.getParameter("degree")
             );
-            if(professorDao.update(professor)){
+            if (professorDao.update(professor)) {
                 response.setStatus(200);
-            }else{
+            } else {
                 response.setStatus(422);
             }
         } catch (DaoException e) {

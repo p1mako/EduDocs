@@ -62,7 +62,7 @@ public class AddAdministrator extends HttpServlet {
 
         try {
             AdministrationMember adminMember = new AdministrationMember(
-                    null,
+                    UUID.fromString(request.getParameter("id")),
                     AdministrationRole.valueOf(request.getParameter("role")),
                     Timestamp.valueOf(request.getParameter("from")),
                     request.getParameter("until") != null ? Timestamp.valueOf(request.getParameter("until")) : null,

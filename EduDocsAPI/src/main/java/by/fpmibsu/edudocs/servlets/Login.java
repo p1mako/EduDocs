@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
             e.printStackTrace();
         }
 
-        if (request.getParameter("login") == null || request.getParameter("password") == null){
+        if (request.getParameter("login") == null || request.getParameter("password") == null) {
             response.setStatus(401);
             return;
         }
@@ -55,12 +55,11 @@ public class Login extends HttpServlet {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword().equals(request.getParameter("password"))){
+        if (user.getPassword().equals(request.getParameter("password"))) {
             HttpSession session = request.getSession(true);
             java.io.PrintWriter writer = response.getWriter();
             writer.println("Success!");
-        }
-        else {
+        } else {
             response.setStatus(401);
         }
     }
@@ -75,10 +74,9 @@ public class Login extends HttpServlet {
             response.setStatus(401);
             return;
         }
-        if (user.getPassword() == request.getParameter("password")){
+        if (user.getPassword() == request.getParameter("password")) {
             HttpSession session = request.getSession(true);
-        }
-        else {
+        } else {
             response.setStatus(401);
         }
     }
