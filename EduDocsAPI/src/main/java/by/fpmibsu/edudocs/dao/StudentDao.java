@@ -47,7 +47,7 @@ public class StudentDao extends AbstractUserDao<Student> {
                         result.getInt("group"),
                         result.getInt("uniqueNumber"),
                         statuses[result.getInt("status")],
-                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getInt("registerNumber"))
+                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
                 );
                 resultSpec.close();
                 resultUser.close();
@@ -94,7 +94,7 @@ public class StudentDao extends AbstractUserDao<Student> {
                     result.getInt("group"),
                     result.getInt("uniqueNumber"),
                     statuses[result.getInt("status")],
-                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getInt("registerNumber"))
+                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
             );
 
             resultSpec.close();
@@ -148,7 +148,7 @@ public class StudentDao extends AbstractUserDao<Student> {
     }
 
     @Override
-    public void update(Student entity) throws DaoException {
+    public boolean update(Student entity) throws DaoException {
         String sql = "UPDATE Students SET group_num = ?, status = ?, entry_date = ?, uniqueNumber = ?, specialization = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -164,5 +164,6 @@ public class StudentDao extends AbstractUserDao<Student> {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return false;
     }
 }
