@@ -10,7 +10,6 @@ import by.fpmibsu.edudocs.entities.Template;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
 import by.fpmibsu.edudocs.service.interfaces.RequestService;
-import by.fpmibsu.edudocs.service.interfaces.UserService;
 import by.fpmibsu.edudocs.service.utils.ServiceFactoryImpl;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +20,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RequestServiceImplTest {
 

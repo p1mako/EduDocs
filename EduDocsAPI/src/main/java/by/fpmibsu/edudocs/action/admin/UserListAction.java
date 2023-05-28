@@ -10,10 +10,9 @@ import java.util.List;
 
 public class UserListAction extends AbstractAdministratorAction {
 	@Override
-	public Forward exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
+	public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
 		UserService service = factory.getService(UserService.class);
 		List<User> users = service.findAll();
 		request.setAttribute("users", users);
-		return null;
 	}
 }

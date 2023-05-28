@@ -17,7 +17,7 @@ public class UserSaveAction extends AbstractAdministratorAction {
 	private static final Logger logger = LogManager.getLogger(UserSaveAction.class);
 
 	@Override
-	public Forward exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
+	public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
 		Forward forward = new Forward("/user/edit.html");
 		try {
 			Validator<User> validator = ValidatorFactory.createValidator(User.class);
@@ -33,6 +33,5 @@ public class UserSaveAction extends AbstractAdministratorAction {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		return forward;
 	}
 }

@@ -2,10 +2,7 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
-import by.fpmibsu.edudocs.entities.Request;
-import by.fpmibsu.edudocs.entities.Specialization;
-import by.fpmibsu.edudocs.entities.Student;
-import by.fpmibsu.edudocs.entities.Template;
+import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

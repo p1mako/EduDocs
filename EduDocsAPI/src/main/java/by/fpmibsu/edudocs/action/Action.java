@@ -44,40 +44,6 @@ abstract public class Action {
         this.factory = factory;
     }
 
-    abstract public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws DaoException;
+    abstract public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException;
 
-    public static class Forward {
-        private String forward;
-        private boolean redirect;
-        private final Map<String, Object> attributes = new HashMap<>();
-
-        public Forward(String forward, boolean redirect) {
-            this.forward = forward;
-            this.redirect = redirect;
-        }
-
-        public Forward(String forward) {
-            this(forward, true);
-        }
-
-        public String getForward() {
-            return forward;
-        }
-
-        public void setForward(String forward) {
-            this.forward = forward;
-        }
-
-        public boolean isRedirect() {
-            return redirect;
-        }
-
-        public void setRedirect(boolean redirect) {
-            this.redirect = redirect;
-        }
-
-        public Map<String, Object> getAttributes() {
-            return attributes;
-        }
-    }
 }

@@ -1,4 +1,4 @@
 package by.fpmibsu.edudocs.service.interfaces;
 
-public interface DocumentService {
+public interface DocumentService extends Service {
 }
