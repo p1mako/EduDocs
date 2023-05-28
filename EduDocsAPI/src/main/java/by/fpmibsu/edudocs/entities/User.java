@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 public class User extends Entity {
@@ -13,6 +14,8 @@ public class User extends Entity {
     String name;
     String surname;
     String lastName;
+
+    List<Request> requests;
 
     public User() {}
 
@@ -29,13 +32,22 @@ public class User extends Entity {
     }
 
     public User(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
-                @Nullable String lastName, @Nullable UUID id) {
+                @Nullable String lastName, @Nullable UUID id, @Nullable List<Request> requests) {
         super(id);
         this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
+        this.requests = requests;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
 
     public String getLogin() {
