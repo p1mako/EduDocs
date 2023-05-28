@@ -55,25 +55,25 @@ public class UpdateProfessor extends HttpServlet {
             return;
         }
 
-        try {
-            Professor professor = new Professor(
-                    request.getParameter("login"),
-                    request.getParameter("password"),
-                    request.getParameter("name"),
-                    request.getParameter("surname"),
-                    request.getParameter("lastName"),
-                    UUID.fromString(request.getParameter("id")),
-                    request.getParameter("degree")
-            );
-            if (1 == 1) {
-                response.setStatus(200);
-            } else {
-                response.setStatus(422);
-            }
-        } catch (Exception e) {
-            response.setStatus(422);
-            return;
-        }
+//        try {
+//            Professor professor = new Professor(
+//                    request.getParameter("login"),
+//                    request.getParameter("password"),
+//                    request.getParameter("name"),
+//                    request.getParameter("surname"),
+//                    request.getParameter("lastName"),
+//                    UUID.fromString(request.getParameter("id")),
+//                    request.getParameter("degree")
+//            );
+//            if (professorDaoImpl.update(professor)) {
+//                response.setStatus(200);
+//            } else {
+//                response.setStatus(422);
+//            }
+//        } catch (DaoException e) {
+//            response.setStatus(422);
+//            return;
+//        }
     }
 
     @Override

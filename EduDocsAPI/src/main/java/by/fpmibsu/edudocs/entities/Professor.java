@@ -1,28 +1,24 @@
 package by.fpmibsu.edudocs.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
+@Getter
+@Setter
 
 public class Professor extends User {
-
+    private List<Request> requests;
     public Professor(){}
 
     public Professor(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
                      @Nullable String lastName, @Nullable UUID id, @NotNull String degree, List<Request> requests) {
-        super(login, password, name, surname, lastName, id, requests);
+        super(login, password, name, surname, lastName, id);
         this.degree = degree;
+        this.requests = requests;
     }
-
     String degree;
-
-    public String getDegree() {
-        return degree;
-    }
-
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
 }

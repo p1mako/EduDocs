@@ -1,6 +1,8 @@
 package by.fpmibsu.edudocs.entities;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +10,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@Setter
+@Getter
 public class Document extends Entity {
     Template template;
     Timestamp created;
@@ -15,7 +19,8 @@ public class Document extends Entity {
     AdministrationMember author;
     User initiator;
 
-    public Document(){}
+    public Document() {
+    }
 
     public Document(@Nullable UUID id, @NotNull Template template, @NotNull Timestamp created,
                     @Nullable Date validThrough, @Nullable AdministrationMember author, @NotNull User initiator) {
@@ -27,43 +32,4 @@ public class Document extends Entity {
         this.initiator = initiator;
     }
 
-    public Template getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(Template template) {
-        this.template = template;
-    }
-
-    public Timestamp getCreated() {
-        return created;
-    }
-
-    public void setCreated(Timestamp created) {
-        this.created = created;
-    }
-
-    public Date getValidThrough() {
-        return validThrough;
-    }
-
-    public void setValidThrough(Date validThrough) {
-        this.validThrough = validThrough;
-    }
-
-    public AdministrationMember getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(AdministrationMember author) {
-        this.author = author;
-    }
-
-    public User getInitiator() {
-        return initiator;
-    }
-
-    public void setInitiator(User initiator) {
-        this.initiator = initiator;
-    }
 }

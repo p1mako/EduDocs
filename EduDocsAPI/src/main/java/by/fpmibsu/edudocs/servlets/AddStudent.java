@@ -63,26 +63,26 @@ public class AddStudent extends HttpServlet {
             response.setStatus(422);
             return;
         }
-       try {
-            User user = new Student(null,
-                    request.getParameter("login"),
-                    request.getParameter("password"),
-                    request.getParameter("name"),
-                    request.getParameter("surname"),
-                    request.getParameter("lastname"),
-                    Timestamp.valueOf(request.getParameter("entryDate")),
-                    Integer.valueOf(request.getParameter("group")),
-                    Integer.valueOf(request.getParameter("uniqueNumber")),
-                    StudentStatus.valueOf(request.getParameter("status")),
-                    sd.read(UUID.fromString((request.getParameter("specialization")))));
-            if(1==1){
-                java.io.PrintWriter writer = response.getWriter();
-                writer.println("Success!");
-            }
-        } catch (DaoException e) {
-            response.setStatus(422);
-            return;
-        }
+//       try {
+//            User user = new Student(null,
+//                    request.getParameter("login"),
+//                    request.getParameter("password"),
+//                    request.getParameter("name"),
+//                    request.getParameter("surname"),
+//                    request.getParameter("lastname"),
+//                    Timestamp.valueOf(request.getParameter("entryDate")),
+//                    Integer.valueOf(request.getParameter("group")),
+//                    Integer.valueOf(request.getParameter("uniqueNumber")),
+//                    StudentStatus.valueOf(request.getParameter("status")),
+//                    sd.read(UUID.fromString((request.getParameter("specialization")))));
+//            if(userDao.create((Student) user)){
+//                java.io.PrintWriter writer = response.getWriter();
+//                writer.println("Success!");
+//            }
+//        } catch (DaoException e) {
+//            response.setStatus(422);
+//            return;
+//        }
     }
 
     @Override

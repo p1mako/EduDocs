@@ -57,28 +57,28 @@ public class UpdateAdministrator extends HttpServlet {
             return;
         }
         TemplateParser parser = new TemplateParser();
-        try {
-            AdministrationMember administrator = new AdministrationMember(
-                    UUID.fromString(request.getParameter("id")),
-                    AdministrationRole.valueOf(request.getParameter("role")),
-                    Timestamp.valueOf(request.getParameter("from")),
-                    request.getParameter("until") != null ? Timestamp.valueOf(request.getParameter("until")) : null,
-                    request.getParameter("login"),
-                    request.getParameter("password"),
-                    request.getParameter("name"),
-                    request.getParameter("surname"),
-                    request.getParameter("lastName"),
-                    parser.ListFromString(request.getParameter("availableTemplates"))
-            );
-            if (1 == 1) {
-                response.setStatus(200);
-            } else {
-                response.setStatus(422);
-            }
-        } catch (Exception e) {
-            response.setStatus(422);
-            return;
-        }
+//        try {
+//            AdministrationMember administrator = new AdministrationMember(
+//                    UUID.fromString(request.getParameter("id")),
+//                    AdministrationRole.valueOf(request.getParameter("role")),
+//                    Timestamp.valueOf(request.getParameter("from")),
+//                    request.getParameter("until") != null ? Timestamp.valueOf(request.getParameter("until")) : null,
+//                    request.getParameter("login"),
+//                    request.getParameter("password"),
+//                    request.getParameter("name"),
+//                    request.getParameter("surname"),
+//                    request.getParameter("lastName"),
+//                    parser.ListFromString(request.getParameter("availableTemplates"))
+//            );
+//            if (administratorDao.update(administrator)) {
+//                response.setStatus(200);
+//            } else {
+//                response.setStatus(422);
+//            }
+//        } catch (DaoException e) {
+//            response.setStatus(422);
+//            return;
+//        }
     }
 
     @Override

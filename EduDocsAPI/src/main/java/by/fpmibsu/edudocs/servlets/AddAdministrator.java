@@ -59,27 +59,27 @@ public class AddAdministrator extends HttpServlet {
             return;
         }
 
-        try {
-            AdministrationMember adminMember = new AdministrationMember(
-                    UUID.fromString(request.getParameter("id")),
-                    AdministrationRole.valueOf(request.getParameter("role")),
-                    Timestamp.valueOf(request.getParameter("from")),
-                    request.getParameter("until") != null ? Timestamp.valueOf(request.getParameter("until")) : null,
-                    request.getParameter("login"),
-                    request.getParameter("password"),
-                    request.getParameter("name"),
-                    request.getParameter("surname"),
-                    request.getParameter("lastName"),
-                    new ArrayList<Template>()
-            );
-            if(adminMemberDao.create(adminMember) == null){
-                response.setStatus(201);
-            }else{
-                response.setStatus(422);
-            }
-        } catch (DaoException e) {
-            response.setStatus(422);
-        }
+//        try {
+//            AdministrationMember adminMember = new AdministrationMember(
+//                    UUID.fromString(request.getParameter("id")),
+//                    AdministrationRole.valueOf(request.getParameter("role")),
+//                    Timestamp.valueOf(request.getParameter("from")),
+//                    request.getParameter("until") != null ? Timestamp.valueOf(request.getParameter("until")) : null,
+//                    request.getParameter("login"),
+//                    request.getParameter("password"),
+//                    request.getParameter("name"),
+//                    request.getParameter("surname"),
+//                    request.getParameter("lastName"),
+//                    new ArrayList<Template>()
+//            );
+//            if(adminMemberDao.create(adminMember)){
+//                response.setStatus(201);
+//            }else{
+//                response.setStatus(422);
+//            }
+//        } catch (DaoException e) {
+//            response.setStatus(422);
+//        }
     }
 
     @Override

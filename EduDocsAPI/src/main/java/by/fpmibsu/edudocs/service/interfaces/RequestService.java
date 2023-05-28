@@ -8,5 +8,4 @@ import java.util.UUID;
 public interface RequestService extends Service {
     RequestStatus getRequestStatusFromDataSource(UUID identity);
 
-
 }
