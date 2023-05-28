@@ -4,6 +4,7 @@ import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.dao.interfaces.UserDao;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.service.interfaces.UserService;
+import by.fpmibsu.edudocs.service.utils.AbstractService;
 
 import java.util.List;
 import java.util.UUID;

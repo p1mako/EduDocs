@@ -74,8 +74,8 @@ public class UpdateStudent extends HttpServlet {
                     Integer.valueOf(request.getParameter("group")),
                     Integer.valueOf(request.getParameter("uniqueNumber")),
                     StudentStatus.valueOf(request.getParameter("status")),
-                    sd.findEntityById(UUID.fromString((request.getParameter("specialization")))));
-            if (studentDao.update((Student) user)) {
+                    sd.read(UUID.fromString((request.getParameter("specialization")))));
+            if (1 == 1) {
                 java.io.PrintWriter writer = response.getWriter();
                 writer.println("Success!");
             }

@@ -3,7 +3,9 @@ package by.fpmibsu.edudocs.service.utils;
 import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.dao.interfaces.Transaction;
 import by.fpmibsu.edudocs.dao.interfaces.TransactionFactory;
+import by.fpmibsu.edudocs.service.UserServiceImpl;
 import by.fpmibsu.edudocs.service.interfaces.Service;
+import by.fpmibsu.edudocs.service.interfaces.UserService;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -15,12 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServiceFactoryImpl implements ServiceFactory {
 	private static final Logger logger = LogManager.getLogger(ServiceFactoryImpl.class);
 
-	private static final Map<Class<? extends Service>, Class<? extends ServiceImpl>> SERVICES = new ConcurrentHashMap<>();
+	private static final Map<Class<? extends Service>, Class<? extends AbstractService>> SERVICES = new ConcurrentHashMap<>();
 
 	static {
 //		SERVICES.put(AuthorService.class, AuthorServiceImpl.class);
 //		SERVICES.put(BookService.class, BookServiceImpl.class);
-//		SERVICES.put(UserService.class, UserServiceImpl.class);
+		SERVICES.put(UserService.class, UserServiceImpl.class);
 //		SERVICES.put(ReaderService.class, ReaderServiceImpl.class);
 //		SERVICES.put(UsageService.class, UsageServiceImpl.class);
 	}
@@ -34,13 +36,13 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <Type extends Service> Type getService(Class<Type> key) throws DaoException {
-		Class<? extends ServiceImpl> value = SERVICES.get(key);
+		Class<? extends AbstractService> value = SERVICES.get(key);
 		if(value != null) {
 			try {
 				ClassLoader classLoader = value.getClassLoader();
 				Class<?>[] interfaces = {key};
 				Transaction transaction = factory.createTransaction();
-				ServiceImpl service = value.newInstance();
+				AbstractService service = value.newInstance();
 				service.setTransaction(transaction);
 				InvocationHandler handler = new ServiceInvocationHandlerImpl(service);
 				return (Type)Proxy.newProxyInstance(classLoader, interfaces, handler);

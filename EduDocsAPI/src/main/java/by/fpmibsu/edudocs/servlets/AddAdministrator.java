@@ -72,7 +72,7 @@ public class AddAdministrator extends HttpServlet {
                     request.getParameter("lastName"),
                     new ArrayList<Template>()
             );
-            if(adminMemberDao.create(adminMember)){
+            if(adminMemberDao.create(adminMember) == null){
                 response.setStatus(201);
             }else{
                 response.setStatus(422);

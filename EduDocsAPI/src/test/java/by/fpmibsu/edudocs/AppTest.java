@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs;
+package java.by.fpmibsu.edudocs;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
