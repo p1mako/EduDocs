@@ -1,58 +1,15 @@
 package by.fpmibsu.edudocs.validator;
 
-import main.java.by.avelana.library.domain.Reader;
-import main.java.by.avelana.library.exception.IncorrectFormDataException;
+import by.fpmibsu.edudocs.entities.Student;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.stream.Collectors;
 
-public class StudentValidator implements Validator<Reader> {
-	@Override
-	public Reader validate(HttpServletRequest request) throws IncorrectFormDataException {
-		Reader reader = new Reader();
-		String parameter = request.getParameter("identity");
-		if(parameter != null) {
-			try {
-				reader.setIdentity(Integer.parseInt(parameter));
-			} catch(NumberFormatException e) {
-				throw new IncorrectFormDataException("identity", parameter);
-			}
-		}
-		parameter = request.getParameter("libraryCardNumber");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setLibraryCardNumber(parameter);
-		} else {
-			throw new IncorrectFormDataException("libraryCardNumber", parameter);
-		}
-		parameter = request.getParameter("surname");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setSurname(parameter);
-		} else {
-			throw new IncorrectFormDataException("surname", parameter);
-		}
-		parameter = request.getParameter("name");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setName(parameter);
-		} else {
-			throw new IncorrectFormDataException("name", parameter);
-		}
-		parameter = request.getParameter("patronymic");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setPatronymic(parameter);
-		} else {
-			throw new IncorrectFormDataException("patronymic", parameter);
-		}
-		parameter = request.getParameter("address");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setAddress(parameter);
-		} else {
-			throw new IncorrectFormDataException("address", parameter);
-		}
-		parameter = request.getParameter("phone");
-		if(parameter != null && !parameter.isEmpty()) {
-			reader.setPhone(parameter);
-		} else {
-			throw new IncorrectFormDataException("phone", parameter);
-		}
-		return reader;
-	}
+public class StudentValidator implements Validator<Student> {
+    @Override
+    public Student validate(HttpServletRequest request) throws IOException {
+        return (new ObjectMapper()).readValue(request.getReader().lines().collect(Collectors.joining(" ")), Student.class);
+    }
 }

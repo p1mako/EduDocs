@@ -1,8 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.UserDao;
-import by.fpmibsu.edudocs.entities.Request;
 import by.fpmibsu.edudocs.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,25 +77,13 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
 
-            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-            statementAdminDoc.setString(1, identity.toString());
-            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-            ArrayList<Request> requests = new ArrayList<>();
-
-            while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
-                RequestDao TD = new RequestDaoImpl();
-                requests.add(TD.read(UUID.fromString(docId)));
-            }
-
             if (result.next()) {
                 user = new User(result.getString("login"),
                         result.getString("password"),
                         result.getString("name"),
                         result.getString("surname"),
                         result.getString("lastName"),
-                        UUID.fromString(result.getString("id")), requests);
+                        UUID.fromString(result.getString("id")));
             }
             result.close();
             statement.close();
@@ -145,26 +131,13 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
 
             UUID identity = UUID.fromString(result.getString("id"));
 
-            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-            statementAdminDoc.setString(1, identity.toString());
-            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-            ArrayList<Request> requests = new ArrayList<>();
-
-            while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
-                RequestDao TD = new RequestDaoImpl();
-                requests.add(TD.read(UUID.fromString(docId)));
-            }
-
-
             if (result.next()) {
                 user = new User(result.getString("login"),
                         result.getString("password"),
                         result.getString("name"),
                         result.getString("surname"),
                         result.getString("lastName"),
-                        identity, requests);
+                        identity);
             }
             result.close();
             statement.close();

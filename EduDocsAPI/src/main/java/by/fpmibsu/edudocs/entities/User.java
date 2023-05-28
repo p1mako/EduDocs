@@ -14,29 +14,18 @@ public class User extends Entity {
     String surname;
     String lastName;
 
-    List<Request> requests;
-
-    public User() {}
+    public User() {
+    }
 
     public User(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
-                @Nullable String lastName, @Nullable UUID id, @Nullable List<Request> requests) {
+                @Nullable String lastName, @Nullable UUID id) {
         super(id);
         this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
-        this.requests = requests;
     }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
-    }
-
     public String getLogin() {
         return login;
     }

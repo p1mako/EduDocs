@@ -56,25 +56,25 @@ public class AddProfessor extends HttpServlet {
             return;
         }
 
-        try {
-            Professor professor = new Professor(
-                    request.getParameter("login"),
-                    request.getParameter("password"),
-                    request.getParameter("name"),
-                    request.getParameter("surname"),
-                    request.getParameter("lastName"),
-                    null,
-                    request.getParameter("degree")
-            );
-            if (userDao.create(professor)) {
-                response.setStatus(201);
-            } else {
-                response.setStatus(422);
-            }
-        } catch (DaoException e) {
-            response.setStatus(422);
-            return;
-        }
+//        try {
+//            Professor professor = new Professor(
+//                    request.getParameter("login"),
+//                    request.getParameter("password"),
+//                    request.getParameter("name"),
+//                    request.getParameter("surname"),
+//                    request.getParameter("lastName"),
+//                    null,
+//                    request.getParameter("degree")
+//            );
+//            if (userDao.create(professor)) {
+//                response.setStatus(201);
+//            } else {
+//                response.setStatus(422);
+//            }
+//        } catch (DaoException e) {
+//            response.setStatus(422);
+//            return;
+//        }
     }
 
     @Override

@@ -1,12 +1,15 @@
 package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
 import java.util.UUID;
-
+@Getter
+@Setter
 public class Request extends Entity {
     RequestStatus status;
     Timestamp created;
@@ -27,45 +30,5 @@ public class Request extends Entity {
         this.status = status;
         this.created = created;
         this.document = document;
-    }
-
-    public RequestStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(RequestStatus status) {
-        this.status = status;
-    }
-
-    public Timestamp getCreated() {
-        return created;
-    }
-
-    public void setCreated(Timestamp created) {
-        this.created = created;
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
-    public Template getTemplate() {
-        return template;
-    }
-
-    public User getInitiator() {
-        return initiator;
-    }
-
-    public void setTemplate(Template template) {
-        this.template = template;
-    }
-
-    public void setInitiator(User initiator) {
-        this.initiator = initiator;
     }
 }

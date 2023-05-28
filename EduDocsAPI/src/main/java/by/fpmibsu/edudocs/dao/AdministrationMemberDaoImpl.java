@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.AdministrationMemberDao;
+import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
 import org.apache.logging.log4j.LogManager;
@@ -61,6 +62,20 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
+
+                StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
+                for (var x : templates) {
+                    sql1.append(" template = ").append(x.getId().toString()).append(" or");
+                }
+                PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
+                requestStatement.setString(1, id);
+                ResultSet resSet = statementAdminDoc.executeQuery();
+                List<Request> requests = new ArrayList<>();
+                while (resSet.next()) {
+                    String docId = resultAdminDoc.getString("request");
+                    RequestDao TD = new RequestDaoImpl();
+                    requests.add(TD.read(UUID.fromString(docId)));
+                }
                 AdministrationMember user = new AdministrationMember(UUID.fromString(id),
                         administrationRoles[result.getInt("role")],
                         Timestamp.valueOf(result.getString("assignment_start")),
@@ -70,7 +85,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                         resultUser.getString("name"),
                         resultUser.getString("surname"),
                         resultUser.getString("lastName"),
-                        templates);
+                        templates, requests);
 
                 resultUser.close();
                 statementUser.close();
@@ -112,6 +127,20 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
+            StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
+            for (var x : templates) {
+                sql1.append(" template = ").append(x.getId().toString()).append(" or");
+            }
+            PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
+            requestStatement.setString(1, identity.toString());
+            ResultSet resSet = statementAdminDoc.executeQuery();
+            List<Request> requests = new ArrayList<>();
+            while (resSet.next()) {
+                String docId = resultAdminDoc.getString("request");
+                RequestDao TD = new RequestDaoImpl();
+                requests.add(TD.read(UUID.fromString(docId)));
+            }
+
             user = new AdministrationMember(identity,
                     administrationRoles[result.getInt("role")],
                     Timestamp.valueOf(result.getString("assignment_start")),
@@ -121,7 +150,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                     resultUser.getString("name"),
                     resultUser.getString("surname"),
                     resultUser.getString("lastName"),
-                    templates);
+                    templates, requests);
 
             resultUser.close();
             statementUser.close();
