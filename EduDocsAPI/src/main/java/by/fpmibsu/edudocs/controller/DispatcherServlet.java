@@ -36,11 +36,11 @@ public class DispatcherServlet  extends HttpServlet  {
     public static final int DB_POOL_CHECK_CONNECTION_TIMEOUT = 0;
 
     public void init() {
-        try {
-            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, DB_USER, DB_PASSWORD, DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
-        } catch (DaoException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, DB_USER, DB_PASSWORD, DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
+//        } catch (DaoException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public ServiceFactory getFactory() throws DaoException {

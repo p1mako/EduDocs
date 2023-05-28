@@ -12,7 +12,7 @@ import java.util.UUID;
 public class UserDeleteAction extends AbstractAdministratorAction {
     private static final Logger logger = LogManager.getLogger(UserDeleteAction.class);
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
+    public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
         Forward forward = new Forward("/user/list.html");
         try {
             UserService service = factory.getService(UserService.class);
@@ -23,6 +23,5 @@ public class UserDeleteAction extends AbstractAdministratorAction {
         } catch(NumberFormatException e) {
             logger.warn(String.format("Incorrect data was found when user \"%s\" tried to delete user", getAuthorizedUser().getLogin()), e);
         }
-        return forward;
     }
 }

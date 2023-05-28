@@ -5,15 +5,12 @@ import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.dao.TransactionFactoryImpl;
 import by.fpmibsu.edudocs.dao.pool.ConnectionPool;
 import by.fpmibsu.edudocs.service.interfaces.RequestService;
-import by.fpmibsu.edudocs.service.interfaces.UserService;
 import by.fpmibsu.edudocs.service.utils.ServiceFactoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RequestServiceImplTest {
 

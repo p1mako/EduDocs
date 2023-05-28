@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class UserEditAction extends AbstractAdministratorAction {
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
+    public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
         request.setAttribute("roles", Role.values());
         UUID identity = UUID.fromString((String) request.getAttribute("identity"));
         UserService service = factory.getService(UserService.class);
@@ -19,6 +19,5 @@ public class UserEditAction extends AbstractAdministratorAction {
         if (user != null) {
             request.setAttribute("user", user);
         }
-        return null;
     }
 }
