@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public class Student extends User {
@@ -19,8 +20,8 @@ public class Student extends User {
     public Student(@Nullable UUID id, @NotNull String login, @NotNull String password, @NotNull String name,
                    @NotNull String surname, @Nullable String lastName, @NotNull Timestamp entryDate,
                    int group, int uniqueNumber, @NotNull StudentStatus status,
-                   @NotNull Specialization specialization) {
-        super(login, password, name, surname, lastName, id);
+                   @NotNull Specialization specialization, List<Request> requests) {
+        super(login, password, name, surname, lastName, id, requests);
         this.entryDate = entryDate;
         this.group = group;
         this.status = status;

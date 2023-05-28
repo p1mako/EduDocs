@@ -1,7 +1,9 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.ProfessorDao;
+import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.entities.Professor;
+import by.fpmibsu.edudocs.entities.Request;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,13 +57,25 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
+                String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
+                PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
+                statementAdminDoc.setString(1, id);
+                ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+                ArrayList<Request> requests = new ArrayList<>();
+
+                while (resultAdminDoc.next()) {
+                    String docId = resultAdminDoc.getString("template");
+                    RequestDao TD = new RequestDaoImpl();
+                    requests.add(TD.read(UUID.fromString(docId)));
+                }
+
                 Professor user = new Professor(resultUser.getString("login"),
                         resultUser.getString("password"),
                         resultUser.getString("name"),
                         resultUser.getString("surname"),
                         resultUser.getString("lastName"),
                         UUID.fromString(id),
-                        result.getString("degree"));
+                        result.getString("degree"), requests);
                 users.add(user);
                 resultUser.close();
                 statementUser.close();
@@ -87,13 +101,25 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
+            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
+            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
+            statementAdminDoc.setString(1, identity.toString());
+            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+            ArrayList<Request> requests = new ArrayList<>();
+
+            while (resultAdminDoc.next()) {
+                String docId = resultAdminDoc.getString("template");
+                RequestDao TD = new RequestDaoImpl();
+                requests.add(TD.read(UUID.fromString(docId)));
+            }
+
             user = new Professor(resultUser.getString("login"),
                     resultUser.getString("password"),
                     resultUser.getString("name"),
                     resultUser.getString("surname"),
                     resultUser.getString("lastName"),
                     identity,
-                    result.getString("degree"));
+                    result.getString("degree"), requests);
             resultUser.close();
             statementUser.close();
             result.close();

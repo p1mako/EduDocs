@@ -1,8 +1,11 @@
 package by.fpmibsu.edudocs.dao;
 
+import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
+import by.fpmibsu.edudocs.entities.Request;
 import by.fpmibsu.edudocs.entities.Specialization;
 import by.fpmibsu.edudocs.entities.Student;
+import by.fpmibsu.edudocs.entities.Template;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class StudentDaoImpl extends WrapperConnection implements StudentDao {
 
     private static final Logger logger = LogManager.getLogger(StudentDaoImpl.class);
+
     @Override
     public UUID create(Student entity) throws DaoException {
         UserDaoImpl UD = new UserDaoImpl();
@@ -64,6 +68,17 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 statementUser.setString(1, idSpec);
                 ResultSet resultSpec = statementUser.executeQuery();
 
+                String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
+                PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
+                statementAdminDoc.setString(1, id);
+                ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+                ArrayList<Request> requests = new ArrayList<>();
+
+                while (resultAdminDoc.next()) {
+                    String docId = resultAdminDoc.getString("template");
+                    RequestDao TD = new RequestDaoImpl();
+                    requests.add(TD.read(UUID.fromString(docId)));
+                }
                 Student user = new Student(UUID.fromString(id),
                         resultUser.getString("login"),
                         resultUser.getString("password"),
@@ -74,7 +89,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                         result.getInt("group"),
                         result.getInt("uniqueNumber"),
                         statuses[result.getInt("status")],
-                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
+                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
                 );
                 resultSpec.close();
                 resultUser.close();
@@ -111,6 +126,22 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
+            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
+            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
+            statementAdminDoc.setString(1, identity.toString());
+            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+            ArrayList<Request> requests = new ArrayList<>();
+
+            while (resultAdminDoc.next()) {
+                String docId = resultAdminDoc.getString("template");
+                RequestDao TD = new RequestDaoImpl();
+                requests.add(TD.read(UUID.fromString(docId)));
+            }
+
+            statementAdminDoc.close();
+            resultAdminDoc.close();
+
+
             student = new Student(identity,
                     resultUser.getString("login"),
                     resultUser.getString("password"),
@@ -121,7 +152,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     result.getInt("group"),
                     result.getInt("uniqueNumber"),
                     statuses[result.getInt("status")],
-                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"))
+                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
             );
 
             resultSpec.close();
