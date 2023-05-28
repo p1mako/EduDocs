@@ -11,9 +11,9 @@ import java.lang.reflect.Method;
 public class ServiceInvocationHandlerImpl implements InvocationHandler {
     private static final Logger logger = LogManager.getLogger(ServiceInvocationHandlerImpl.class);
 
-    private final ServiceImpl service;
+    private final AbstractService service;
 
-    public ServiceInvocationHandlerImpl(ServiceImpl service) {
+    public ServiceInvocationHandlerImpl(AbstractService service) {
         this.service = service;
     }
 

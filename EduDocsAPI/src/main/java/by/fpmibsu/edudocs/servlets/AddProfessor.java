@@ -66,7 +66,7 @@ public class AddProfessor extends HttpServlet {
                     null,
                     request.getParameter("degree")
             );
-            if (userDao.create(professor)) {
+            if (userDao.create(professor) == null) {
                 response.setStatus(201);
             } else {
                 response.setStatus(422);
