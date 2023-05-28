@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RequestServiceImplTest {
 
-    private User user = new User("fpm.Leschik", "o98,pluj68h7egv", "Dmitry", "Leschik", "Anatolievich",UUID.fromString("22FED5A9-B35F-4D4D-92C0-FF50C78C5DA7"), null);
+    private User user = new User("fpm.Leschik", "o98,pluj68h7egv", "Dmitry", "Leschik", "Anatolievich",UUID.fromString("22FED5A9-B35F-4D4D-92C0-FF50C78C5DA7"));
 
     private Template template = new Template(null, "test", "testRoute");
 
