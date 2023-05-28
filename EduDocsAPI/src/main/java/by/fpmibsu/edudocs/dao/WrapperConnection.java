@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class WrapperConnection {
+public abstract class WrapperConnection {
     protected Connection connection;
     public void setConnection(Connection connection) {
         this.connection = connection;

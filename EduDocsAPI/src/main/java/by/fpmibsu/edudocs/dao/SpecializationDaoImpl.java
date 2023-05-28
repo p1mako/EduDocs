@@ -2,6 +2,8 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.SpecializationDao;
 import by.fpmibsu.edudocs.entities.Specialization;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +15,24 @@ import java.util.UUID;
 
 public class SpecializationDaoImpl extends WrapperConnection implements SpecializationDao {
 
-
+    private static final Logger logger = LogManager.getLogger(SpecializationDaoImpl.class);
     @Override
-    public boolean create(Specialization entity) throws DaoException {
+    public UUID create(Specialization entity) throws DaoException {
         String sql = "INSERT INTO Specializations(id, name, registerNumber) VALUES (?, ?, ?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, entity.getId().toString());
             statement.setString(2, entity.getName());
             statement.setString(3, String.valueOf(entity.getRegisterNumber()));
-            int rows = statement.executeUpdate();
+            statement.executeUpdate();
+            var resultSet = statement.getGeneratedKeys();
             statement.close();
-            return rows > 0;
+            if (resultSet.next()) {
+                return UUID.fromString(resultSet.getString(1));
+            } else {
+                logger.error("There is no autoincremented index after trying to add record into table `Specializations`");
+                throw new DaoException();
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }

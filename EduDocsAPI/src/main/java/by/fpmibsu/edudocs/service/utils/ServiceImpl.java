@@ -1,6 +1,7 @@
-package by.fpmibsu.edudocs.service;
+package by.fpmibsu.edudocs.service.utils;
 
 import by.fpmibsu.edudocs.dao.interfaces.Transaction;
+import by.fpmibsu.edudocs.service.interfaces.Service;
 
 abstract public class ServiceImpl implements Service {
     protected Transaction transaction = null;

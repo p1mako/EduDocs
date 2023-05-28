@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs.service;
+package by.fpmibsu.edudocs.service.utils;
 
 public interface ServiceInvocationHandler {
 }
