@@ -3,6 +3,7 @@ package by.fpmibsu.edudocs.entities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class User extends Entity {
@@ -14,6 +15,18 @@ public class User extends Entity {
     String lastName;
 
     public User() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(lastName, user.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, password, name, surname, lastName);
+    }
 
     public User(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
                 @Nullable String lastName, @Nullable UUID id) {
