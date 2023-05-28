@@ -1,5 +1,6 @@
 package by.fpmibsu.edudocs.controller;
 
+import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.action.Action;
 import by.fpmibsu.edudocs.action.ActionManager;
 import by.fpmibsu.edudocs.action.ActionManagerFactory;
@@ -18,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 
 public class DispatcherServlet  extends HttpServlet  {
     private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
@@ -27,6 +30,7 @@ public class DispatcherServlet  extends HttpServlet  {
     public static final Level LOG_LEVEL = Level.ALL;
     public static final String LOG_MESSAGE_FORMAT = "%n%d%n%p\t%C.%M:%L%n%m%n";
 
+    public static Properties prop = new Properties();
     public static final String DB_DRIVER_CLASS = "com.mysql.jdbc.Driver";
     public static final String DB_URL = "jdbc:mysql://localhost:3306/EduDocs?useUnicode=true&characterEncoding=UTF-8";
     public static final String DB_USER = "orlovich";
@@ -37,7 +41,14 @@ public class DispatcherServlet  extends HttpServlet  {
 
     public void init() {
         try {
-            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, DB_USER, DB_PASSWORD, DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
+            InputStream stream = App.class.getClassLoader().getResourceAsStream("config.properties");
+            try {
+                prop.load(stream);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, prop , DB_POOL_START_SIZE, DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
         } catch (DaoException e) {
             throw new RuntimeException(e);
         }

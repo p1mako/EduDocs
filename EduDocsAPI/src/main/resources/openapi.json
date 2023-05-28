@@ -79,40 +79,30 @@
       "User": {
         "type": "object",
         "properties": {
-          "UUID": {
+          "ID": {
             "type": "integer",
-            "format": "int64",
-            "example": 10
+            "format": "32 hexadecimal characters with four hyphens",
+            "example": "df3305c3-c8ef-4eeb-8538-6666e9a4d010"
           },
-          "username": {
+          "login": {
             "type": "string",
-            "example": "theUser"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "James"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@email.com"
+            "example": "fpm.******"
           },
           "password": {
             "type": "string",
-            "example": "12345"
+            "example": "9iuo8nvw65n98e5"
           },
-          "phone": {
+          "name": {
             "type": "string",
-            "example": "12345"
+            "example": "John"
           },
-          "userStatus": {
-            "type": "integer",
-            "description": "User Status",
-            "format": "int32",
-            "example": 1
+          "surname": {
+            "type": "string",
+            "example": "James"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Andreevich"
           }
         },
         "xml": {
