@@ -31,11 +31,24 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Override
     public void save(User user) throws DaoException {
-
+        UserDao dao = transaction.createDao(UserDao.class);
+        if(user.getId() != null) {
+            if(user.getPassword() != null) {
+                user.setPassword(md5(user.getPassword()));
+            } else {
+                User oldUser = dao.read(user.getId());
+                user.setPassword(oldUser.getPassword());
+            }
+            dao.update(user);
+        } else {
+            user.setPassword(md5(""));
+            user.setId(dao.create(user));
+        }
     }
 
     @Override
     public void delete(UUID identity) throws DaoException {
-
+        UserDao dao = transaction.createDao(UserDao.class);
+        dao.delete(identity);
     }
 }

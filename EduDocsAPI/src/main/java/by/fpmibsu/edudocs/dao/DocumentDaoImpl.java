@@ -2,6 +2,8 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.DocumentDao;
 import by.fpmibsu.edudocs.entities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,17 +11,25 @@ import java.util.List;
 import java.util.UUID;
 
 public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
+    private static final Logger logger = LogManager.getLogger(DocumentDaoImpl.class);
     final String SQL_GET_ALL = "SELECT * FROM Documents";
 
     @Override
-    public boolean create(Document entity) throws DaoException {
+    public UUID create(Document entity) throws DaoException {
         String sql = "INSERT INTO documents (id, created, valid_through) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getId().toString());
             statement.setTimestamp(2, entity.getCreated());
             statement.setDate(3, entity.getValidThrough());
-            int rows = statement.executeUpdate();
-            return rows > 0;
+            statement.executeUpdate();
+            var resultSet = statement.getGeneratedKeys();
+            statement.close();
+            if (resultSet.next()) {
+                return UUID.fromString(resultSet.getString(1));
+            } else {
+                logger.error("There is no autoincremented index after trying to add record into table `Documents`");
+                throw new DaoException();
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }

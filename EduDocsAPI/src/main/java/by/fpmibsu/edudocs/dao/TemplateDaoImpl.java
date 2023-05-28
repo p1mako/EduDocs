@@ -2,6 +2,8 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.TemplateDao;
 import by.fpmibsu.edudocs.entities.Template;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,18 +14,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
-
+    private static final Logger logger = LogManager.getLogger(TemplateDaoImpl.class);
     @Override
-    public boolean create(Template entity) throws DaoException {
+    public UUID create(Template entity) throws DaoException {
         String sql = "INSERT INTO Templates(id, name, route_to_document) VALUES (?, ?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, entity.getId().toString());
             statement.setString(2, entity.getName());
             statement.setString(3, entity.getRouteToDocument());
-            int rows = statement.executeUpdate();
-            statement.close();
-            return rows > 0;
+            statement.executeUpdate();
+            var resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                statement.close();
+                return UUID.fromString(resultSet.getString(1));
+            } else {
+                logger.error("There is no autoincremented index after trying to add record into table `Templates`");
+                throw new DaoException();
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }

@@ -3,6 +3,8 @@ package by.fpmibsu.edudocs.dao;
 import by.fpmibsu.edudocs.dao.interfaces.AdministrationMemberDao;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,28 +12,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class AdministrationMemberDaoImpl extends WrapperConnection implements AdministrationMemberDao {
-    @Override
-    public boolean create(AdministrationMember entity) throws DaoException {
-        try {
-            UserDaoImpl UD = new UserDaoImpl();
-            UD.create(entity);
-            UUID id = entity.getId();
-            String sql = "INSERT INTO Admins(id, assignment_start, assignment_end, role) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
-            statement.setString(2, entity.getFrom().toString());
-            statement.setString(3, entity.getUntil().toString());
-            statement.setString(4, AdministrationRole.valueOf(entity.getRole().toString()).toString());
 
-            ArrayList<Template> templates = (ArrayList<Template>) entity.getAvailableTemplates();
-            insertToAdministrationDocuments(id, statement, templates);
-            int rows = statement.executeUpdate();
-            statement.close();
-            return rows > 0;
+    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+
+    @Override
+    public UUID create(AdministrationMember entity) throws DaoException {
+        try {
+           var resultSet = insertToAdmins(entity);
+           if (resultSet.next()) {
+               return UUID.fromString(resultSet.getString(1));
+           } else {
+            logger.error("There is no autoincremented index after trying to add record into table `Admins`");
+            throw new DaoException();
+        }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
+
 
     @Override
     public List<AdministrationMember> read() throws DaoException {
@@ -138,18 +136,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
     @Override
     public void update(AdministrationMember entity) throws DaoException {
         try {
-            UserDaoImpl UD = new UserDaoImpl();
-            UD.create(entity);
-            UUID id = entity.getId();
-            String sql = "INSERT INTO Admins(id, assignment_start, assignment_end, role) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
-            statement.setString(2, entity.getFrom().toString());
-            statement.setString(3, entity.getUntil().toString());
-            statement.setString(4, AdministrationRole.valueOf(entity.getRole().toString()).toString());
-
-            ArrayList<Template> templates = (ArrayList<Template>) entity.getAvailableTemplates();
-            insertToAdministrationDocuments(id, statement, templates);
+            insertToAdmins(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -163,6 +150,26 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+    }
+
+    private ResultSet insertToAdmins(AdministrationMember entity) throws DaoException, SQLException {
+        UserDaoImpl UD = new UserDaoImpl();
+        UD.create(entity);
+        UUID id = entity.getId();
+        String sql = "INSERT INTO Admins(id, assignment_start, assignment_end, role) VALUES (?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, id.toString());
+        statement.setString(2, entity.getFrom().toString());
+        statement.setString(3, entity.getUntil().toString());
+        statement.setString(4, AdministrationRole.valueOf(entity.getRole().toString()).toString());
+        statement.executeUpdate();
+        ArrayList<Template> templates = (ArrayList<Template>) entity.getAvailableTemplates();
+
+        insertToAdministrationDocuments(id, statement, templates);
+
+        var resultSet = statement.getGeneratedKeys();
+        statement.close();
+        return resultSet;
     }
 
     private void insertToAdministrationDocuments(UUID id, PreparedStatement statement, List<Template> templates) throws SQLException {

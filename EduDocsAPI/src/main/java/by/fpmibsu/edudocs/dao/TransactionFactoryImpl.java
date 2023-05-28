@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TransactionFactoryImpl implements TransactionFactory {
-	private static Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
-	private Connection connection;
+	private static final Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
+	private final Connection connection;
 	
 	public TransactionFactoryImpl() throws DaoException {
 		connection = ConnectionPool.getInstance().getConnection();

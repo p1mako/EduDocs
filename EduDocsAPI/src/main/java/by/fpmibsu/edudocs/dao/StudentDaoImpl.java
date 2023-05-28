@@ -4,6 +4,8 @@ import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
 import by.fpmibsu.edudocs.entities.Specialization;
 import by.fpmibsu.edudocs.entities.Student;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,22 +17,29 @@ import java.util.UUID;
 
 public class StudentDaoImpl extends WrapperConnection implements StudentDao {
 
+    private static final Logger logger = LogManager.getLogger(StudentDaoImpl.class);
     @Override
-    public boolean create(Student entity) throws DaoException {
+    public UUID create(Student entity) throws DaoException {
         UserDaoImpl UD = new UserDaoImpl();
         try {
             UD.create(entity);
             UUID id = entity.getId();
             String sql = "INSERT INTO Students(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);;
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             updateStudents(entity, statement);
             statement.setString(6, id.toString());
             statement.executeUpdate();
-            statement.close();
+            var resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                statement.close();
+                return UUID.fromString(resultSet.getString(1));
+            } else {
+                logger.error("There is no autoincremented index after trying to add record into table `Specializations`");
+                throw new DaoException();
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return true;
     }
 
     @Override
