@@ -2,8 +2,10 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.ProfessorDao;
 import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
+import by.fpmibsu.edudocs.dao.interfaces.UserDao;
 import by.fpmibsu.edudocs.entities.Professor;
 import by.fpmibsu.edudocs.entities.Request;
+import by.fpmibsu.edudocs.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +23,9 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
 
     @Override
     public UUID create(Professor entity) throws DaoException {
-        UserDaoImpl UD = new UserDaoImpl();
+        UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
         try {
-            UD.create(entity);
+            userDao.create(entity);
             UUID id = entity.getId();
             String sql = "INSERT INTO Professors(id, degree) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -51,54 +53,27 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
             while (result.next()) {
                 String id = result.getString("id");
-                String sqlUser = "SELECT * FROM Users Where id = ?";
-                PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-                statementUser.setString(1, id);
-                ResultSet resultUser = statementUser.executeQuery();
 
-                if (!resultUser.next()) {
-                    resultUser.close();
-                    statementUser.close();
-                    return null;
-                }
-
-                String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-                PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-                statementAdminDoc.setString(1, id);
-                ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-
-                if (!resultAdminDoc.next()) {
-                    resultAdminDoc.close();
-                    statementAdminDoc.close();
-                    return null;
-                }
+                UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+                User userpart = userDao.read(UUID.fromString(id));
 
                 ArrayList<Request> requests = new ArrayList<>();
 
-                while (resultAdminDoc.next()) {
-                    String docId = resultAdminDoc.getString("template");
-                    RequestDao TD = new RequestDaoImpl();
-                    requests.add(TD.read(UUID.fromString(docId)));
-                }
+                RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+                requests = (ArrayList<Request>) requestDao.readByInitiator(UUID.fromString(id));
 
-                Professor user = new Professor(resultUser.getString("login"),
-                        resultUser.getString("password"),
-                        resultUser.getString("name"),
-                        resultUser.getString("surname"),
-                        resultUser.getString("lastName"),
+                Professor user = new Professor(
+                        userpart.getLogin(),
+                        userpart.getPassword(),
+                        userpart.getName(),
+                        userpart.getSurname(),
+                        userpart.getLastName(),
                         UUID.fromString(id),
-                        result.getString("degree"), requests);
+                        result.getString("degree"),
+                        requests);
                 users.add(user);
-                resultUser.close();
-                statementUser.close();
             }
             result.close();
             statement.close();
@@ -122,67 +97,24 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                 return null;
             }
 
-            if (!result.isBeforeFirst()){
-                result.close();
-                statement.close();
-                return null;
-            }
+            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            User userpart = userDao.read(identity);
 
-            String sqlUser = "SELECT * FROM Users Where id = ?";
-            PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, identity.toString());
-            ResultSet resultUser = statementUser.executeQuery();
+            List<Request> requests;
 
-            if (!resultUser.next()) {
-                resultUser.close();
-                statementUser.close();
-                return null;
-            }
+            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+            requests = requestDao.readByInitiator(identity);
 
-            if (!resultUser.isBeforeFirst()){
-                resultUser.close();
-                result.close();
-                statement.close();
-                return null;
-            }
+            user = new Professor(
+                    userpart.getLogin(),
+                    userpart.getPassword(),
+                    userpart.getName(),
+                    userpart.getSurname(),
+                    userpart.getLastName(),
+                    identity,
+                    result.getString("degree"),
+                    requests);
 
-            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-            statementAdminDoc.setString(1, identity.toString());
-            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-
-            if (!resultAdminDoc.next()) {
-                resultAdminDoc.close();
-                statementAdminDoc.close();
-                return null;
-            }
-
-            ArrayList<Request> requests = new ArrayList<>();
-
-            while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
-                RequestDao TD = new RequestDaoImpl();
-                requests.add(TD.read(UUID.fromString(docId)));
-            }
-
-            try {
-                user = new Professor(resultUser.getString("login"),
-                        resultUser.getString("password"),
-                        resultUser.getString("name"),
-                        resultUser.getString("surname"),
-                        resultUser.getString("lastName"),
-                        identity,
-                        result.getString("degree"), requests);
-            }
-            catch (SQLException e){
-                resultUser.close();
-                statementUser.close();
-                result.close();
-                statement.close();
-                return null;
-            }
-            resultUser.close();
-            statementUser.close();
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -199,8 +131,8 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             statement.setString(1, entity.getDegree());
             statement.executeUpdate();
             statement.close();
-            UserDaoImpl UD = new UserDaoImpl();
-            UD.update(entity);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+            userDao.update(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

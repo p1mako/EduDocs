@@ -18,8 +18,11 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
     private static final Logger logger = LogManager.getLogger(RequestDaoImpl.class);
 
     final String SQL_GET_ALL = "SELECT * FROM Requests";
+    final String SQL_GET_ALL_BY_INITIATOR = "SELECT * FROM Requests Where initiator = ?";
     final String SQL_GET_BY_UwU = "SELECT * FROM Requests WHERE id = ?";
     final String SQL_DELETE_BY_Uwu = "DELETE FROM Requests WHERE id = ?";
+
+    final String SQL_GET_ALL_BY_TEMPLATE = "SELECT * FROM Requests Where template = ?";
     final String SQL_INSERT_REQUEST = "INSERT INTO Requests(id, status, template, initiator, created, document) VALUES (?, ?, ?, ?, ?, ?)";
     final String SQL_UPDATE_REQUEST = "UPDATE Requests SET id = ?, status = ?, template = ?, initiator = ?, created = ?, document = ?";
 
@@ -45,13 +48,6 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SQL_GET_ALL);
-
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("id"));
                 requests.add(makeRequest(result, uuid));
@@ -62,6 +58,28 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
             throw new DaoException(e);
         }
         return requests;
+    }
+
+    @Override
+    public List<Request> getAllByTemplate(Template template) throws DaoException {
+
+        List<Request> requestList = new ArrayList<>();
+        try {
+            PreparedStatement requestStatement;
+            requestStatement = connection.prepareStatement(SQL_GET_ALL_BY_TEMPLATE);
+            requestStatement.setString(1, template.getId().toString());
+            ResultSet result = requestStatement.executeQuery();
+            while (result.next()) {
+                UUID uuid = UUID.fromString(result.getString("id"));
+                Request request = read(uuid);
+                if (request != null) {
+                    requestList.add(read(uuid));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return requestList;
     }
 
     @Override
@@ -129,14 +147,35 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
         Timestamp created = null;
         Document document = null;
 
-            status = RequestStatus.values()[result.getInt("status")];
-            template = templateDao.read(UUID.fromString(result.getString("template")));
-            initiator = userDao.read(UUID.fromString(result.getString("initiator")));
-            created = result.getTimestamp("created");
-            var documentString = result.getString("document");
-            if (documentString != null){
-                document = documentsDaoImpl.read(UUID.fromString(documentString));
-            }
+        status = RequestStatus.values()[result.getInt("status")];
+        template = templateDao.read(UUID.fromString(result.getString("template")));
+        initiator = userDao.read(UUID.fromString(result.getString("initiator")));
+        created = result.getTimestamp("created");
+        var documentString = result.getString("document");
+        if (documentString != null) {
+            document = documentsDaoImpl.read(UUID.fromString(documentString));
+        }
         return new Request(uuid, status, template, initiator, created, document);
+    }
+
+    public List<Request> readByInitiator(UUID initiator) throws DaoException {
+        PreparedStatement statementAdminDoc = null;
+        ArrayList<Request> requests = new ArrayList<>();
+        try {
+            statementAdminDoc = connection.prepareStatement(SQL_GET_ALL_BY_INITIATOR);
+            statementAdminDoc.setString(1, String.valueOf(initiator));
+            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+            while (resultAdminDoc.next()) {
+                String docId = resultAdminDoc.getString("template");
+                requests.add(this.read(UUID.fromString(docId)));
+            }
+
+            statementAdminDoc.close();
+            resultAdminDoc.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return requests;
     }
 }
