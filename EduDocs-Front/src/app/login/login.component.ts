@@ -17,6 +17,7 @@ export class LoginComponent {
 
   submit() : void{
     this.error = true;
+    console.log(this.login + " " + this.password)
     this.backend.authenticate(this.login, this.password). subscribe({
       next : (x) => {
         this.error = false;
@@ -29,6 +30,7 @@ export class LoginComponent {
       },
       complete : () => {
         console.log('done');
+        this.router.navigateByUrl("/requests");
       },
     });
   }

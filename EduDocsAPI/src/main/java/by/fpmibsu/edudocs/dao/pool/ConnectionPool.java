@@ -1,19 +1,13 @@
 package by.fpmibsu.edudocs.dao.pool;
 
-import by.fpmibsu.edudocs.App;
-import by.fpmibsu.edudocs.dao.UserDaoImpl;
-import by.fpmibsu.edudocs.entities.User;
 import org.apache.logging.log4j.LogManager;
 
 import by.fpmibsu.edudocs.dao.DaoException;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;

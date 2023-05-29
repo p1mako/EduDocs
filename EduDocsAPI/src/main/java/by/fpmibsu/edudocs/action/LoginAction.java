@@ -12,6 +12,7 @@ import by.fpmibsu.edudocs.service.interfaces.UserService;
 import by.fpmibsu.edudocs.validator.UserValidator;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Objects;
 
 public class LoginAction extends Action {
 
@@ -34,13 +36,15 @@ public class LoginAction extends Action {
         try {
             String toParse = request.getReader().readLine();
             if (toParse != null) {
-                var jp = (new JsonFactory()).createParser(request.getReader().readLine());
-                login = jp.getValueAsString("login");
-                password = jp.getValueAsString("password");
+                ObjectMapper mapper = new ObjectMapper();
+                var tree = mapper.readTree(toParse);
+                login = tree.get("login").textValue();
+                password = tree.get("password").textValue();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("Info: " + login + " " + password);
         if (login != null && password != null) {
             UserService service = factory.getService(UserService.class);
             User user = service.findByLogin(login);
@@ -62,16 +66,29 @@ public class LoginAction extends Action {
                             return;
                         } else {
                             session.setAttribute("user", administrationMember);
+                            if (!Objects.equals(administrationMember.getPassword(), password)){
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                return;
+                            }
                         }
                     } else {
                         session.setAttribute("user", professor);
+                        if (!Objects.equals(professor.getPassword(), password)){
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            return;
+                        }
                     }
                 } else {
+                    if (!Objects.equals(student.getPassword(), password)){
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
+                    }
                     session.setAttribute("user", student);
                 }
                 logger.info(String.format("user \"%s\" is logged in from %s (%s:%s)", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort()));
             } else {
                 request.setAttribute("message", "Имя пользователя не опознано");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 logger.info(String.format("user \"%s\" unsuccessfully tried to log in from %s (%s:%s)", login, request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort()));
             }
         } else if (request.getSession(false) == null) {
