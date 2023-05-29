@@ -15,10 +15,19 @@ export class BackendService {
   private adress = "http://localhost:8080/EduDocsAPI/";
 
   authenticate(login: string, password: string) : Observable<Student | Professor | Admin> {
-    return this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
+    var postHttp = this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
       login: login,
       password: password
-    }, {headers: {"Access-Control-Allow-Credentials": "true"}, withCredentials: true});
+    });
+
+    postHttp.subscribe((user: Student | Professor | Admin) => {
+      this.storage.user = user;
+    })
+    return postHttp;
+  }
+
+  logOut(){
+    this.http.get(this.adress + BackendAdresses.logout, {withCredentials: true})
   }
 
   isLoggedIn() : Observable<boolean | UrlTree>{
@@ -40,8 +49,8 @@ export class BackendService {
 }
 
 enum BackendAdresses {
-  login = "user/login",
-  logout = "user/logout",
+  login = "login",
+  logout = "logout",
   changeUser = "user/update",
   createUser = "user/create",
   createRequest = "request/create",

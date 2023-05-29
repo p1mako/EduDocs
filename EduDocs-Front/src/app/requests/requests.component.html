@@ -1,33 +1,51 @@
+<div class="nav">
+  <div class="wrap _w-custom structure-nav">
+    <div data-collapse="small" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+      data-doc-height="1" role="banner" class="structure-menu w-nav">
+      <div class="structure-cards-menu"><a routerLink="" class="structure-link">EduDocs</a>
+        <nav role="navigation" class="structure-project-menu w-nav-menu">
+          <div class="structure-menu-items">
+            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
+            <a href="" class="structure-link structure-menu-link"></a>
+            <a (click)="logOut()" class="btn btn-outline-dark w-button">LOG&nbsp;OUT</a>
+          </div>
+        </nav>
+        <div mdbDropdownToggle class="structure-cards2-menu-btn w-nav-button" (click)="expand()"><img
+            src="https://uploads-ssl.webflow.com/57d2d032578a8a81597b9f6a/5c8477db7c584b1a11e71704_menu-icon%402x.png"
+            width="18" alt="" class="structurenav-menu"></div>
+      </div>
+      <div class="w-nav-overlay" data-wf-ignore="" style="height: 10673px; display: block;">
+        <nav [@expandedPanel]="state" role="navigation" class="structure-project-menu w-nav-menu w--nav-menu-open">
+          <div class="structure-menu-items">
+            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
+            <a href="" class="structure-link structure-menu-link"></a>
+            <a (click)="logOut()" class="btn btn-outline-dark w-button">LOG&nbsp;OUT</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="list-section wf-section">
   <div class="w-dyn-list">
     <div role="list" class="list w-dyn-items">
       <div role="listitem" class="w-dyn-item">
-        <div class="staff-wrap">
+        <div class="staff-wrap" *ngFor="let request of requests; index as i;">
           <div class="cta5-option-headline">
-            <p class="name">Dinah Theus</p>
+            <p class="name">{{requests[i].template.name}}</p>
             <div class="label">
-              <div class="phone">(381) 247-8793</div>
+              <div class="phone">{{requests[i].created}}</div>
             </div>
-            <div class="label label-aqua"><a href="#" class="email">dinah.theus@trogdor.com</a></div>
+            <div class="label label-aqua">{{requests[i].created}}</div>
             <div class="label label-grey">
-              <div class="position">Burninator</div>
+              <div class="position" [hidden]="requests[i].document == null">{{requests[i].document?.author}}</div>
             </div>
             <div class="label-2 label-red">
-              <div class="location">Fresno</div>
+              <div class="location">{{requests[i].status.toString}}</div>
             </div>
           </div>
-          <div class="staff-button-wrap"><a href="/request" class="btn w-button">Open</a></div>
+          <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>
         </div>
-      </div>
-
-      <div class="w-embed w-script">
-        <script>
-          var options = {
-            valueNames: ['name', 'location', 'position']
-          };
-
-          var userList = new List('staff', options);
-        </script>
       </div>
     </div>
   </div>
