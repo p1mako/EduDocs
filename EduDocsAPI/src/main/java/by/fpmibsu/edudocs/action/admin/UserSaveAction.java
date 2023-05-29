@@ -18,17 +18,17 @@ public class UserSaveAction extends AbstractAdministratorAction {
 
 	@Override
 	public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
-		Forward forward = new Forward("/user/edit.html");
+		//Forward forward = new Forward("/user/edit.html");
 		try {
 			Validator<User> validator = ValidatorFactory.createValidator(User.class);
 			User user = validator.validate(request);
 			UserService service = factory.getService(UserService.class);
 			service.save(user);
-			forward.getAttributes().put("identity", user.getId());
-			forward.getAttributes().put("message", "Данные пользователя успешно сохранены");
+			//forward.getAttributes().put("identity", user.getId());
+//			forward.getAttributes().put("message", "Данные пользователя успешно сохранены");
 			logger.info(String.format("User \"%s\" saved user with identity %s", getAuthorizedUser().getLogin(), user.getId()));
 		} catch(IncorrectFormDataException e) {
-			forward.getAttributes().put("message", "Были обнаружены некорректные данные");
+//			forward.getAttributes().put("message", "Были обнаружены некорректные данные");
 			logger.warn(String.format("Incorrect data was found when user \"%s\" tried to save user", getAuthorizedUser().getLogin()), e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

@@ -14,9 +14,9 @@ public class ActionManagerImpl implements ActionManager {
     }
 
     @Override
-    public Action.Forward execute(Action action, HttpServletRequest request, HttpServletResponse response) throws DaoException {
+    public void execute(Action action, HttpServletRequest request, HttpServletResponse response) throws DaoException {
         action.setFactory(factory);
-        return action.exec(request, response);
+        action.exec(request, response);
     }
 
     @Override

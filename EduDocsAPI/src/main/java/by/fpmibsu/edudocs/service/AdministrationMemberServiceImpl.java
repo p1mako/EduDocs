@@ -14,6 +14,5 @@ public class AdministrationMemberServiceImpl extends AbstractService implements 
     public AdministrationMember findByIdentity(UUID identity) throws DaoException {
         var dao = transaction.createDao(AdministrationMemberDao.class);
         return dao.read(identity);
-
     }
 }

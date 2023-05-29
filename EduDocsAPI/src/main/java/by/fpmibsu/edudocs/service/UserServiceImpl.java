@@ -52,4 +52,10 @@ public class UserServiceImpl extends AbstractService implements UserService {
         UserDao dao = transaction.createDao(UserDao.class);
         dao.delete(identity);
     }
+
+    @Override
+    public void addUser(User user) throws DaoException {
+        UserDao dao = transaction.createDao(UserDao.class);
+        dao.create(user);
+    }
 }
