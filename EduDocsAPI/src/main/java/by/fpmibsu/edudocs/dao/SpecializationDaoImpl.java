@@ -45,6 +45,13 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             while (result.next()) {
                 Specialization user = new Specialization(UUID.fromString(result.getString("id")),
                         result.getString("name"),
@@ -67,6 +74,13 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             if (result.next()) {
                 user = new Specialization(identity,
                         result.getString("name"),
