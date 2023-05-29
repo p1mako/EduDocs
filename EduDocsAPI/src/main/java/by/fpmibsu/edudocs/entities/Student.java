@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
 public class Student extends User {
     Timestamp entryDate;
     int group;

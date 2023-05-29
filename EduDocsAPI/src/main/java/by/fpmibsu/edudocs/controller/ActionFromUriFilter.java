@@ -3,6 +3,8 @@ package by.fpmibsu.edudocs.controller;
 
 import by.fpmibsu.edudocs.action.Action;
 import by.fpmibsu.edudocs.action.LoginAction;
+import by.fpmibsu.edudocs.action.LogoutAction;
+import by.fpmibsu.edudocs.action.admin.UserDeleteAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,6 +12,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,7 +25,10 @@ public class ActionFromUriFilter implements Filter {
 	static {
 		actions.put("/", LoginAction.class);
 //		actions.put("/index", MainAction.class);
-		actions.put("/user/login", LoginAction.class);
+		actions.put("/user/create", LoginAction.class);
+		actions.put("/user/delete", UserDeleteAction.class);
+		actions.put("/logout", LogoutAction.class);
+		actions.put("/login", LoginAction.class);
 //		actions.put("/logout", LogoutAction.class);
 
 //		actions.put("/profile/edit", ProfileEditAction.class);
@@ -78,6 +84,7 @@ public class ActionFromUriFilter implements Filter {
 			} else {
 				actionName = uri.substring(beginAction);
 			}
+
 			Class<? extends Action> actionClass = actions.get(actionName);
 			try {
 				Action action = actionClass.newInstance();
@@ -95,4 +102,5 @@ public class ActionFromUriFilter implements Filter {
 
 	@Override
 	public void destroy() {}
+
 }

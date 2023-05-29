@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
 public class Request extends Entity {
     RequestStatus status;
     Timestamp created;

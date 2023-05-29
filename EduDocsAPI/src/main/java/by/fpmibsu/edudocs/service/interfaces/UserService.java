@@ -16,4 +16,6 @@ public interface UserService extends Service {
     void save(User user) throws DaoException;
 
     void delete(UUID identity) throws DaoException;
+
+    void addUser(User user) throws DaoException;
 }

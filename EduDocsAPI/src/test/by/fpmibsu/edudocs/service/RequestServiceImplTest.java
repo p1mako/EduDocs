@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -26,12 +27,12 @@ import static junit.framework.Assert.assertTrue;
 
 class RequestServiceImplTest {
 
-    private User user = new User("fpm.Leschik", "o98,pluj68h7egv", "Dmitry", "Leschik", "Anatolievich",UUID.fromString("22FED5A9-B35F-4D4D-92C0-FF50C78C5DA7"));
+    private final User user = new User("fpm.Leschik", "o98,pluj68h7egv", "Dmitry", "Leschik", "Anatolievich",UUID.fromString("22FED5A9-B35F-4D4D-92C0-FF50C78C5DA7"));
 
-    private Template template = new Template(null, "test", "testRoute");
+    private final Template template = new Template(null, "test", "testRoute");
 
-    private Document document = new Document(null, template, Timestamp.valueOf(LocalDateTime.now()), null, null, user);
-    private Request request = new Request(UUID.fromString("94C96E03-7448-43CE-BD35-563A441384D5"), RequestStatus.Sent, template, user, Timestamp.valueOf("1900-01-01 00:00:00.0000000"), null);
+    private final Document document = new Document(null, template, Timestamp.valueOf(LocalDateTime.now()), null, null, user);
+    private final Request request = new Request(UUID.fromString("94C96E03-7448-43CE-BD35-563A441384D5"), RequestStatus.Sent, template, user, Timestamp.valueOf("1900-01-01 00:00:00.0000000"), null);
 
     RequestServiceImplTest() {
         String url = "jdbc:sqlserver://localhost";
@@ -81,8 +82,7 @@ class RequestServiceImplTest {
         } catch (DaoException e) {
             throw new RuntimeException(e);
         }
-        ArrayList<Request> list = null;
-        list = (ArrayList<Request>) rs.getAllRequests();
+//        List<Request> list = rs.getAllRequests();
         assertFalse(rs.getAllRequests().isEmpty());
     }
 

@@ -30,7 +30,7 @@ import java.util.Properties;
 
 @WebServlet(name = "Dispatcher", value = "/")
 public class DispatcherServlet  extends HttpServlet  {
-    private static Logger logger = LogManager.getLogger(DispatcherServlet.class);
+    private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
     public static final String LOG_FILE_NAME = "log.txt";
     public static final Level LOG_LEVEL = Level.ALL;

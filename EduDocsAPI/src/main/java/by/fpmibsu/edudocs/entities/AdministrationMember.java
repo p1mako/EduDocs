@@ -2,6 +2,7 @@ package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
 public class AdministrationMember extends User {
 
     AdministrationRole role;
