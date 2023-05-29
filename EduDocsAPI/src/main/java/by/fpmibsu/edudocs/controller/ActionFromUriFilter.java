@@ -22,7 +22,7 @@ public class ActionFromUriFilter implements Filter {
 	static {
 		actions.put("/", LoginAction.class);
 //		actions.put("/index", MainAction.class);
-		actions.put("/user/create", LoginAction.class);
+		actions.put("/user/login", LoginAction.class);
 //		actions.put("/logout", LogoutAction.class);
 
 //		actions.put("/profile/edit", ProfileEditAction.class);
@@ -78,15 +78,11 @@ public class ActionFromUriFilter implements Filter {
 			} else {
 				actionName = uri.substring(beginAction);
 			}
-			System.out.println("suka " + actionName);
 			Class<? extends Action> actionClass = actions.get(actionName);
-			System.out.println(actionClass.getName());
 			try {
 				Action action = actionClass.newInstance();
-				System.out.println("action done");
 				action.setName(actionName);
 				httpRequest.setAttribute("action", action);
-				System.out.println("all done");
 				chain.doFilter(request, response);
 			} catch (InstantiationException | IllegalAccessException | NullPointerException e) {
 				logger.error("It is impossible to create action handler object", e);

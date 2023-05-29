@@ -16,14 +16,14 @@
                                     class="oma-form-1" aria-label="Email Form">
                                     <div class="oma-wrap-7">
                                         <div class="oma-text-1">Username</div>
-                                        <input [ngModel]="login" type="text" class="oma-imput-1 w-input" maxlength="256"
+                                        <input [(ngModel)]="login" type="text" class="oma-imput-1 w-input" maxlength="256"
                                             name="field-2" data-name="Field 2" placeholder="fpm.abacaba" id="field-2"
                                             required="">
                                         <div class="oma-wrap-8">
                                             <div class="oma-text-1">Password</div>
                                             <a href="#" class="oma-link-1" hidden="true">Forgot your password?</a>
                                         </div>
-                                        <input [ngModel]="password" type="password" pa class="oma-imput-1 w-input"
+                                        <input [(ngModel)]="password" type="password" pa class="oma-imput-1 w-input"
                                             maxlength="256" name="field" data-name="Field" placeholder="***********"
                                             id="field" required="">
                                         <div (click)="submit()" class="oma-button-1 w-button">Log in</div>
