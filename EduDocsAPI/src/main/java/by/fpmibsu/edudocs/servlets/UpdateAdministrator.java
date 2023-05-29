@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 import java.util.Properties;
 
-@WebServlet(name = "UpdateAdministrator", value = "/update-administrator")
 public class UpdateAdministrator extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

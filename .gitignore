@@ -1,0 +1,6 @@
+/target/
+/out/
+/.idea/
+/EduDocs-Front/.vscode/
+/EduDocsAPI/src/main/resources/CreateDevUser.sql
+/EduDocsAPI/src/main/resources/Лещик_6.sql

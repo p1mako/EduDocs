@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-@WebServlet(name = "UpdateProfessor", value = "/update-professor")
 public class UpdateProfessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

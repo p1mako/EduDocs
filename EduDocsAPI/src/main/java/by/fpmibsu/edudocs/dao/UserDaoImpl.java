@@ -129,9 +129,10 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
             statement.setString(1, login);
             ResultSet result = statement.executeQuery();
 
-            UUID identity = UUID.fromString(result.getString("id"));
+            UUID identity;
 
             if (result.next()) {
+                identity = UUID.fromString(result.getString("id"));
                 user = new User(result.getString("login"),
                         result.getString("password"),
                         result.getString("name"),

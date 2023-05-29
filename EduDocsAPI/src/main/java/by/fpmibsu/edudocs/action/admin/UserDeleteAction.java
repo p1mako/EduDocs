@@ -22,5 +22,6 @@ public class UserDeleteAction extends AbstractAdministratorAction {
         } catch (NumberFormatException e) {
             logger.warn(String.format("Incorrect data was found when user \"%s\" tried to delete user", getAuthorizedUser().getLogin()), e);
         }
+
     }
 }

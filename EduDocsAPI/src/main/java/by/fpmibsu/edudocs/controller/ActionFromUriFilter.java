@@ -28,6 +28,8 @@ public class ActionFromUriFilter implements Filter {
 		actions.put("/user/create", LoginAction.class);
 		actions.put("/user/delete", UserDeleteAction.class);
 		actions.put("/logout", LogoutAction.class);
+		actions.put("/login", LoginAction.class);
+//		actions.put("/logout", LogoutAction.class);
 
 //		actions.put("/profile/edit", ProfileEditAction.class);
 //		actions.put("/profile/save", ProfileSaveAction.class);
@@ -69,7 +71,8 @@ public class ActionFromUriFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		if(request instanceof HttpServletRequest httpRequest) {
+		if(request instanceof HttpServletRequest) {
+			HttpServletRequest httpRequest = (HttpServletRequest)request;
 			String contextPath = httpRequest.getContextPath();
 			String uri = httpRequest.getRequestURI();
 			logger.debug(String.format("Starting of processing of request for URI \"%s\"", uri));
@@ -81,21 +84,16 @@ public class ActionFromUriFilter implements Filter {
 			} else {
 				actionName = uri.substring(beginAction);
 			}
-			System.out.println("suka " + actionName);
+
 			Class<? extends Action> actionClass = actions.get(actionName);
-			System.out.println(actionClass.getName());
 			try {
-				Action action = actionClass.getConstructor().newInstance();
-				System.out.println("action done");
+				Action action = actionClass.newInstance();
 				action.setName(actionName);
 				httpRequest.setAttribute("action", action);
-				System.out.println("all done");
 				chain.doFilter(request, response);
 			} catch (InstantiationException | IllegalAccessException | NullPointerException e) {
 				logger.error("It is impossible to create action handler object", e);
 				httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
-			} catch (InvocationTargetException | NoSuchMethodException e) {
-				throw new RuntimeException(e);
 			}
 		} else {
 			logger.error("It is impossible to use HTTP filter");
@@ -104,4 +102,5 @@ public class ActionFromUriFilter implements Filter {
 
 	@Override
 	public void destroy() {}
+
 }

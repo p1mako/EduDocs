@@ -20,7 +20,6 @@ import java.sql.Timestamp;
 import java.util.Properties;
 import java.util.UUID;
 
-@WebServlet(name = "UpdateStudent", value = "/update-student")
 public class UpdateStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
