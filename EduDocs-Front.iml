@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$/EduDocs-Front">
       <excludeFolder url="file://$MODULE_DIR$/EduDocs-Front/tmp" />
     </content>
+    <content url="file://$MODULE_DIR$/EduDocs-Front/dist" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
