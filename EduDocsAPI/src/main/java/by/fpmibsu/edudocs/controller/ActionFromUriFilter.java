@@ -3,6 +3,8 @@ package by.fpmibsu.edudocs.controller;
 
 import by.fpmibsu.edudocs.action.Action;
 import by.fpmibsu.edudocs.action.LoginAction;
+import by.fpmibsu.edudocs.action.LogoutAction;
+import by.fpmibsu.edudocs.action.admin.UserDeleteAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +26,8 @@ public class ActionFromUriFilter implements Filter {
 		actions.put("/", LoginAction.class);
 //		actions.put("/index", MainAction.class);
 		actions.put("/user/create", LoginAction.class);
-//		actions.put("/logout", LogoutAction.class);
+		actions.put("/user/delete", UserDeleteAction.class);
+		actions.put("/logout", LogoutAction.class);
 
 //		actions.put("/profile/edit", ProfileEditAction.class);
 //		actions.put("/profile/save", ProfileSaveAction.class);
