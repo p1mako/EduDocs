@@ -4,13 +4,11 @@ import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
+import jdk.jshell.Snippet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -52,33 +50,41 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery(sql);
             StudentStatus[] statuses = StudentStatus.values();
 
-            if (!result.isBeforeFirst()){
+            if (!result.isBeforeFirst()) {
                 result.close();
                 statement.close();
                 return null;
             }
 
             while (result.next()) {
-
-                String id = result.getString("id");
+                String id;
+                try {
+                    id = result.getString("id");
+                } catch (SQLException e) {
+                    return null;
+                }
                 String sqlUser = "SELECT * FROM Users Where id = ?";
                 PreparedStatement statementUser = connection.prepareStatement(sqlUser);
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
-                if (!resultUser.isBeforeFirst()){
+                if (!resultUser.isBeforeFirst()) {
                     resultUser.close();
                     statementUser.close();
                     return null;
                 }
-
-                String idSpec = result.getString("specialization");
+                String idSpec;
+                try {
+                    idSpec = result.getString("specialization");
+                } catch (SQLException e) {
+                    return null;
+                }
                 String sqlSpec = "SELECT * FROM Specializations Where id = ?";
                 PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
                 statementUser.setString(1, idSpec);
                 ResultSet resultSpec = statementUser.executeQuery();
 
-                if (!resultSpec.isBeforeFirst()){
+                if (!resultSpec.isBeforeFirst()) {
                     resultSpec.close();
                     statementSpec.close();
                     return null;
@@ -90,7 +96,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
                 ArrayList<Request> requests = new ArrayList<>();
 
-                if (!resultAdminDoc.isBeforeFirst()){
+                if (!resultAdminDoc.isBeforeFirst()) {
                     resultAdminDoc.close();
                     statementAdminDoc.close();
                     return null;
@@ -101,18 +107,37 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     RequestDao TD = new RequestDaoImpl();
                     requests.add(TD.read(UUID.fromString(docId)));
                 }
-                Student user = new Student(UUID.fromString(id),
-                        resultUser.getString("login"),
-                        resultUser.getString("password"),
-                        resultUser.getString("name"),
-                        resultUser.getString("surname"),
-                        resultUser.getString("lastName"),
-                        result.getTimestamp("entryDate"),
-                        result.getInt("group"),
-                        result.getInt("uniqueNumber"),
-                        statuses[result.getInt("status")],
-                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
-                );
+
+                String login;
+                String password;
+                String name;
+                String surname;
+                String lastname;
+                Timestamp entryDate;
+                int group;
+                int uniqid;
+                StudentStatus status;
+                Specialization specialization;
+
+                try {
+                    login = resultUser.getString("login");
+                    password = resultUser.getString("password");
+                    name = resultUser.getString("name");
+                    surname = resultUser.getString("surname");
+                    lastname = resultUser.getString("lastName");
+                    entryDate = result.getTimestamp("entryDate");
+                    group = result.getInt("group");
+                    uniqid = result.getInt("uniqueNumber");
+                    status = statuses[result.getInt("status")];
+                    specialization = new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"));
+
+                } catch (SQLException e) {
+                    return null;
+                }
+
+
+                Student user = new Student(UUID.fromString(id), login, password, name, surname, lastname, entryDate, group, uniqid, status, specialization, requests);
+
                 resultSpec.close();
                 resultUser.close();
                 statementUser.close();
@@ -137,7 +162,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery();
             StudentStatus[] statuses = StudentStatus.values();
 
-            if (!result.isBeforeFirst()){
+            if (!result.isBeforeFirst()) {
                 result.close();
                 statement.close();
                 return null;
@@ -148,19 +173,24 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
-            if (!resultUser.isBeforeFirst()){
+            if (!resultUser.isBeforeFirst()) {
                 resultUser.close();
                 statementUser.close();
                 return null;
             }
+            String idSpec;
 
-            String idSpec = result.getString("specialization");
+            try {
+                idSpec = result.getString("specialization");
+            } catch (SQLException e){
+                return null;
+            }
             String sqlSpec = "SELECT * FROM Specializations Where id = ?";
             PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
             statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
-            if (!resultSpec.isBeforeFirst()){
+            if (!resultSpec.isBeforeFirst()) {
                 resultSpec.close();
                 statementSpec.close();
                 return null;
@@ -173,14 +203,18 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
             ArrayList<Request> requests = new ArrayList<>();
 
-            if (!resultAdminDoc.isBeforeFirst()){
+            if (!resultAdminDoc.isBeforeFirst()) {
                 resultAdminDoc.close();
                 statementAdminDoc.close();
                 return null;
             }
 
             while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
+                String docId;
+                try{docId = resultAdminDoc.getString("template");}
+                catch (SQLException e){
+                    return null;
+                }
                 RequestDao TD = new RequestDaoImpl();
                 requests.add(TD.read(UUID.fromString(docId)));
             }
@@ -189,18 +223,39 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             resultAdminDoc.close();
 
 
-            student = new Student(identity,
-                    resultUser.getString("login"),
-                    resultUser.getString("password"),
-                    resultUser.getString("name"),
-                    resultUser.getString("surname"),
-                    resultUser.getString("lastName"),
-                    result.getTimestamp("entryDate"),
-                    result.getInt("group"),
-                    result.getInt("uniqueNumber"),
-                    statuses[result.getInt("status")],
-                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
-            );
+            String login;
+            String password;
+            String name;
+            String surname;
+            String lastname;
+            Timestamp entryDate;
+            int group;
+            int uniqid;
+            StudentStatus status;
+            Specialization specialization;
+
+            try {
+                login = resultUser.getString("login");
+                password = resultUser.getString("password");
+                name = resultUser.getString("name");
+                surname = resultUser.getString("surname");
+                lastname = resultUser.getString("lastName");
+                entryDate = result.getTimestamp("entryDate");
+                group = result.getInt("group");
+                uniqid = result.getInt("uniqueNumber");
+                status = statuses[result.getInt("status")];
+                specialization = new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"));
+
+            } catch (SQLException e) {
+                return null;
+            }
+
+            student = new Student(identity, login, password, name, surname, lastname, entryDate, group, uniqid, status, specialization, requests);
+
+            resultSpec.close();
+            resultUser.close();
+            statementUser.close();
+            statementSpec.close();
 
             resultSpec.close();
             resultUser.close();
