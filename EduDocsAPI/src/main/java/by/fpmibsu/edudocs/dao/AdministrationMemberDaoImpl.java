@@ -39,6 +39,12 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
             AdministrationRole[] administrationRoles = AdministrationRole.values();
 
             while (result.next()) {
@@ -47,6 +53,13 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 PreparedStatement statementAdminDoc = connection.prepareStatement(sqlAdminDoc);
                 statementAdminDoc.setString(1, id);
                 ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+                if (!resultAdminDoc.next()) {
+                    resultAdminDoc.close();
+                    statementAdminDoc.close();
+                    return null;
+                }
+
                 List<Template> templates = new ArrayList<>();
 
                 while (resultAdminDoc.next()) {
@@ -62,6 +75,12 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
+                if (!resultUser.next()) {
+                    resultUser.close();
+                    statementUser.close();
+                    return null;
+                }
+
 
                 StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
                 for (var x : templates) {
@@ -70,6 +89,13 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
                 requestStatement.setString(1, id);
                 ResultSet resSet = statementAdminDoc.executeQuery();
+
+                if (!resSet.next()) {
+                    resSet.close();
+                    requestStatement.close();
+                    return null;
+                }
+
                 List<Request> requests = new ArrayList<>();
                 while (resSet.next()) {
                     String docId = resultAdminDoc.getString("request");
@@ -107,12 +133,26 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             AdministrationRole[] administrationRoles = AdministrationRole.values();
 
             String sqlAdminDoc = "SELECT * FROM AdministrationDocuments Where administration_member = ?";
             PreparedStatement statementAdminDoc = connection.prepareStatement(sqlAdminDoc);
             statementAdminDoc.setString(1, identity.toString());
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+            if (!resultAdminDoc.next()) {
+                resultAdminDoc.close();
+                statementAdminDoc.close();
+                return null;
+            }
+
             ArrayList<Template> templates = new ArrayList<>();
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
@@ -127,6 +167,12 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
+            if (!resultUser.next()) {
+                resultUser.close();
+                statementUser.close();
+                return null;
+            }
+
             StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
             for (var x : templates) {
                 sql1.append(" template = ").append(x.getId().toString()).append(" or");
@@ -134,6 +180,13 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
             requestStatement.setString(1, identity.toString());
             ResultSet resSet = statementAdminDoc.executeQuery();
+
+            if (!resSet.next()) {
+                resSet.close();
+                requestStatement.close();
+                return null;
+            }
+
             List<Request> requests = new ArrayList<>();
             while (resSet.next()) {
                 String docId = resultAdminDoc.getString("request");
@@ -192,6 +245,7 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
         statement.setString(3, entity.getUntil().toString());
         statement.setString(4, AdministrationRole.valueOf(entity.getRole().toString()).toString());
         statement.executeUpdate();
+
         ArrayList<Template> templates = (ArrayList<Template>) entity.getAvailableTemplates();
 
         insertToAdministrationDocuments(id, statement, templates);

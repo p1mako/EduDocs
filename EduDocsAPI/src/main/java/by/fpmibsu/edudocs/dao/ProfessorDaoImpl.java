@@ -50,6 +50,13 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             while (result.next()) {
                 String id = result.getString("id");
                 String sqlUser = "SELECT * FROM Users Where id = ?";
@@ -57,10 +64,23 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
+                if (!resultUser.next()) {
+                    resultUser.close();
+                    statementUser.close();
+                    return null;
+                }
+
                 String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
                 PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
                 statementAdminDoc.setString(1, id);
                 ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+                if (!resultAdminDoc.next()) {
+                    resultAdminDoc.close();
+                    statementAdminDoc.close();
+                    return null;
+                }
+
                 ArrayList<Request> requests = new ArrayList<>();
 
                 while (resultAdminDoc.next()) {
@@ -96,15 +116,34 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
 
+            if (!resultUser.next()) {
+                resultUser.close();
+                statementUser.close();
+                return null;
+            }
+
             String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
             PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
             statementAdminDoc.setString(1, identity.toString());
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+            if (!resultAdminDoc.next()) {
+                resultAdminDoc.close();
+                statementAdminDoc.close();
+                return null;
+            }
+
             ArrayList<Request> requests = new ArrayList<>();
 
             while (resultAdminDoc.next()) {
