@@ -128,7 +128,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     entryDate = result.getTimestamp("entryDate");
                     group = result.getInt("group");
                     uniqid = result.getInt("uniqueNumber");
-                    status = statuses[result.getInt("status")];
+                    status = statuses[result.getInt("status") - 1];
                     specialization = new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"));
 
                 } catch (SQLException e) {
@@ -243,7 +243,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 entryDate = result.getTimestamp("entryDate");
                 group = result.getInt("group");
                 uniqid = result.getInt("uniqueNumber");
-                status = statuses[result.getInt("status")];
+                status = statuses[result.getInt("status") - 1];
                 specialization = new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber"));
 
             } catch (SQLException e) {
