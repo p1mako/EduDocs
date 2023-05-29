@@ -26,7 +26,7 @@ public class RequestUpdateAction extends Action {
         }
         RequestService service = factory.getService(RequestService.class);
 
-        if (service.createRequest(myRequest)) {
+        if (service.updateRequest(myRequest)) {
             response.setStatus(200);
         } else {
             response.setStatus(500);
