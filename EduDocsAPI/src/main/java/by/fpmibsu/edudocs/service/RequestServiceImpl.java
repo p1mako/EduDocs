@@ -77,4 +77,15 @@ public class RequestServiceImpl implements RequestService {
             return false;
         }
     }
+
+    @Override
+    public boolean updateRequest(Request request) {
+        RequestDaoImpl rd = new RequestDaoImpl();
+        try {
+            rd.update(request);
+            return true;
+        } catch (DaoException e) {
+            return false;
+        }
+    }
 }

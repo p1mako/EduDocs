@@ -21,4 +21,6 @@ public interface RequestService extends Service {
     public boolean deleteRequest(Request request);
 
     public boolean addAnswerToRequest(Request request, Document document);
+
+    public boolean updateRequest(Request request);
 }
