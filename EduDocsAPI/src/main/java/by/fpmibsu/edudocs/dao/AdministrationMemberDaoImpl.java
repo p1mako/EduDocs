@@ -1,9 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.dao.interfaces.AdministrationMemberDao;
-import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
-import by.fpmibsu.edudocs.dao.interfaces.TemplateDao;
-import by.fpmibsu.edudocs.dao.interfaces.TransactionFactory;
+import by.fpmibsu.edudocs.dao.interfaces.*;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
 import org.apache.logging.log4j.LogManager;
@@ -42,81 +39,43 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
             AdministrationRole[] administrationRoles = AdministrationRole.values();
+
+            TemplateDao templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDao.class);
+
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+
+            RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
 
             while (result.next()) {
                 String id = result.getString("id");
-                String sqlAdminDoc = "SELECT * FROM AdministrationDocuments Where administration_member = ?";
-                PreparedStatement statementAdminDoc = connection.prepareStatement(sqlAdminDoc);
-                statementAdminDoc.setString(1, id);
-                ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
 
-                if (!resultAdminDoc.next()) {
-                    resultAdminDoc.close();
-                    statementAdminDoc.close();
-                    return null;
-                }
+                List<Template> templates = templateDao.getAvailableTemplates(UUID.fromString(id));
 
-                List<Template> templates = new ArrayList<>();
-
-                while (resultAdminDoc.next()) {
-                    String docId = resultAdminDoc.getString("template");
-                    TemplateDaoImpl TD = new TemplateDaoImpl();
-                    templates.add(TD.read(UUID.fromString(docId)));
-                }
-                statementAdminDoc.close();
-                resultAdminDoc.close();
-
-                String sqlUser = "SELECT * FROM Users Where id = ?";
-                PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-                statementUser.setString(1, id);
-                ResultSet resultUser = statementUser.executeQuery();
-
-                if (!resultUser.next()) {
-                    resultUser.close();
-                    statementUser.close();
-                    return null;
-                }
-
-
-                StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
-                for (var x : templates) {
-                    sql1.append(" template = ").append(x.getId().toString()).append(" or");
-                }
-                PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
-                requestStatement.setString(1, id);
-                ResultSet resSet = statementAdminDoc.executeQuery();
-
-                if (!resSet.next()) {
-                    resSet.close();
-                    requestStatement.close();
-                    return null;
-                }
+                User userpart = userDao.read(UUID.fromString(id));
 
                 List<Request> requests = new ArrayList<>();
-                while (resSet.next()) {
-                    String docId = resultAdminDoc.getString("request");
-                    RequestDao TD = new RequestDaoImpl();
-                    requests.add(TD.read(UUID.fromString(docId)));
+
+                for(var template : templates){
+                    List<Request> requestListpart;
+                    requestListpart = requestDao.getAllByTemplate(template);
+                    if(requestListpart != null){
+                        requests.add((Request) requestListpart);
+                    }
                 }
+
                 AdministrationMember user = new AdministrationMember(UUID.fromString(id),
                         administrationRoles[result.getInt("role")],
                         Timestamp.valueOf(result.getString("assignment_start")),
                         Timestamp.valueOf(result.getString("assignment_end")),
-                        resultUser.getString("login"),
-                        resultUser.getString("password"),
-                        resultUser.getString("name"),
-                        resultUser.getString("surname"),
-                        resultUser.getString("lastName"),
-                        templates, requests);
+                        userpart.getLogin(),
+                        userpart.getPassword(),
+                        userpart.getName(),
+                        userpart.getSurname(),
+                        userpart.getLastName(),
+                        templates,
+                        requests);
 
-                resultUser.close();
-                statementUser.close();
                 users.add(user);
             }
             result.close();
@@ -144,79 +103,37 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
 
             AdministrationRole[] administrationRoles = AdministrationRole.values();
 
-            String sqlAdminDoc = "SELECT * FROM AdministrationDocuments Where administration_member = ?";
-            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlAdminDoc);
-            statementAdminDoc.setString(1, identity.toString());
-            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+            TemplateDaoImpl templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDaoImpl.class);
 
-            if (!resultAdminDoc.next()) {
-                resultAdminDoc.close();
-                statementAdminDoc.close();
-                return null;
-            }
+            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
 
-            ArrayList<Template> templates = new ArrayList<>();
-            while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
-                var td =(new TransactionFactoryImpl()).createTransaction().createDao(TemplateDao.class);
-                var current = td.read(UUID.fromString(docId));
-                if (current != null){
-                    templates.add(current);
-                }
-            }
-            statementAdminDoc.close();
-            resultAdminDoc.close();
+            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
 
-            String sqlUser = "SELECT * FROM Users Where id = ?";
-            PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, identity.toString());
-            ResultSet resultUser = statementUser.executeQuery();
+            List<Template> templates = templateDao.getAvailableTemplates(identity);
 
-            if (!resultUser.next()) {
-                resultUser.close();
-                statementUser.close();
-                return null;
-            }
-
-            StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
-            for (var x : templates) {
-                sql1.append(" template = '").append(x.getId().toString()).append("' or");
-            }
-            sql1.delete(sql1.length() - 3, sql1.length());
-            PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
-            ResultSet resSet = requestStatement.executeQuery();
-
-            if (!resSet.next()) {
-                resSet.close();
-                requestStatement.close();
-                return null;
-            }
+            User userpart = userDao.read(identity);
 
             List<Request> requests = new ArrayList<>();
-            while (resSet.next()) {
-                String docId = resSet.getString("id");
-                var rd = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
-                requests.add(rd.read(UUID.fromString(docId)));
+
+            for(var template : templates){
+                List<Request> requestListpart;
+                requestListpart = requestDao.getAllByTemplate(template);
+                if(requestListpart != null){
+                    requests.add((Request) requestListpart);
+                }
             }
 
-            String assignmentEndStr = result.getString("assignment_end");
-            Timestamp asignmentEnd = null;
-            if (assignmentEndStr != null){
-                asignmentEnd = Timestamp.valueOf(result.getString(assignmentEndStr));
-            }
             user = new AdministrationMember(identity,
                     administrationRoles[result.getInt("role")],
                     Timestamp.valueOf(result.getString("assignment_start")),
-                    asignmentEnd,
-                    resultUser.getString("login"),
-                    resultUser.getString("password"),
-                    resultUser.getString("name"),
-                    resultUser.getString("surname"),
-                    resultUser.getString("lastName"),
+                    Timestamp.valueOf(result.getString("assignment_end")),
+                    userpart.getLogin(),
+                    userpart.getPassword(),
+                    userpart.getName(),
+                    userpart.getSurname(),
+                    userpart.getLastName(),
                     templates, requests);
 
-            resultUser.close();
-            statementUser.close();
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -245,8 +162,8 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
     }
 
     private ResultSet insertToAdmins(AdministrationMember entity) throws DaoException, SQLException {
-        UserDaoImpl UD = new UserDaoImpl();
-        UD.create(entity);
+        UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+        userDao.create(entity);
         UUID id = entity.getId();
         String sql = "INSERT INTO Admins(id, assignment_start, assignment_end, role) VALUES (?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
