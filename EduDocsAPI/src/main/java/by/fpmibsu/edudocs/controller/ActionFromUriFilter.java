@@ -3,7 +3,6 @@ package by.fpmibsu.edudocs.controller;
 
 import by.fpmibsu.edudocs.action.Action;
 import by.fpmibsu.edudocs.action.LoginAction;
-import by.fpmibsu.edudocs.action.admin.UserCreateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,20 +10,20 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@WebFilter(asyncSupported = true, urlPatterns = {"/*"})
+@WebFilter(filterName = "asb", asyncSupported = true, urlPatterns = {"/*"})
 public class ActionFromUriFilter implements Filter {
 	private static final Logger logger = LogManager.getLogger(ActionFromUriFilter.class);
 
-	private static final Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
+	private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
 
 	static {
-//		actions.put("/", MainAction.class);
+		actions.put("/", LoginAction.class);
 //		actions.put("/index", MainAction.class);
-		actions.put("/login", LoginAction.class);
-		actions.put("/user/create", UserCreateAction.class);
+		actions.put("/user/create", LoginAction.class);
 //		actions.put("/logout", LogoutAction.class);
 
 //		actions.put("/profile/edit", ProfileEditAction.class);
@@ -67,8 +66,7 @@ public class ActionFromUriFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		if(request instanceof HttpServletRequest) {
-			HttpServletRequest httpRequest = (HttpServletRequest)request;
+		if(request instanceof HttpServletRequest httpRequest) {
 			String contextPath = httpRequest.getContextPath();
 			String uri = httpRequest.getRequestURI();
 			logger.debug(String.format("Starting of processing of request for URI \"%s\"", uri));
@@ -80,20 +78,24 @@ public class ActionFromUriFilter implements Filter {
 			} else {
 				actionName = uri.substring(beginAction);
 			}
+			System.out.println("suka " + actionName);
 			Class<? extends Action> actionClass = actions.get(actionName);
+			System.out.println(actionClass.getName());
 			try {
-				Action action = actionClass.newInstance();
+				Action action = actionClass.getConstructor().newInstance();
+				System.out.println("action done");
 				action.setName(actionName);
 				httpRequest.setAttribute("action", action);
+				System.out.println("all done");
 				chain.doFilter(request, response);
 			} catch (InstantiationException | IllegalAccessException | NullPointerException e) {
 				logger.error("It is impossible to create action handler object", e);
 				httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
-				httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
+			} catch (InvocationTargetException | NoSuchMethodException e) {
+				throw new RuntimeException(e);
 			}
 		} else {
 			logger.error("It is impossible to use HTTP filter");
-			request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
 		}
 	}
 

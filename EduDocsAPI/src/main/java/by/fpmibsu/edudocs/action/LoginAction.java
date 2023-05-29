@@ -9,11 +9,7 @@ import by.fpmibsu.edudocs.service.interfaces.AdministrationMemberService;
 import by.fpmibsu.edudocs.service.interfaces.ProfessorService;
 import by.fpmibsu.edudocs.service.interfaces.StudentService;
 import by.fpmibsu.edudocs.service.interfaces.UserService;
-import by.fpmibsu.edudocs.validator.UserValidator;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.util.JsonParserDelegate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
