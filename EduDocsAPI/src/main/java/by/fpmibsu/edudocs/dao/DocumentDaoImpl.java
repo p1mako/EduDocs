@@ -44,6 +44,13 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SQL_GET_ALL);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             Document document;
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("author"));
@@ -73,6 +80,13 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             Template template = templateDao.read(UUID.fromString(result.getString("template")));
             Timestamp created = result.getTimestamp("created");
             Date date = result.getDate("date");

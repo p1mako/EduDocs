@@ -45,6 +45,13 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SQL_GET_ALL);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("id"));
                 requests.add(makeRequest(result, uuid));
@@ -63,6 +70,13 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
             PreparedStatement statement = connection.prepareStatement(SQL_GET_BY_UwU);
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             Request request = makeRequest(result, identity);
             result.close();
             statement.close();

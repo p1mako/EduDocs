@@ -44,6 +44,13 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             while (result.next()) {
                 Template user = new Template(UUID.fromString(result.getString("id")),
                         result.getString("name"),
@@ -66,6 +73,13 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
+
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             if (result.next()) {
                 user = new Template(UUID.fromString(result.getString("id")),
                         result.getString("name"),

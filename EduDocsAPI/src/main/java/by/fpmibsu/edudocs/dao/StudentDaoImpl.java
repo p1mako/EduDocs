@@ -4,13 +4,11 @@ import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
+import jdk.jshell.Snippet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -51,19 +49,46 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             StudentStatus[] statuses = StudentStatus.values();
-            while (result.next()) {
 
-                String id = result.getString("id");
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
+            while (result.next()) {
+                String id;
+                try {
+                    id = result.getString("id");
+                } catch (SQLException e) {
+                    return null;
+                }
                 String sqlUser = "SELECT * FROM Users Where id = ?";
                 PreparedStatement statementUser = connection.prepareStatement(sqlUser);
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
-                String idSpec = result.getString("specialization");
+                if (!resultUser.next()) {
+                    resultUser.close();
+                    statementUser.close();
+                    return null;
+                }
+                String idSpec;
+                try {
+                    idSpec = result.getString("specialization");
+                } catch (SQLException e) {
+                    return null;
+                }
                 String sqlSpec = "SELECT * FROM Specializations Where id = ?";
                 PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
                 statementUser.setString(1, idSpec);
                 ResultSet resultSpec = statementUser.executeQuery();
+
+                if (!resultSpec.next()) {
+                    resultSpec.close();
+                    statementSpec.close();
+                    return null;
+                }
 
                 String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
                 PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
@@ -71,11 +96,18 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
                 ArrayList<Request> requests = new ArrayList<>();
 
+                if (!resultAdminDoc.next()) {
+                    resultAdminDoc.close();
+                    statementAdminDoc.close();
+                    return null;
+                }
+
                 while (resultAdminDoc.next()) {
                     String docId = resultAdminDoc.getString("template");
                     RequestDao TD = new RequestDaoImpl();
                     requests.add(TD.read(UUID.fromString(docId)));
                 }
+
                 Student user = new Student(UUID.fromString(id),
                         resultUser.getString("login"),
                         resultUser.getString("password"),
@@ -85,7 +117,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                         result.getTimestamp("entryDate"),
                         result.getInt("group"),
                         result.getInt("uniqueNumber"),
-                        statuses[result.getInt("status")],
+                        statuses[result.getInt("status") - 1],
                         new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
                 );
                 resultSpec.close();
@@ -112,10 +144,22 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery();
             StudentStatus[] statuses = StudentStatus.values();
 
+            if (!result.next()) {
+                result.close();
+                statement.close();
+                return null;
+            }
+
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
+
+            if (!resultUser.next()) {
+                resultUser.close();
+                statementUser.close();
+                return null;
+            }
 
             String idSpec = result.getString("specialization");
             String sqlSpec = "SELECT * FROM Specializations Where id = ?";
@@ -123,11 +167,24 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
+            if (!resultSpec.next()) {
+                resultSpec.close();
+                statementSpec.close();
+                return null;
+            }
+
+
             String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
             PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
             statementAdminDoc.setString(1, identity.toString());
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
             ArrayList<Request> requests = new ArrayList<>();
+
+            if (!resultAdminDoc.next()) {
+                resultAdminDoc.close();
+                statementAdminDoc.close();
+                return null;
+            }
 
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
@@ -148,7 +205,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     result.getTimestamp("entryDate"),
                     result.getInt("group"),
                     result.getInt("uniqueNumber"),
-                    statuses[result.getInt("status")],
+                    statuses[result.getInt("status") - 1],
                     new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
             );
 
