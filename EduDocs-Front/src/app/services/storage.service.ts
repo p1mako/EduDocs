@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class StorageService {
 
-  currentUser: Student | Professor | Admin | null = null;
+  private currentUser: Student | Professor | Admin | null = null;
 
   constructor() { }
 
@@ -15,7 +15,7 @@ export class StorageService {
 
   
   public get user() : Student | Professor | Admin | null {
-    return this.user;
+    return this.currentUser;
   }
   
 }
@@ -45,7 +45,7 @@ export interface Specialization extends Entity{
 }
 
 export interface Student extends User{
-  requests: [Request];
+  requests: RequestEntity[];
   entryDate: string;
   group: number;
   status: StudentStatus;
@@ -54,7 +54,7 @@ export interface Student extends User{
 }
 
 export interface Admin extends User{
-  requests: [Request];
+  requests: RequestEntity[];
   role: AdministrationRole;
   from: string;
   until: string;
@@ -62,7 +62,7 @@ export interface Admin extends User{
 }
 
 export interface Professor extends User{
-  requests: [Request];
+  requests: RequestEntity[];
   degree: string;
 }
 
@@ -74,7 +74,7 @@ export interface Document extends Entity{
   inititator: User;
 }
 
-export interface Request extends Entity{
+export interface RequestEntity extends Entity{
   status: RequestStatus;
   created: string;
   document: Document | null;
