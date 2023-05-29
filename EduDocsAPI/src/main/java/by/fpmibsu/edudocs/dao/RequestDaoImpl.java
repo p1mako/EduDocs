@@ -1,6 +1,6 @@
 package by.fpmibsu.edudocs.dao;
 
-import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
+import by.fpmibsu.edudocs.dao.interfaces.*;
 import by.fpmibsu.edudocs.entities.Document;
 import by.fpmibsu.edudocs.entities.Request;
 import by.fpmibsu.edudocs.entities.Template;
@@ -119,14 +119,24 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
     }
 
     private Request makeRequest(ResultSet result, UUID uuid) throws SQLException, DaoException {
-        DocumentDaoImpl documentsDaoImpl = new DocumentDaoImpl();
-        TemplateDaoImpl templateDao = new TemplateDaoImpl();
-        UserDaoImpl userDao = new UserDaoImpl();
-        RequestStatus status = RequestStatus.values()[result.getInt("status")];
-        Template template = templateDao.read(UUID.fromString(result.getString("template")));
-        User initiator = userDao.read(UUID.fromString(result.getString("initiator")));
-        Timestamp created = result.getTimestamp("created");
-        Document document = documentsDaoImpl.read(UUID.fromString(result.getString("document")));
+        var factory = new TransactionFactoryImpl();
+        DocumentDao documentsDaoImpl = factory.createTransaction().createDao(DocumentDao.class);
+        TemplateDao templateDao = factory.createTransaction().createDao(TemplateDao.class);
+        UserDao userDao = factory.createTransaction().createDao(UserDao.class);
+        RequestStatus status = null;
+        Template template = null;
+        User initiator = null;
+        Timestamp created = null;
+        Document document = null;
+
+            status = RequestStatus.values()[result.getInt("status")];
+            template = templateDao.read(UUID.fromString(result.getString("template")));
+            initiator = userDao.read(UUID.fromString(result.getString("initiator")));
+            created = result.getTimestamp("created");
+            var documentString = result.getString("document");
+            if (documentString != null){
+                document = documentsDaoImpl.read(UUID.fromString(documentString));
+            }
         return new Request(uuid, status, template, initiator, created, document);
     }
 }

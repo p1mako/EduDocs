@@ -161,6 +161,11 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 return null;
             }
 
+            if (!result.isBeforeFirst()){
+                result.close();
+                statement.close();
+                return null;
+            }
             String idSpec = result.getString("specialization");
             String sqlSpec = "SELECT * FROM Specializations Where id = ?";
             PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);

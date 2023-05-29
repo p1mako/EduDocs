@@ -54,7 +54,7 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
             while (result.next()) {
                 Template user = new Template(UUID.fromString(result.getString("id")),
                         result.getString("name"),
-                        result.getString("route"));
+                        result.getString("route_to_document"));
                 users.add(user);
             }
             result.close();
@@ -80,11 +80,10 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
                 return null;
             }
 
-            if (result.next()) {
-                user = new Template(UUID.fromString(result.getString("id")),
+            user = new Template(UUID.fromString(result.getString("id")),
                         result.getString("name"),
-                        result.getString("route"));
-            }
+                        result.getString("route_to_document"));
+
             result.close();
             statement.close();
         } catch (SQLException e) {

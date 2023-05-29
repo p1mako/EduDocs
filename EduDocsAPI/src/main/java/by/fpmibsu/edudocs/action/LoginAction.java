@@ -27,9 +27,8 @@ public class LoginAction extends Action {
 
     private static final Logger logger = LogManager.getLogger(LoginAction.class);
 
-
     @Override
-    public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
+    public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException{
         String login = null;
         String password = null;
         try {
@@ -64,23 +63,38 @@ public class LoginAction extends Action {
                             response.setStatus(500);
                             return;
                         } else {
-                            session.setAttribute("user", administrationMember);
                             if (!Objects.equals(administrationMember.getPassword(), password)){
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                 return;
                             }
+                            session.setAttribute("user", administrationMember);
+                            try {
+                                response.getOutputStream().println((request.getSession().getAttribute("user")).toString());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     } else {
-                        session.setAttribute("user", professor);
                         if (!Objects.equals(professor.getPassword(), password)){
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             return;
+                        }
+                        session.setAttribute("user", professor);
+                        try {
+                            response.getOutputStream().println((request.getSession().getAttribute("user")).toString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 } else {
                     if (!Objects.equals(student.getPassword(), password)){
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         return;
+                    }
+                    try {
+                        response.getOutputStream().println( (request.getSession().getAttribute("user")).toString());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                     session.setAttribute("user", student);
                 }

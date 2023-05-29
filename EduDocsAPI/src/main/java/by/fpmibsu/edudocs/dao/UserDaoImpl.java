@@ -51,12 +51,6 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
             while (result.next()) {
                 User user = new User(result.getString("login"),
                         result.getString("password"),
@@ -83,12 +77,6 @@ public class UserDaoImpl extends WrapperConnection implements UserDao {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
-
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
 
             if (result.next()) {
                 user = new User(result.getString("login"),

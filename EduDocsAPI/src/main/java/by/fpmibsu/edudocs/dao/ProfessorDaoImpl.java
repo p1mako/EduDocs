@@ -122,6 +122,12 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                 return null;
             }
 
+            if (!result.isBeforeFirst()){
+                result.close();
+                statement.close();
+                return null;
+            }
+
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
             statementUser.setString(1, identity.toString());
@@ -130,6 +136,13 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             if (!resultUser.next()) {
                 resultUser.close();
                 statementUser.close();
+                return null;
+            }
+
+            if (!resultUser.isBeforeFirst()){
+                resultUser.close();
+                result.close();
+                statement.close();
                 return null;
             }
 
@@ -152,13 +165,22 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                 requests.add(TD.read(UUID.fromString(docId)));
             }
 
-            user = new Professor(resultUser.getString("login"),
-                    resultUser.getString("password"),
-                    resultUser.getString("name"),
-                    resultUser.getString("surname"),
-                    resultUser.getString("lastName"),
-                    identity,
-                    result.getString("degree"), requests);
+            try {
+                user = new Professor(resultUser.getString("login"),
+                        resultUser.getString("password"),
+                        resultUser.getString("name"),
+                        resultUser.getString("surname"),
+                        resultUser.getString("lastName"),
+                        identity,
+                        result.getString("degree"), requests);
+            }
+            catch (SQLException e){
+                resultUser.close();
+                statementUser.close();
+                result.close();
+                statement.close();
+                return null;
+            }
             resultUser.close();
             statementUser.close();
             result.close();
