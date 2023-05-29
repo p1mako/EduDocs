@@ -256,11 +256,6 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             resultUser.close();
             statementUser.close();
             statementSpec.close();
-
-            resultSpec.close();
-            resultUser.close();
-            statementUser.close();
-            statementSpec.close();
             result.close();
             statement.close();
         } catch (SQLException e) {
