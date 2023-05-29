@@ -12,7 +12,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.UUID;
-@WebServlet(name = "CreateRequest", value = "/create-request")
 public class CreateRequestServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

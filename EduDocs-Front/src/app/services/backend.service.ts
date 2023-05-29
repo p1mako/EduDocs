@@ -18,7 +18,7 @@ export class BackendService {
     return this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
       login: login,
       password: password
-    }, {withCredentials: true, responseType: "json"});
+    }, {headers: {"Access-Control-Allow-Credentials": "true"}, withCredentials: true});
   }
 
   isLoggedIn() : Observable<boolean | UrlTree>{
