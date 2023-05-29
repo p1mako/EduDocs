@@ -2,6 +2,8 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.AdministrationMemberDao;
 import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
+import by.fpmibsu.edudocs.dao.interfaces.TemplateDao;
+import by.fpmibsu.edudocs.dao.interfaces.TransactionFactory;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
 import org.apache.logging.log4j.LogManager;
@@ -156,8 +158,11 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
             ArrayList<Template> templates = new ArrayList<>();
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
-                TemplateDaoImpl TD = new TemplateDaoImpl();
-                templates.add(TD.read(UUID.fromString(docId)));
+                var td =(new TransactionFactoryImpl()).createTransaction().createDao(TemplateDao.class);
+                var current = td.read(UUID.fromString(docId));
+                if (current != null){
+                    templates.add(current);
+                }
             }
             statementAdminDoc.close();
             resultAdminDoc.close();
@@ -175,11 +180,11 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
 
             StringBuilder sql1 = new StringBuilder("SELECT * FROM Requests Where");
             for (var x : templates) {
-                sql1.append(" template = ").append(x.getId().toString()).append(" or");
+                sql1.append(" template = '").append(x.getId().toString()).append("' or");
             }
+            sql1.delete(sql1.length() - 3, sql1.length());
             PreparedStatement requestStatement = connection.prepareStatement(sql1.toString());
-            requestStatement.setString(1, identity.toString());
-            ResultSet resSet = statementAdminDoc.executeQuery();
+            ResultSet resSet = requestStatement.executeQuery();
 
             if (!resSet.next()) {
                 resSet.close();
@@ -189,15 +194,20 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
 
             List<Request> requests = new ArrayList<>();
             while (resSet.next()) {
-                String docId = resultAdminDoc.getString("request");
-                RequestDao TD = new RequestDaoImpl();
-                requests.add(TD.read(UUID.fromString(docId)));
+                String docId = resSet.getString("id");
+                var rd = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
+                requests.add(rd.read(UUID.fromString(docId)));
             }
 
+            String assignmentEndStr = result.getString("assignment_end");
+            Timestamp asignmentEnd = null;
+            if (assignmentEndStr != null){
+                asignmentEnd = Timestamp.valueOf(result.getString(assignmentEndStr));
+            }
             user = new AdministrationMember(identity,
                     administrationRoles[result.getInt("role")],
                     Timestamp.valueOf(result.getString("assignment_start")),
-                    Timestamp.valueOf(result.getString("assignment_end")),
+                    asignmentEnd,
                     resultUser.getString("login"),
                     resultUser.getString("password"),
                     resultUser.getString("name"),
