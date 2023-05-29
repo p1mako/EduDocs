@@ -18,7 +18,7 @@ import java.io.IOException;
 public class RequestAction extends Action {
     @Override
     public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
-        RequestValidator validator = new RequestValidator();
+        Validator<Request> validator = ValidatorFactory.createValidator(Request.class);
         Request myRequest;
         try {
             myRequest = validator.validate(request);
