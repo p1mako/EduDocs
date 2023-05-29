@@ -51,6 +51,13 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             StudentStatus[] statuses = StudentStatus.values();
+
+            if (!result.isBeforeFirst()){
+                result.close();
+                statement.close();
+                return null;
+            }
+
             while (result.next()) {
 
                 String id = result.getString("id");
@@ -59,17 +66,35 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 statementUser.setString(1, id);
                 ResultSet resultUser = statementUser.executeQuery();
 
+                if (!resultUser.isBeforeFirst()){
+                    resultUser.close();
+                    statementUser.close();
+                    return null;
+                }
+
                 String idSpec = result.getString("specialization");
                 String sqlSpec = "SELECT * FROM Specializations Where id = ?";
                 PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
                 statementUser.setString(1, idSpec);
                 ResultSet resultSpec = statementUser.executeQuery();
 
+                if (!resultSpec.isBeforeFirst()){
+                    resultSpec.close();
+                    statementSpec.close();
+                    return null;
+                }
+
                 String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
                 PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
                 statementAdminDoc.setString(1, id);
                 ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
                 ArrayList<Request> requests = new ArrayList<>();
+
+                if (!resultAdminDoc.isBeforeFirst()){
+                    resultAdminDoc.close();
+                    statementAdminDoc.close();
+                    return null;
+                }
 
                 while (resultAdminDoc.next()) {
                     String docId = resultAdminDoc.getString("template");
@@ -112,10 +137,22 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery();
             StudentStatus[] statuses = StudentStatus.values();
 
+            if (!result.isBeforeFirst()){
+                result.close();
+                statement.close();
+                return null;
+            }
+
             String sqlUser = "SELECT * FROM Users Where id = ?";
             PreparedStatement statementUser = connection.prepareStatement(sqlUser);
             statementUser.setString(1, identity.toString());
             ResultSet resultUser = statementUser.executeQuery();
+
+            if (!resultUser.isBeforeFirst()){
+                resultUser.close();
+                statementUser.close();
+                return null;
+            }
 
             String idSpec = result.getString("specialization");
             String sqlSpec = "SELECT * FROM Specializations Where id = ?";
@@ -123,11 +160,24 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             statementUser.setString(1, idSpec);
             ResultSet resultSpec = statementUser.executeQuery();
 
+            if (!resultSpec.isBeforeFirst()){
+                resultSpec.close();
+                statementSpec.close();
+                return null;
+            }
+
+
             String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
             PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
             statementAdminDoc.setString(1, identity.toString());
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
             ArrayList<Request> requests = new ArrayList<>();
+
+            if (!resultAdminDoc.isBeforeFirst()){
+                resultAdminDoc.close();
+                statementAdminDoc.close();
+                return null;
+            }
 
             while (resultAdminDoc.next()) {
                 String docId = resultAdminDoc.getString("template");
