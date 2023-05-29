@@ -29,12 +29,15 @@ public class LoginAction extends Action {
 
     @Override
     public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
-        String login;
-        String password;
+        String login = null;
+        String password = null;
         try {
-            var jp = (new JsonFactory()).createParser(request.getReader().readLine());
-            login = jp.getValueAsString("login");
-            password = jp.getValueAsString("password");
+            String toParse = request.getReader().readLine();
+            if (toParse != null) {
+                var jp = (new JsonFactory()).createParser(request.getReader().readLine());
+                login = jp.getValueAsString("login");
+                password = jp.getValueAsString("password");
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
 
-@WebServlet(name = "AddAdministrator", value = "/add-admin")
+
 public class AddAdministrator extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -14,7 +14,7 @@ var loginGuard = () => {
 const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'request', component: RequestComponent/*, canActivate: [loginGuard] */},
+  { path: 'request', component: RequestComponent, canActivate: [loginGuard] },
   { path: 'requests', component: RequestsComponent/*, canActivate: [loginGuard] */}
 ];
 
