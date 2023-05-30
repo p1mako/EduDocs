@@ -44,7 +44,7 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
 
     @Override
     public List<Document> read() throws DaoException {
-        AdministrationMemberDaoImpl administrationMemberDaoImpl = new TransactionFactoryImpl().createTransaction().createDao(AdministrationMemberDaoImpl.class);
+        AdministrationMemberDao administrationMemberDaoImpl = new TransactionFactoryImpl().createTransaction().createDao(AdministrationMemberDao.class);
         TemplateDao templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDao.class);
         UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
 

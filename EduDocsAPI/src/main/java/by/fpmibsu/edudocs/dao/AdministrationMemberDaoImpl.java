@@ -103,11 +103,11 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
 
             AdministrationRole[] administrationRoles = AdministrationRole.values();
 
-            TemplateDaoImpl templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDaoImpl.class);
+            TemplateDao templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDao.class);
 
-            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
 
-            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+            RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
 
             List<Template> templates = templateDao.getAvailableTemplates(identity);
 
