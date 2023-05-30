@@ -23,7 +23,7 @@ public class Student extends User {
     int uniqueNumber;
     Specialization specialization;
 
-    List<Request> requests;
+    List<Request> availableRequests;
 
     public Student() {
     }
@@ -38,6 +38,6 @@ public class Student extends User {
         this.status = status;
         this.uniqueNumber = uniqueNumber;
         this.specialization = specialization;
-        this.requests = requests;
+        this.availableRequests = requests;
     }
 }

@@ -141,10 +141,10 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     userpart.getName(),
                     userpart.getSurname(),
                     userpart.getLastName(),
-                    result.getTimestamp("entryDate"),
-                    result.getInt("group"),
+                    result.getTimestamp("entry_date"),
+                    result.getInt("group_num"),
                     result.getInt("uniqueNumber"),
-                    statuses[result.getInt("status") - 1],
+                    statuses[result.getInt("status")],
                     specialization,
                     requests
             );
