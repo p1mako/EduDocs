@@ -1,4 +1,4 @@
-package by.fpmibsu.edudocs.service;
+package java.by.fpmibsu.edudocs.service;
 
 import by.fpmibsu.edudocs.App;
 import by.fpmibsu.edudocs.dao.DaoException;
