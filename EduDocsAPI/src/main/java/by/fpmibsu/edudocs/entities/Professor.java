@@ -12,14 +12,14 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode(callSuper = false)
 public class Professor extends User {
-    private List<Request> requests;
+    private List<Request> availableRequests;
     public Professor(){}
 
     public Professor(@NotNull String login, @NotNull String password, @NotNull String name, @NotNull String surname,
                      @Nullable String lastName, @Nullable UUID id, @NotNull String degree, List<Request> requests) {
         super(login, password, name, surname, lastName, id);
         this.degree = degree;
-        this.requests = requests;
+        this.availableRequests = requests;
     }
     String degree;
 }

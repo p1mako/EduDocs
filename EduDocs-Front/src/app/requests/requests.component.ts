@@ -25,7 +25,9 @@ export class RequestsComponent {
    }
 
   ngOnInit() {
+    console.log(this.storage.user)
     this.requests = this.storage.user?.availableRequests!;
+    console.log(this.requests);
   }
 
   

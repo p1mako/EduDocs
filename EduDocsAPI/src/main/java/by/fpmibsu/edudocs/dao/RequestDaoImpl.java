@@ -18,7 +18,7 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
     private static final Logger logger = LogManager.getLogger(RequestDaoImpl.class);
 
     final String SQL_GET_ALL = "SELECT * FROM Requests";
-    final String SQL_GET_ALL_BY_INITIATOR = "SELECT * FROM Requests Where initiator = ?";
+    final String SQL_GET_ALL_BY_INITIATOR = "SELECT id FROM Requests Where initiator = ?";
     final String SQL_GET_BY_UwU = "SELECT * FROM Requests WHERE id = ?";
     final String SQL_DELETE_BY_Uwu = "DELETE FROM Requests WHERE id = ?";
 
@@ -167,7 +167,7 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
             ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
 
             while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
+                String docId = resultAdminDoc.getString("id");
                 requests.add(this.read(UUID.fromString(docId)));
             }
 
