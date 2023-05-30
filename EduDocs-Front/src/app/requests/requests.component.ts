@@ -18,11 +18,23 @@ import { BackendService } from '../services/backend.service';
 })
 export class RequestsComponent {
 
-  constructor(private storage: StorageService, private router: Router, private backend: BackendService){  }
+  requests: RequestEntity[] = []; 
+
+  constructor(public storage: StorageService, private router: Router, private backend: BackendService){ 
+    this.requests = storage.user?.availableRequests!;
+   }
+
+  ngOnInit() {
+    this.requests = this.storage.user?.availableRequests!;
+  }
+
+  
 
   public logOut(){
     this.backend.logOut();
   }
+
+  
 
   isExpanded: boolean = false
   state: string = 'initial'
@@ -30,14 +42,6 @@ export class RequestsComponent {
   expand() {
     this.isExpanded = !this.isExpanded
     this.state = this.isExpanded ? 'expanded' : 'initial'
-  }
-
-  public get requests(): RequestEntity[] {
-    if (this.storage.user == null){
-        this.router.navigateByUrl("/login");
-      return new Array(0);
-    }
-    return this.storage.user.requests;
   }
   
 }

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class StorageService {
 
-  private currentUser: Student | Professor | Admin | null = null;
+  currentUser: Student | Professor | Admin | null = null;
 
   constructor() { }
 
@@ -45,7 +45,7 @@ export interface Specialization extends Entity{
 }
 
 export interface Student extends User{
-  requests: RequestEntity[];
+  availableRequests: RequestEntity[];
   entryDate: string;
   group: number;
   status: StudentStatus;
@@ -54,7 +54,7 @@ export interface Student extends User{
 }
 
 export interface Admin extends User{
-  requests: RequestEntity[];
+  availableRequests: RequestEntity[];
   role: AdministrationRole;
   from: string;
   until: string;
@@ -62,7 +62,7 @@ export interface Admin extends User{
 }
 
 export interface Professor extends User{
-  requests: RequestEntity[];
+  availableRequests: RequestEntity[];
   degree: string;
 }
 
@@ -79,7 +79,7 @@ export interface RequestEntity extends Entity{
   created: string;
   document: Document | null;
   template: Template;
-  inititaor: User;
+  initiator: User;
 }
 
 export enum StudentStatus{
@@ -88,12 +88,12 @@ export enum StudentStatus{
 }
 
 export enum RequestStatus {
-  Sent,
-  BeingProcessed,
-  CanBeTaken,
-  Received,
-  Declined,
-  Removed
+  Sent = "green",
+  BeingProcessed = "gray",
+  CanBeTaken = "green",
+  Received = "white",
+  Declined = "red",
+  Removed = "red"
 }
 
 export enum AdministrationRole {

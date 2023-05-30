@@ -30,18 +30,18 @@
   <div class="w-dyn-list">
     <div role="list" class="list w-dyn-items">
       <div role="listitem" class="w-dyn-item">
-        <div class="staff-wrap" *ngFor="let request of requests; index as i;">
+        <div *ngFor="let request of requests;" class="staff-wrap">
           <div class="cta5-option-headline">
-            <p class="name">{{requests[i].template.name}}</p>
+            <p class="name">{{request.template.name}}</p>
             <div class="label">
-              <div class="phone">{{requests[i].created}}</div>
+              <div class="phone">{{request.created}}</div>
             </div>
-            <div class="label label-aqua">{{requests[i].created}}</div>
-            <div class="label label-grey">
-              <div class="position" [hidden]="requests[i].document == null">{{requests[i].document?.author}}</div>
+            <div class="label label-aqua">{{request.created}}</div>
+            <div [hidden]="request.document == null" class="label label-grey">
+              <div class="position" >{{request.document?.author?.name}}</div>
             </div>
-            <div class="label-2 label-red">
-              <div class="location">{{requests[i].status.toString}}</div>
+            <div [style.background-color]="request.status" class="label-2 label-red">
+              <div class="location">{{request.status.toString()}}</div>
             </div>
           </div>
           <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>

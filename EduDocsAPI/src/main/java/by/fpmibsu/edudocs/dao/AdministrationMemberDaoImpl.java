@@ -119,14 +119,20 @@ public class AdministrationMemberDaoImpl extends WrapperConnection implements Ad
                 List<Request> requestListpart;
                 requestListpart = requestDao.getAllByTemplate(template);
                 if(requestListpart != null){
-                    requests.add((Request) requestListpart);
+                    requests.addAll(requestListpart);
                 }
+            }
+
+            var stringAsignementEnd = result.getString("assignment_end");
+            Timestamp asignementEnd = null;
+            if (stringAsignementEnd != null) {
+                asignementEnd = Timestamp.valueOf(stringAsignementEnd);
             }
 
             user = new AdministrationMember(identity,
                     administrationRoles[result.getInt("role")],
                     Timestamp.valueOf(result.getString("assignment_start")),
-                    Timestamp.valueOf(result.getString("assignment_end")),
+                    asignementEnd,
                     userpart.getLogin(),
                     userpart.getPassword(),
                     userpart.getName(),

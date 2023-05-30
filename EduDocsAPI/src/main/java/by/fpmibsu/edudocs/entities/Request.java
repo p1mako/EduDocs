@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class Request extends Entity {
     RequestStatus status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Timestamp created;
     Document document;
     Template template;

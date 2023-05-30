@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BackendService } from '../services/backend.service';
 import { Router } from '@angular/router';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -9,17 +10,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  constructor(private backend: BackendService, private router: Router) { }
+  constructor(private backend: BackendService, private router: Router, private storage: StorageService) { }
 
   login = "";
   password = "";
   error = false;
 
   submit() : void{
-    this.error = true;
     console.log(this.login + " " + this.password)
     this.backend.authenticate(this.login, this.password). subscribe({
-      next : (x) => {
+      next : (user) => {
+        this.storage.user = user;
         this.error = false;
       },
       error : (err) =>  {
