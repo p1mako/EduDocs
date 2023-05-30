@@ -21,6 +21,7 @@ import java.io.IOException;
 public class RequestUpdateAction extends Action {
 
     private static final Logger logger = LogManager.getLogger(UserListAction.class);
+  
     @Override
     public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
 
@@ -33,25 +34,25 @@ public class RequestUpdateAction extends Action {
                 mapper.readValue(request.getSession().getAttribute("user").toString(), AdministrationMember.class);
             } catch (JsonProcessingException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                logger.info("Cannot respond user with user list, because user is not an admin");
+                logger.info("Cannot change request, because user is not an admin");
             }
         }
-
         Validator<Request> validator = ValidatorFactory.createValidator(Request.class);
         Request myRequest;
         try {
             myRequest = validator.validate(request);
-        } catch (IncorrectFormDataException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        RequestService service = factory.getService(RequestService.class);
+            RequestService service = factory.getService(RequestService.class);
 
-        if (service.updateRequest(myRequest)) {
-            response.setStatus(200);
-        } else {
-            response.setStatus(500);
+            if (service.updateRequest(myRequest)) {
+                logger.info(String.format("request with id %s has been updated", myRequest.getId().toString()));
+                response.setStatus(200);
+            } else {
+                logger.info(String.format("request with id %s hasn`t been updated", myRequest.getId().toString()));
+                response.setStatus(500);
+            }
+        } catch (IncorrectFormDataException | IOException e) {
+            logger.info("request is wrong");
+            response.setStatus(422);
         }
     }
 }

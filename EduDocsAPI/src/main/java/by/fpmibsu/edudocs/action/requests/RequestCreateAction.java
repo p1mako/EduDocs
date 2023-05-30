@@ -41,17 +41,18 @@ public class RequestCreateAction extends Action {
         Request myRequest;
         try {
             myRequest = validator.validate(request);
-        } catch (IncorrectFormDataException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        RequestService service = factory.getService(RequestService.class);
+            RequestService service = factory.getService(RequestService.class);
 
-        if (service.createRequest(myRequest)) {
-            response.setStatus(200);
-        } else {
-            response.setStatus(500);
+            if (service.createRequest(myRequest)) {
+                logger.info(String.format("request with id %s has been created", myRequest.getId().toString()));
+                response.setStatus(200);
+            } else {
+                logger.info(String.format("request with id %s hasn`t been created", myRequest.getId().toString()));
+                response.setStatus(500);
+            }
+        } catch (IncorrectFormDataException | IOException  e) {
+            logger.info("request is wrong");
+            response.setStatus(422);
         }
     }
 }
