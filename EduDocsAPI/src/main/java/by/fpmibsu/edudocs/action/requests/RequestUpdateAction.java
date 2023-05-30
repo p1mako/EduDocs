@@ -21,7 +21,7 @@ import java.io.IOException;
 public class RequestUpdateAction extends Action {
 
     private static final Logger logger = LogManager.getLogger(UserListAction.class);
-
+  
     @Override
     public void exec(HttpServletRequest request, HttpServletResponse response) throws DaoException {
 
