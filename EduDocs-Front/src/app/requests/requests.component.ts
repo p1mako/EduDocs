@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { RequestEntity, StorageService } from '../services/storage.service';
+import { RequestEntity, StorageService, Template } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { BackendService } from '../services/backend.service';
 
@@ -19,6 +19,7 @@ import { BackendService } from '../services/backend.service';
 export class RequestsComponent {
 
   requests: RequestEntity[] = []; 
+  templates: Template[] = [];
 
   constructor(public storage: StorageService, private router: Router, private backend: BackendService){ 
     this.requests = storage.user?.availableRequests!;
@@ -36,6 +37,16 @@ export class RequestsComponent {
     this.backend.logOut();
   }
 
+  isCreateOpened = false;
+  stateCreate = 'initial';
+
+  openCreate(){
+    this.backend.getTemplates().add(() => {
+      this.templates = this.storage.templates
+    });
+    this.isCreateOpened = !this.isCreateOpened
+    this.stateCreate = this.stateCreate ? 'expanded' : 'initial'
+  }
   
 
   isExpanded: boolean = false
@@ -46,4 +57,8 @@ export class RequestsComponent {
     this.state = this.isExpanded ? 'expanded' : 'initial'
   }
   
+  addRequest(){
+
+  }
+
 }
