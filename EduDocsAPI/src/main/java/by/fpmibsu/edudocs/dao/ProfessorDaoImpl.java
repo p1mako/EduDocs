@@ -23,7 +23,7 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
 
     @Override
     public UUID create(Professor entity) throws DaoException {
-        UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+        UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
         try {
             userDao.create(entity);
             UUID id = entity.getId();
@@ -56,12 +56,12 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
             while (result.next()) {
                 String id = result.getString("id");
 
-                UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+                UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
                 User userpart = userDao.read(UUID.fromString(id));
 
                 ArrayList<Request> requests = new ArrayList<>();
 
-                RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+                RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
                 requests = (ArrayList<Request>) requestDao.readByInitiator(UUID.fromString(id));
 
                 Professor user = new Professor(
@@ -85,24 +85,25 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
 
     @Override
     public Professor read(UUID identity) throws DaoException {
-        String sql = "SELECT * FROM Professors";
+        String sql = "SELECT * FROM Professors Where id = ?";
         Professor user;
         try {
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, identity.toString());
+            ResultSet result = preparedStatement.executeQuery();
 
             if (!result.next()) {
                 result.close();
-                statement.close();
+                preparedStatement.close();
                 return null;
             }
 
-            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
             User userpart = userDao.read(identity);
 
             List<Request> requests;
 
-            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+            RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
             requests = requestDao.readByInitiator(identity);
 
             user = new Professor(
@@ -116,7 +117,7 @@ public class ProfessorDaoImpl extends WrapperConnection implements ProfessorDao 
                     requests);
 
             result.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         }

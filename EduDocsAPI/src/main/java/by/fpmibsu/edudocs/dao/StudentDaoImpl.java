@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
+import by.fpmibsu.edudocs.dao.interfaces.SpecializationDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
 import by.fpmibsu.edudocs.dao.interfaces.UserDao;
 import by.fpmibsu.edudocs.entities.*;
@@ -20,7 +21,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
 
     @Override
     public UUID create(Student entity) throws DaoException {
-        UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+        UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
 
         try {
             userDao.create(entity);
@@ -52,7 +53,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery(sql);
             StudentStatus[] statuses = StudentStatus.values();
 
-            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
             while (result.next()) {
                 String id;
                 try {
@@ -70,11 +71,11 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                     return null;
                 }
 
-                SpecializationDaoImpl specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDaoImpl.class);
+                SpecializationDao specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDao.class);
                 Specialization specialization = specializationDao.read(UUID.fromString(idSpec));
 
 
-                RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+                RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
                 ArrayList<Request> requests = (ArrayList<Request>) requestDao.readByInitiator(UUID.fromString(id));
 
                 Student user = new Student(UUID.fromString(id),
@@ -117,7 +118,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 return null;
             }
 
-            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
             User userpart = userDao.read(identity);
 
             String idSpec;
@@ -127,11 +128,11 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 return null;
             }
 
-            SpecializationDaoImpl specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDaoImpl.class);
+            SpecializationDao specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDao.class);
             Specialization specialization = specializationDao.read(UUID.fromString(idSpec));
 
 
-            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+            RequestDao requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDao.class);
             List<Request> requests = requestDao.readByInitiator(identity);
 
             student = new Student(identity,
