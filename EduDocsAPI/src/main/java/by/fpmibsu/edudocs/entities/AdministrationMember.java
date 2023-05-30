@@ -2,6 +2,7 @@ package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.AdministrationRole;
 import by.fpmibsu.edudocs.entities.utils.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,9 @@ import java.util.UUID;
 public class AdministrationMember extends User {
 
     AdministrationRole role;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Timestamp from;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Timestamp until;
     List<Template> availableTemplates;
     List<Request> availableRequests;

@@ -11,6 +11,7 @@ import { RequestsComponent } from './requests/requests.component';
 import { RequestComponent } from './request/request.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
+import { NgFor } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgFor
   ],
   providers: [],
   bootstrap: [AppComponent]

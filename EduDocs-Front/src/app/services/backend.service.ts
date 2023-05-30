@@ -14,26 +14,22 @@ export class BackendService {
 
   private adress = "http://localhost:8080/EduDocsAPI/";
 
-  authenticate(login: string, password: string) : Observable<Student | Professor | Admin> {
+  authenticate(login: string, password: string): Observable<Student | Professor | Admin> {
     var postHttp = this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
       login: login,
       password: password
     });
-
-    postHttp.subscribe((user: Student | Professor | Admin) => {
-      this.storage.user = user;
-    })
     return postHttp;
   }
 
-  logOut(){
-    this.http.get(this.adress + BackendAdresses.logout, {withCredentials: true})
+  logOut() {
+    this.http.get<null>(this.adress + BackendAdresses.logout).subscribe(() => { this.router.navigateByUrl("/login") });
   }
 
-  isLoggedIn() : Observable<boolean | UrlTree>{
+  isLoggedIn(): Observable<boolean | UrlTree> {
     return new Observable<boolean | UrlTree>(
       (subscriber) => {
-        this.http.get<Student | Professor | Admin>(this.adress + BackendAdresses.login, {withCredentials: true, responseType: "json"}).subscribe({
+        this.http.get<Student | Professor | Admin>(this.adress + BackendAdresses.login, { responseType: "json" }).subscribe({
           complete: () => {
             subscriber.next(true);
             subscriber.complete;

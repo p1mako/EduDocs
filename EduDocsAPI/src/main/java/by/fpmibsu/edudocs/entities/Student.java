@@ -1,6 +1,7 @@
 package by.fpmibsu.edudocs.entities;
 
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode(callSuper = false)
 public class Student extends User {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Timestamp entryDate;
     int group;
     StudentStatus status;
