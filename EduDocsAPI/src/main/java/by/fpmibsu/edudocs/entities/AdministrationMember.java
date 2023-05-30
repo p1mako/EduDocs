@@ -34,5 +34,6 @@ public class AdministrationMember extends User {
         this.from = from;
         this.until = until;
         this.availableTemplates = availableTemplates;
+        this.availableRequests = availableRequests;
     }
 }

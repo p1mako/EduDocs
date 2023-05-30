@@ -1,29 +1,16 @@
 package by.fpmibsu.edudocs.action;
 
 import by.fpmibsu.edudocs.dao.DaoException;
-import by.fpmibsu.edudocs.dao.TransactionFactoryImpl;
-import by.fpmibsu.edudocs.entities.AdministrationMember;
-import by.fpmibsu.edudocs.entities.Professor;
-import by.fpmibsu.edudocs.entities.Student;
 import by.fpmibsu.edudocs.entities.User;
-import by.fpmibsu.edudocs.service.StudentServiceImpl;
 import by.fpmibsu.edudocs.service.interfaces.AdministrationMemberService;
 import by.fpmibsu.edudocs.service.interfaces.ProfessorService;
 import by.fpmibsu.edudocs.service.interfaces.StudentService;
 import by.fpmibsu.edudocs.service.interfaces.UserService;
-import by.fpmibsu.edudocs.service.utils.ServiceFactory;
-import by.fpmibsu.edudocs.service.utils.ServiceFactoryImpl;
-import by.fpmibsu.edudocs.service.utils.ServiceInvocationHandler;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
