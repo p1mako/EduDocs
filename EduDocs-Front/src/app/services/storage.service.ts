@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class StorageService {
 
   currentUser: Student | Professor | Admin | null = null;
+  templates: Template[] = [];
 
   constructor() { }
 
