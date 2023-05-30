@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
     private static final Logger logger = LogManager.getLogger(TemplateDaoImpl.class);
+
     @Override
     public UUID create(Template entity) throws DaoException {
         String sql = "INSERT INTO Templates(id, name, route_to_document) VALUES (?, ?, ?)";
@@ -40,35 +41,55 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
     @Override
     public List<Template> read() throws DaoException {
         String sql = "SELECT * FROM Templates";
-        List<Template> users = new ArrayList<>();
+        List<Template> templates = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
-
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
 
             while (result.next()) {
                 Template user = new Template(UUID.fromString(result.getString("id")),
                         result.getString("name"),
                         result.getString("route_to_document"));
-                users.add(user);
+                templates.add(user);
             }
             result.close();
             statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return users;
+        return templates;
+    }
+
+    @Override
+    public List<Template> getAvailableTemplates(UUID member) throws DaoException {
+        String sqlAdminDoc = "SELECT * FROM AdministrationDocuments Where administration_member = ?";
+        List<Template> templates = new ArrayList<>();
+        try {
+            PreparedStatement statementAdminDoc;
+            statementAdminDoc = connection.prepareStatement(sqlAdminDoc);
+            statementAdminDoc.setString(1, member.toString());
+            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
+
+            while (resultAdminDoc.next()) {
+                String docId = resultAdminDoc.getString("template");
+                Template template = read(UUID.fromString(docId));
+                if(template != null){
+                    templates.add(template);
+                }
+            }
+
+            statementAdminDoc.close();
+            resultAdminDoc.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return templates;
     }
 
     @Override
     public Template read(UUID identity) throws DaoException {
         String sql = "SELECT * FROM Templates WHERE id = ?";
-        Template user = null;
+        Template template;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, identity.toString());
@@ -80,16 +101,16 @@ public class TemplateDaoImpl extends WrapperConnection implements TemplateDao {
                 return null;
             }
 
-            user = new Template(UUID.fromString(result.getString("id")),
-                        result.getString("name"),
-                        result.getString("route_to_document"));
+            template = new Template(UUID.fromString(result.getString("id")),
+                    result.getString("name"),
+                    result.getString("route_to_document"));
 
             result.close();
             statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return user;
+        return template;
     }
 
     @Override

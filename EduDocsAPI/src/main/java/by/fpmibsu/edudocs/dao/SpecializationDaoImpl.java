@@ -16,6 +16,7 @@ import java.util.UUID;
 public class SpecializationDaoImpl extends WrapperConnection implements SpecializationDao {
 
     private static final Logger logger = LogManager.getLogger(SpecializationDaoImpl.class);
+
     @Override
     public UUID create(Specialization entity) throws DaoException {
         String sql = "INSERT INTO Specializations(id, name, registerNumber) VALUES (?, ?, ?)";
@@ -46,12 +47,6 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
             while (result.next()) {
                 Specialization user = new Specialization(UUID.fromString(result.getString("id")),
                         result.getString("name"),
@@ -75,17 +70,12 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
             if (result.next()) {
                 user = new Specialization(identity,
                         result.getString("name"),
                         result.getString("registerNumber"));
             }
+
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -96,7 +86,17 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
 
     @Override
     public void update(Specialization entity) throws DaoException {
-
+        String sql = "UPDATE Specializations SET id = ?, name = ?, registerNumber = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, entity.getId().toString());
+            statement.setString(2, entity.getName());
+            statement.setString(3, entity.getRegisterNumber());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     @Override
@@ -108,6 +108,5 @@ public class SpecializationDaoImpl extends WrapperConnection implements Speciali
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-
     }
 }

@@ -2,6 +2,7 @@ package by.fpmibsu.edudocs.dao;
 
 import by.fpmibsu.edudocs.dao.interfaces.RequestDao;
 import by.fpmibsu.edudocs.dao.interfaces.StudentDao;
+import by.fpmibsu.edudocs.dao.interfaces.UserDao;
 import by.fpmibsu.edudocs.entities.*;
 import by.fpmibsu.edudocs.entities.utils.StudentStatus;
 import jdk.jshell.Snippet;
@@ -19,9 +20,10 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
 
     @Override
     public UUID create(Student entity) throws DaoException {
-        UserDaoImpl UD = new UserDaoImpl();
+        UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+
         try {
-            UD.create(entity);
+            userDao.create(entity);
             UUID id = entity.getId();
             String sql = "INSERT INTO Students(group_num, status, entry_date, uniqueNumber, specialization, id) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -50,12 +52,7 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             ResultSet result = statement.executeQuery(sql);
             StudentStatus[] statuses = StudentStatus.values();
 
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
-
+            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
             while (result.next()) {
                 String id;
                 try {
@@ -63,69 +60,39 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 } catch (SQLException e) {
                     return null;
                 }
-                String sqlUser = "SELECT * FROM Users Where id = ?";
-                PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-                statementUser.setString(1, id);
-                ResultSet resultUser = statementUser.executeQuery();
 
-                if (!resultUser.next()) {
-                    resultUser.close();
-                    statementUser.close();
-                    return null;
-                }
+                User userpart = userDao.read(UUID.fromString(id));
+
                 String idSpec;
                 try {
                     idSpec = result.getString("specialization");
                 } catch (SQLException e) {
                     return null;
                 }
-                String sqlSpec = "SELECT * FROM Specializations Where id = ?";
-                PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
-                statementUser.setString(1, idSpec);
-                ResultSet resultSpec = statementUser.executeQuery();
 
-                if (!resultSpec.next()) {
-                    resultSpec.close();
-                    statementSpec.close();
-                    return null;
-                }
+                SpecializationDaoImpl specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDaoImpl.class);
+                Specialization specialization = specializationDao.read(UUID.fromString(idSpec));
 
-                String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-                PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-                statementAdminDoc.setString(1, id);
-                ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-                ArrayList<Request> requests = new ArrayList<>();
 
-                if (!resultAdminDoc.next()) {
-                    resultAdminDoc.close();
-                    statementAdminDoc.close();
-                    return null;
-                }
-
-                while (resultAdminDoc.next()) {
-                    String docId = resultAdminDoc.getString("template");
-                    RequestDao TD = new RequestDaoImpl();
-                    requests.add(TD.read(UUID.fromString(docId)));
-                }
+                RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+                ArrayList<Request> requests = (ArrayList<Request>) requestDao.readByInitiator(UUID.fromString(id));
 
                 Student user = new Student(UUID.fromString(id),
-                        resultUser.getString("login"),
-                        resultUser.getString("password"),
-                        resultUser.getString("name"),
-                        resultUser.getString("surname"),
-                        resultUser.getString("lastName"),
+                        userpart.getLogin(),
+                        userpart.getPassword(),
+                        userpart.getName(),
+                        userpart.getSurname(),
+                        userpart.getLastName(),
                         result.getTimestamp("entryDate"),
                         result.getInt("group"),
                         result.getInt("uniqueNumber"),
                         statuses[result.getInt("status") - 1],
-                        new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
+                        specialization,
+                        requests
                 );
-                resultSpec.close();
-                resultUser.close();
-                statementUser.close();
-                statementSpec.close();
                 users.add(user);
             }
+
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -150,74 +117,37 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
                 return null;
             }
 
-            String sqlUser = "SELECT * FROM Users Where id = ?";
-            PreparedStatement statementUser = connection.prepareStatement(sqlUser);
-            statementUser.setString(1, identity.toString());
-            ResultSet resultUser = statementUser.executeQuery();
+            UserDaoImpl userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDaoImpl.class);
+            User userpart = userDao.read(identity);
 
-            if (!resultUser.next()) {
-                resultUser.close();
-                statementUser.close();
+            String idSpec;
+            try {
+                idSpec = result.getString("specialization");
+            } catch (SQLException e) {
                 return null;
             }
 
-            if (!result.isBeforeFirst()){
-                result.close();
-                statement.close();
-                return null;
-            }
-            String idSpec = result.getString("specialization");
-            String sqlSpec = "SELECT * FROM Specializations Where id = ?";
-            PreparedStatement statementSpec = connection.prepareStatement(sqlSpec);
-            statementUser.setString(1, idSpec);
-            ResultSet resultSpec = statementUser.executeQuery();
-
-            if (!resultSpec.next()) {
-                resultSpec.close();
-                statementSpec.close();
-                return null;
-            }
+            SpecializationDaoImpl specializationDao = new TransactionFactoryImpl().createTransaction().createDao(SpecializationDaoImpl.class);
+            Specialization specialization = specializationDao.read(UUID.fromString(idSpec));
 
 
-            String sqlStudentRequest = "SELECT * FROM Requests Where initiator = ?";
-            PreparedStatement statementAdminDoc = connection.prepareStatement(sqlStudentRequest);
-            statementAdminDoc.setString(1, identity.toString());
-            ResultSet resultAdminDoc = statementAdminDoc.executeQuery();
-            ArrayList<Request> requests = new ArrayList<>();
-
-            if (!resultAdminDoc.next()) {
-                resultAdminDoc.close();
-                statementAdminDoc.close();
-                return null;
-            }
-
-            while (resultAdminDoc.next()) {
-                String docId = resultAdminDoc.getString("template");
-                RequestDao TD = new RequestDaoImpl();
-                requests.add(TD.read(UUID.fromString(docId)));
-            }
-
-            statementAdminDoc.close();
-            resultAdminDoc.close();
-
+            RequestDaoImpl requestDao = new TransactionFactoryImpl().createTransaction().createDao(RequestDaoImpl.class);
+            List<Request> requests = requestDao.readByInitiator(identity);
 
             student = new Student(identity,
-                    resultUser.getString("login"),
-                    resultUser.getString("password"),
-                    resultUser.getString("name"),
-                    resultUser.getString("surname"),
-                    resultUser.getString("lastName"),
+                    userpart.getLogin(),
+                    userpart.getPassword(),
+                    userpart.getName(),
+                    userpart.getSurname(),
+                    userpart.getLastName(),
                     result.getTimestamp("entryDate"),
                     result.getInt("group"),
                     result.getInt("uniqueNumber"),
                     statuses[result.getInt("status") - 1],
-                    new Specialization(UUID.fromString(idSpec), resultSpec.getString("name"), resultSpec.getString("registerNumber")), requests
+                    specialization,
+                    requests
             );
 
-            resultSpec.close();
-            resultUser.close();
-            statementUser.close();
-            statementSpec.close();
             result.close();
             statement.close();
         } catch (SQLException e) {
@@ -234,8 +164,8 @@ public class StudentDaoImpl extends WrapperConnection implements StudentDao {
             updateStudents(entity, statement);
             statement.executeUpdate();
             statement.close();
-            UserDaoImpl UD = new UserDaoImpl();
-            UD.update(entity);
+            UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+            userDao.update(entity);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

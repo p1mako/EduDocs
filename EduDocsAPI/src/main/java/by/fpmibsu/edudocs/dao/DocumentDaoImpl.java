@@ -1,10 +1,14 @@
 package by.fpmibsu.edudocs.dao;
 
+import by.fpmibsu.edudocs.dao.interfaces.AdministrationMemberDao;
 import by.fpmibsu.edudocs.dao.interfaces.DocumentDao;
+import by.fpmibsu.edudocs.dao.interfaces.TemplateDao;
+import by.fpmibsu.edudocs.dao.interfaces.UserDao;
 import by.fpmibsu.edudocs.entities.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.xml.stream.FactoryConfigurationError;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,9 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
 
     @Override
     public UUID create(Document entity) throws DaoException {
+        if (entity == null) {
+            return null;
+        }
         String sql = "INSERT INTO documents (id, created, valid_through) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, entity.getId().toString());
@@ -37,19 +44,14 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
 
     @Override
     public List<Document> read() throws DaoException {
-        AdministrationMemberDaoImpl administrationMemberDaoImpl = new AdministrationMemberDaoImpl();
-        TemplateDaoImpl templateDao = new TemplateDaoImpl();
-        UserDaoImpl userDao = new UserDaoImpl();
+        AdministrationMemberDaoImpl administrationMemberDaoImpl = new TransactionFactoryImpl().createTransaction().createDao(AdministrationMemberDaoImpl.class);
+        TemplateDao templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDao.class);
+        UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+
         List<Document> documents = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SQL_GET_ALL);
-
-            if (!result.next()) {
-                result.close();
-                statement.close();
-                return null;
-            }
 
             Document document;
             while (result.next()) {
@@ -72,11 +74,13 @@ public class DocumentDaoImpl extends WrapperConnection implements DocumentDao {
 
     @Override
     public Document read(UUID identity) throws DaoException {
-        TemplateDaoImpl templateDao = new TemplateDaoImpl();
-        UserDaoImpl userDao = new UserDaoImpl();
-        AdministrationMemberDaoImpl administrationMemberDaoImpl = new AdministrationMemberDaoImpl();
+        AdministrationMemberDao administrationMemberDaoImpl = new TransactionFactoryImpl().createTransaction().createDao(AdministrationMemberDao.class);
+        TemplateDao templateDao = new TransactionFactoryImpl().createTransaction().createDao(TemplateDao.class);
+        UserDao userDao = new TransactionFactoryImpl().createTransaction().createDao(UserDao.class);
+
         Document document;
         String sql = "SELECT * FROM Documents WHERE id = ?";
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, identity.toString());
             ResultSet result = statement.executeQuery();
