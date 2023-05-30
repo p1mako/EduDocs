@@ -1,10 +1,13 @@
 package by.fpmibsu.edudocs.action.admin;
 
 import by.fpmibsu.edudocs.dao.DaoException;
+import by.fpmibsu.edudocs.dao.IncorrectFormDataException;
 import by.fpmibsu.edudocs.entities.AdministrationMember;
 import by.fpmibsu.edudocs.entities.User;
 import by.fpmibsu.edudocs.entities.utils.Role;
 import by.fpmibsu.edudocs.service.interfaces.UserService;
+import by.fpmibsu.edudocs.validator.Validator;
+import by.fpmibsu.edudocs.validator.ValidatorFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 public class UserEditAction extends AbstractAdministratorAction {
@@ -28,15 +32,18 @@ public class UserEditAction extends AbstractAdministratorAction {
                 mapper.readValue(request.getSession().getAttribute("user").toString(), AdministrationMember.class);
             } catch (JsonProcessingException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                logger.info("Cannot respond user with user editon, because user is not an admin");
+                logger.info("Cannot respond user with user update, because user is not an admin");
             }
         }
-        request.setAttribute("roles", Role.values());
-        UUID identity = UUID.fromString((String) request.getAttribute("identity"));
         UserService service = factory.getService(UserService.class);
-        User user = service.findByIdentity(identity);
-        if (user != null) {
-            request.setAttribute("user", user);
+        Validator<User> validator = ValidatorFactory.createValidator(User.class);
+        try {
+            User user = validator.validate(request);
+            service.save(user);
+            response.setStatus(200);
+        } catch (IncorrectFormDataException | IOException e) {
+            logger.error("Error responding front with user updation");
+            response.setStatus(500);
         }
     }
 }

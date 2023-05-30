@@ -32,11 +32,13 @@ public class UserListAction extends AbstractAdministratorAction {
 				logger.info("Cannot respond user with user list, because user is not an admin");
 			}
 		}
+
 		UserService service = factory.getService(UserService.class);
 		List<User> users = service.findAll();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			response.getOutputStream().println(mapper.writeValueAsString(users));
+			response.setStatus(200);
 		} catch (IOException e) {
 			logger.error("Error responding front with user list");
 			response.setStatus(500);
