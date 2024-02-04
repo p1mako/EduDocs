@@ -62,7 +62,7 @@ class RequestServiceImplTest {
         }
     }
     @Test
-    void createRequest() {
+    void createRequest() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -74,7 +74,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void getAllRequests() {
+    void getAllRequests() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -87,7 +87,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void updateRequestStatus() {
+    void updateRequestStatus() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -99,7 +99,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void deleteRequestByAdmin() {
+    void deleteRequestByAdmin() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -111,7 +111,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void deleteRequest() {
+    void deleteRequest() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -123,7 +123,7 @@ class RequestServiceImplTest {
     }
 
     @Test
-    void addAnswerToRequest() {
+    void addAnswerToRequest() throws DaoException {
         RequestService rs;
         try {
             ServiceFactoryImpl sf = new ServiceFactoryImpl(new TransactionFactoryImpl());

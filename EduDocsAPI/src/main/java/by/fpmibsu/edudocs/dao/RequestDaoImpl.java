@@ -23,22 +23,22 @@ public class RequestDaoImpl extends WrapperConnection implements RequestDao {
     final String SQL_DELETE_BY_Uwu = "DELETE FROM Requests WHERE id = ?";
 
     final String SQL_GET_ALL_BY_TEMPLATE = "SELECT * FROM Requests Where template = ?";
-    final String SQL_INSERT_REQUEST = "INSERT INTO Requests(id, status, template, initiator, created, document) VALUES (?, ?, ?, ?, ?, ?)";
+    final String SQL_INSERT_REQUEST = "INSERT INTO Requests(status, template, initiator, document) VALUES (?, ?, ?, ?)";
     final String SQL_UPDATE_REQUEST = "UPDATE Requests SET id = ?, status = ?, template = ?, initiator = ?, created = ?, document = ?";
 
     @Override
     public UUID create(Request entity) throws DaoException {
+        String sql = "EXEC AddRequest ?, ?, ?";
         try {
-            var resultSet = changeRequests(entity, SQL_INSERT_REQUEST);
-            if (resultSet.next()) {
-                return UUID.fromString(resultSet.getString(1));
-            } else {
-                logger.error("There is no autoincremented index after trying to add record into table `Requests`");
-                throw new DaoException();
-            }
+            var statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, entity.getStatus().ordinal());
+            statement.setString(2, entity.getInitiator().getLogin());
+            statement.setString(3, entity.getTemplate().getName());
+            var resultSet = statement.executeQuery();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return UUID.randomUUID();
     }
 
     @Override

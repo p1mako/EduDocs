@@ -3,10 +3,7 @@ package by.fpmibsu.edudocs.service.utils;
 import by.fpmibsu.edudocs.dao.DaoException;
 import by.fpmibsu.edudocs.dao.interfaces.Transaction;
 import by.fpmibsu.edudocs.dao.interfaces.TransactionFactory;
-import by.fpmibsu.edudocs.service.AdministrationMemberServiceImpl;
-import by.fpmibsu.edudocs.service.ProfessorServiceImpl;
-import by.fpmibsu.edudocs.service.StudentServiceImpl;
-import by.fpmibsu.edudocs.service.UserServiceImpl;
+import by.fpmibsu.edudocs.service.*;
 import by.fpmibsu.edudocs.service.interfaces.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +23,8 @@ public class ServiceFactoryImpl implements ServiceFactory {
 		SERVICES.put(StudentService.class, StudentServiceImpl.class);
 		SERVICES.put(ProfessorService.class, ProfessorServiceImpl.class);
 		SERVICES.put(AdministrationMemberService.class, AdministrationMemberServiceImpl.class);
+		SERVICES.put(TemplateService.class, TemplateServiceImpl.class);
+		SERVICES.put(RequestService.class, RequestServiceImpl.class);
 	}
 
 	private final TransactionFactory factory;
