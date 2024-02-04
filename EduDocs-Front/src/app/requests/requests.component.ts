@@ -18,10 +18,11 @@ import { BackendService } from '../services/backend.service';
 })
 export class RequestsComponent {
 
-  requests: RequestEntity[] = []; 
+  requests: RequestEntity[] = [];
   templates: Template[] = [];
+  template: number = 1;
 
-  constructor(public storage: StorageService, private router: Router, private backend: BackendService){ 
+  constructor(public storage: StorageService, private router: Router, private backend: BackendService){
     this.requests = storage.user?.availableRequests!;
    }
 
@@ -29,9 +30,10 @@ export class RequestsComponent {
     console.log(this.storage.user)
     this.requests = this.storage.user?.availableRequests!;
     console.log(this.requests);
+    this.backend.getTemplates();
   }
 
-  
+
 
   public logOut(){
     this.backend.logOut();
@@ -40,15 +42,6 @@ export class RequestsComponent {
   isCreateOpened = false;
   stateCreate = 'initial';
 
-  openCreate(){
-    this.backend.getTemplates().add(() => {
-      this.templates = this.storage.templates
-    });
-    this.isCreateOpened = !this.isCreateOpened
-    this.stateCreate = this.stateCreate ? 'expanded' : 'initial'
-  }
-  
-
   isExpanded: boolean = false
   state: string = 'initial'
 
@@ -56,7 +49,7 @@ export class RequestsComponent {
     this.isExpanded = !this.isExpanded
     this.state = this.isExpanded ? 'expanded' : 'initial'
   }
-  
+
   addRequest(){
 
   }

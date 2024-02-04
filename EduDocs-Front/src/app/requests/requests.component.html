@@ -31,12 +31,14 @@
     <div role="list" class="list w-dyn-items">
       <div role="listitem" class="w-dyn-item">
         <div class="staff-wrap">
-          <div class="cta5-option-headline" (click)="openCreate()">
+          <div class="cta5-option-headline">
             <p class="name">Create new request</p>
           </div>
+          <select [(ngModel)]="template" class="form-select" aria-label="Default select example">
+            <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{item.name}}</option>
+          </select>
           <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Create</a></div>
         </div>
-        <app-create-request [hidden]="!isCreateOpened" [@expandedPanel]="stateCreate"></app-create-request>
         <div *ngFor="let request of requests;">
           <div class="staff-wrap">
             <div class="cta5-option-headline">
