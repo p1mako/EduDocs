@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "EduDocsAPI/internal/app"
 
+func main() {
+	app.Run()
 }
