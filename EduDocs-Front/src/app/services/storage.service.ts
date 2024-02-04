@@ -51,7 +51,7 @@ export interface Student extends User{
   group: number;
   status: StudentStatus;
   uniqueNumber: number;
-  specizlization: Specialization;
+  specialization: Specialization;
 }
 
 export interface Admin extends User{
