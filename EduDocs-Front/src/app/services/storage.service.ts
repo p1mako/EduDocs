@@ -55,7 +55,6 @@ export interface Student extends User{
 }
 
 export interface Admin extends User{
-  availableRequests: RequestEntity[];
   role: AdministrationRole;
   from: string;
   until: string;
@@ -69,7 +68,7 @@ export interface Professor extends User{
 
 export interface Document extends Entity{
   template: Template;
-  cerated: string;
+  created: string;
   validThrough: string;
   author: Admin;
   inititator: User;

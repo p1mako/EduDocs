@@ -12,7 +12,7 @@ export class BackendService {
 
   constructor(private http: HttpClient, private storage: StorageService, private router: Router) { }
 
-  private adress = "http://localhost:8080/EduDocsAPI/";
+  private adress = "http://localhost:8080/";
 
   authenticate(login: string, password: string): Observable<Student | Professor | Admin> {
     var postHttp = this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
