@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-@WebServlet(name = "Dispatcher", value = "/")
+@WebServlet(name = "Dispatcher", urlPatterns = "/*")
 public class DispatcherServlet  extends HttpServlet  {
     private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 

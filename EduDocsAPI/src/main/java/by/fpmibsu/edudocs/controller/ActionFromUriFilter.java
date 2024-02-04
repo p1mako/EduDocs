@@ -4,7 +4,9 @@ package by.fpmibsu.edudocs.controller;
 import by.fpmibsu.edudocs.action.Action;
 import by.fpmibsu.edudocs.action.LoginAction;
 import by.fpmibsu.edudocs.action.LogoutAction;
+import by.fpmibsu.edudocs.action.TemplateAction;
 import by.fpmibsu.edudocs.action.admin.UserDeleteAction;
+import by.fpmibsu.edudocs.action.requests.RequestCreateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,89 +20,58 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @WebFilter(filterName = "asb", asyncSupported = true, urlPatterns = {"/*"})
 public class ActionFromUriFilter implements Filter {
-	private static final Logger logger = LogManager.getLogger(ActionFromUriFilter.class);
+    private static final Logger logger = LogManager.getLogger(ActionFromUriFilter.class);
 
-	private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
+    private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
 
-	static {
-		actions.put("/", LoginAction.class);
-//		actions.put("/index", MainAction.class);
-		actions.put("/user/create", LoginAction.class);
-		actions.put("/user/delete", UserDeleteAction.class);
-		actions.put("/logout", LogoutAction.class);
-		actions.put("/login", LoginAction.class);
-//		actions.put("/logout", LogoutAction.class);
+    static {
+        actions.put("/", LoginAction.class);
+        actions.put("/user/create", LoginAction.class);
+        actions.put("/user/delete", UserDeleteAction.class);
+        actions.put("/logout", LogoutAction.class);
+        actions.put("/login", LoginAction.class);
+        actions.put("/templates", TemplateAction.class);
+        actions.put("/request/create", RequestCreateAction.class);
 
-//		actions.put("/profile/edit", ProfileEditAction.class);
-//		actions.put("/profile/save", ProfileSaveAction.class);
-//
-//		actions.put("/reader/list", ReaderListAction.class);
-//		actions.put("/reader/edit", ReaderEditAction.class);
-//		actions.put("/reader/save", ReaderSaveAction.class);
-//		actions.put("/reader/delete", ReaderDeleteAction.class);
-//
-//		actions.put("/user/list", UserListAction.class);
-//		actions.put("/user/edit", UserEditAction.class);
-//		actions.put("/user/save", UserSaveAction.class);
-//		actions.put("/user/delete", UserDeleteAction.class);
-//
-//		actions.put("/author/list", AuthorListAction.class);
-//		actions.put("/author/edit", AuthorEditAction.class);
-//		actions.put("/author/save", AuthorSaveAction.class);
-//		actions.put("/author/delete", AuthorDeleteAction.class);
-//
-//		actions.put("/author/book/list", BookListAction.class);
-//		actions.put("/author/book/edit", BookEditAction.class);
-//		actions.put("/author/book/save", BookSaveAction.class);
-//		actions.put("/author/book/delete", BookDeleteAction.class);
-//
-//		actions.put("/search/book/form", SearchBookFormAction.class);
-//		actions.put("/search/book/result", SearchBookResultAction.class);
-//		actions.put("/author/book/usages", BookUsageListAction.class);
-//
-//		actions.put("/search/reader/form", SearchReaderFormAction.class);
-//		actions.put("/search/reader/result", SearchReaderResultAction.class);
-//		actions.put("/reader/usages", ReaderUsageListAction.class);
-//
-//		actions.put("/author/book/deliver", DeliverBookAction.class);
-//		actions.put("/author/book/return", ReturnBookAction.class);
-	}
+    }
 
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {}
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		if(request instanceof HttpServletRequest) {
-			HttpServletRequest httpRequest = (HttpServletRequest)request;
-			String contextPath = httpRequest.getContextPath();
-			String uri = httpRequest.getRequestURI();
-			logger.debug(String.format("Starting of processing of request for URI \"%s\"", uri));
-			int beginAction = contextPath.length();
-			int endAction = uri.lastIndexOf('.');
-			String actionName;
-			if(endAction >= 0) {
-				actionName = uri.substring(beginAction, endAction);
-			} else {
-				actionName = uri.substring(beginAction);
-			}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            String contextPath = httpRequest.getContextPath();
+            String uri = httpRequest.getRequestURI();
+            logger.debug(String.format("Starting of processing of request for URI \"%s\"", uri));
+            int beginAction = contextPath.length();
+            int endAction = uri.lastIndexOf('.');
+            String actionName;
+            if (endAction >= 0) {
+                actionName = uri.substring(beginAction, endAction);
+            } else {
+                actionName = uri.substring(beginAction);
+            }
 
-			Class<? extends Action> actionClass = actions.get(actionName);
-			try {
-				Action action = actionClass.newInstance();
-				action.setName(actionName);
-				httpRequest.setAttribute("action", action);
-				chain.doFilter(request, response);
-			} catch (InstantiationException | IllegalAccessException | NullPointerException e) {
-				logger.error("It is impossible to create action handler object", e);
-				httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
-			}
-		} else {
-			logger.error("It is impossible to use HTTP filter");
-		}
-	}
+            Class<? extends Action> actionClass = actions.get(actionName);
+            try {
+                Action action = actionClass.newInstance();
+                action.setName(actionName);
+                httpRequest.setAttribute("action", action);
+                chain.doFilter(request, response);
+            } catch (InstantiationException | IllegalAccessException | NullPointerException e) {
+                logger.error("It is impossible to create action handler object", e);
+                httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
+            }
+        } else {
+            logger.error("It is impossible to use HTTP filter");
+        }
+    }
 
-	@Override
-	public void destroy() {}
+    @Override
+    public void destroy() {
+    }
 
 }

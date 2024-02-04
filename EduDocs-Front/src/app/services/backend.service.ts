@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Admin, Professor, StorageService, Student, StudentStatus, User } from './storage.service';
+import { Admin, Professor, StorageService, Student, StudentStatus, Template, User } from './storage.service';
 import { Router, UrlTree } from '@angular/router';
 
 
@@ -42,6 +42,12 @@ export class BackendService {
       }
     );
   }
+
+  getTemplates() {
+    this.http.get<Template[]>(this.adress + BackendAdresses.getTemplates).subscribe((templates) => {
+      this.storage.templates = templates;
+    })
+  }
 }
 
 enum BackendAdresses {
@@ -51,5 +57,6 @@ enum BackendAdresses {
   createUser = "user/create",
   createRequest = "request/create",
   getRequests = "request/all",
-  updateRequest = "request/update"
+  updateRequest = "request/update",
+  getTemplates = "templates"
 }

@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class StorageService {
 
   currentUser: Student | Professor | Admin | null = null;
+  templates: Template[] = [];
 
   constructor() { }
 
@@ -13,11 +14,11 @@ export class StorageService {
     this.currentUser = currentUser;
   }
 
-  
+
   public get user() : Student | Professor | Admin | null {
     return this.currentUser;
   }
-  
+
 }
 
 
@@ -76,7 +77,7 @@ export interface Document extends Entity{
 
 export interface RequestEntity extends Entity{
   status: RequestStatus;
-  created: string;
+  created: string | null;
   document: Document | null;
   template: Template;
   initiator: User;
@@ -88,12 +89,12 @@ export enum StudentStatus{
 }
 
 export enum RequestStatus {
-  Sent = "green",
-  BeingProcessed = "gray",
-  CanBeTaken = "green",
-  Received = "white",
-  Declined = "red",
-  Removed = "red"
+  Sent,
+  BeingProcessed,
+  CanBeTaken,
+  Received,
+  Declined,
+  Removed
 }
 
 export enum AdministrationRole {

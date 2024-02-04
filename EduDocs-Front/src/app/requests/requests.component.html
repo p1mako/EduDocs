@@ -14,8 +14,8 @@
             src="https://uploads-ssl.webflow.com/57d2d032578a8a81597b9f6a/5c8477db7c584b1a11e71704_menu-icon%402x.png"
             width="18" alt="" class="structurenav-menu"></div>
       </div>
-      <div class="w-nav-overlay" data-wf-ignore="" style="height: 10673px; display: block;">
-        <nav [@expandedPanel]="state" role="navigation" class="structure-project-menu w-nav-menu w--nav-menu-open">
+      <div [@expandedPanel]="state" class="w-nav-overlay" data-wf-ignore="" style="height: 10673px; display: block;">
+        <nav role="navigation" class="structure-project-menu w-nav-menu w--nav-menu-open">
           <div class="structure-menu-items">
             <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
             <a href="" class="structure-link structure-menu-link"></a>
@@ -30,21 +30,32 @@
   <div class="w-dyn-list">
     <div role="list" class="list w-dyn-items">
       <div role="listitem" class="w-dyn-item">
-        <div *ngFor="let request of requests;" class="staff-wrap">
+        <div class="staff-wrap">
           <div class="cta5-option-headline">
-            <p class="name">{{request.template.name}}</p>
-            <div class="label">
-              <div class="phone">{{request.created}}</div>
-            </div>
-            <div class="label label-aqua">{{request.created}}</div>
-            <div [hidden]="request.document == null" class="label label-grey">
-              <div class="position" >{{request.document?.author?.name}}</div>
-            </div>
-            <div [style.background-color]="request.status" class="label-2 label-red">
-              <div class="location">{{request.status.toString()}}</div>
-            </div>
+            <p class="name">Create new request</p>
           </div>
-          <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>
+          <select [(ngModel)]="template" class="form-select" aria-label="Default select example">
+            <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{item.name}}</option>
+          </select>
+          <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Create</a></div>
+        </div>
+        <div *ngFor="let request of requests;">
+          <div class="staff-wrap">
+            <div class="cta5-option-headline">
+              <p class="name">{{request.template.name}}</p>
+              <div class="label">
+                <div class="phone">{{request.created}}</div>
+              </div>
+              <div class="label label-aqua">{{request.created}}</div>
+              <div [hidden]="request.document == null" class="label label-grey">
+                <div class="position">{{request.document?.author?.name}}</div>
+              </div>
+              <div [style.background-color]="request.status" class="label-2 label-red">
+                <div class="location">{{request.status.toString()}}</div>
+              </div>
+            </div>
+            <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>
+          </div>
         </div>
       </div>
     </div>

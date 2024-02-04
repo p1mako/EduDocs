@@ -1,5 +1,4 @@
 /target/
-/out/
 /.idea/
 /EduDocs-Front/.vscode/
 /EduDocsAPI/src/main/resources/CreateDevUser.sql
