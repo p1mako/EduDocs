@@ -256,7 +256,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "format": "array of requests"
+                  "items": {
+                    "$ref": "#/components/schemas/Request"
+                  }
                 }
               }
             }
@@ -304,7 +306,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "format": "array of templates"
+                  "items": {
+                    "$ref" : "#/components/schemas/Template"
+                  }
                 }
               }
             }
