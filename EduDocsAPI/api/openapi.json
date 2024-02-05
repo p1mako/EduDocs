@@ -382,7 +382,8 @@
                 "type": "number"
               },
               "status": {
-                "type": "object"
+                "type": "string",
+                "enum": ["Learning", "AcademicVacation"]
               },
               "uniqueNumber": {
                 "type": "number"
