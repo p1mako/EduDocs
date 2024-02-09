@@ -421,7 +421,7 @@
             "properties": {
               "role": {
                 "type": "string",
-                "enum": ["Dean", "Educational_deputy", "Academic_Deputy"]
+                "enum": ["Dean", "EducationalDeputy", "AcademicDeputy"]
               },
               "from": {
                 "type": "string",

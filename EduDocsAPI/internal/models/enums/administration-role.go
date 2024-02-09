@@ -3,7 +3,7 @@ package enums
 type AdministrationRole byte
 
 const (
-	DEAN               AdministrationRole = 0
-	EDUCATIONAL_DEPUTY AdministrationRole = 1
-	ACADEMIC_DEPUTY    AdministrationRole = 2
+	Dean              AdministrationRole = 0
+	EducationalDeputy AdministrationRole = 1
+	AcademicDeputy    AdministrationRole = 2
 )
