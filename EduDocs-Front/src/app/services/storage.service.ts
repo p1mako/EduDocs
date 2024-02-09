@@ -46,7 +46,6 @@ export interface Specialization extends Entity{
 }
 
 export interface Student extends User{
-  availableRequests: RequestEntity[];
   entryDate: string;
   group: number;
   status: StudentStatus;
@@ -62,7 +61,6 @@ export interface Admin extends User{
 }
 
 export interface Professor extends User{
-  availableRequests: RequestEntity[];
   degree: string;
 }
 
