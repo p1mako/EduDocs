@@ -4,13 +4,12 @@ import (
 	"EduDocsAPI/internal/logger"
 	"EduDocsAPI/internal/models"
 	"EduDocsAPI/internal/services"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
 func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+	return func(writer http.ResponseWriter, request *http.Request) {
 		username, _, _ := request.BasicAuth()
 		user := authenticate(writer, request)
 		if user != nil {
@@ -21,12 +20,11 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 			http.Error(writer, "Unauthorized", http.StatusUnauthorized)
 			logger.InfoLog.Printf("Unauthenticated user with login %s", username)
 		}
-	})
+	}
 }
 
 func authenticate(writer http.ResponseWriter, request *http.Request) *models.User {
 	login, password, ok := request.BasicAuth()
-	fmt.Print(login, password)
 	if !ok {
 		writer.WriteHeader(http.StatusUnauthorized)
 		return nil

@@ -12,7 +12,6 @@ func GetUserById(uuid uuid.UUID) models.User {
 
 func GetUserByLogin(login string) (models.User, error) {
 	var user models.User
-	logger.InfoLog.Print(login)
 	query, err := db.Query("SELECT * FROM users WHERE login = $1", login)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get user by login")

@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { Admin, Professor, StorageService, Student, StudentStatus, Template, User } from './storage.service';
 import { Router, UrlTree } from '@angular/router';
+import { Buffer } from "buffer";
 
 
 @Injectable({
@@ -15,10 +16,16 @@ export class BackendService {
   private adress = "http://localhost:8080/";
 
   authenticate(login: string, password: string): Observable<Student | Professor | Admin> {
-    var postHttp = this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
-      login: login,
-      password: password
-    });
+    const headers = new HttpHeaders(
+      {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Basic ' + Buffer.from(login + ':' + password).toString('base64')
+      }
+    )
+    console.log(headers)
+    console.log("sent")
+    var postHttp = this.http.get<Student | Professor | Admin>(this.adress + BackendAdresses.login, {headers: headers});
+    console.log(postHttp)
     return postHttp;
   }
 
