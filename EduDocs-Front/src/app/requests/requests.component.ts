@@ -23,12 +23,14 @@ export class RequestsComponent {
   template: number = 1;
 
   constructor(public storage: StorageService, private router: Router, private backend: BackendService){
-    this.requests = storage.user?.availableRequests!;
+    //this.requests = storage.user?.availableRequests!;
+    //TODO: seperate request for list of requests
    }
 
   ngOnInit() {
     console.log(this.storage.user)
-    this.requests = this.storage.user?.availableRequests!;
+    //this.requests = this.storage.user?.availableRequests!;
+    //TODO: seperate request for list of requests
     console.log(this.requests);
     this.backend.getTemplates();
   }
