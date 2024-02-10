@@ -16,7 +16,7 @@ func Run() {
 			logger.InfoLog.Print(err)
 		}
 	}()
-	http.HandleFunc("POST /login", transport.HandleLogin)
+	http.HandleFunc("/login", transport.HandleLogin)
 	http.HandleFunc("GET /logout", transport.BasicAuth(transport.HandleLogout))
 	logger.InfoLog.Print("Starting server...")
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))

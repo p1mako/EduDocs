@@ -33,6 +33,7 @@ func authenticate(writer http.ResponseWriter, request *http.Request) *models.Use
 	}
 	user, err := services.GetUserByLogin(login)
 	if err != nil {
+		logger.ErrorLog.Print(err)
 		writer.WriteHeader(http.StatusInternalServerError)
 		_, err = writer.Write([]byte(err.Error()))
 		if err != nil {

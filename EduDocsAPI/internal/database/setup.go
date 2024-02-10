@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	_ "github.com/lib/pq"
 	"os"
 )
 
@@ -18,7 +19,7 @@ type dbInfo struct {
 
 var db *sql.DB = nil
 
-const pathToConfig = "../config/db-conf.json"
+const pathToConfig = "./internal/config/db-conf.json"
 
 func init() {
 	connectionInfo, err := getConfig()

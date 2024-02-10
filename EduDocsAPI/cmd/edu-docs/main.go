@@ -2,8 +2,6 @@ package main
 
 import (
 	"EduDocsAPI/internal/app"
-	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
@@ -20,8 +18,6 @@ func initSwagger() {
 }
 
 func main() {
-	var password, _ = bcrypt.GenerateFromPassword([]byte("9iuo8nvw54n98e5"), -1)
-	fmt.Print(string(password), "\n")
 	initSwagger()
 	app.Run()
 }

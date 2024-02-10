@@ -12,12 +12,18 @@ func GetUserById(uuid uuid.UUID) models.User {
 
 func GetUserByLogin(login string) (models.User, error) {
 	var user models.User
-	query, err := db.Query("SELECT * FROM users WHERE login = ?", login)
+	logger.InfoLog.Print(login)
+	query, err := db.Query("SELECT * FROM users WHERE login = $1", login)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get user by login")
 		return user, err
 	}
-	err = query.Scan(&user)
-	logger.ErrorLog.Print("Model did not match the one in database")
+	if !query.Next() {
+		logger.ErrorLog.Print("No data was extracted from query")
+	}
+	err = query.Scan(&user.Uuid, &user.Password, &user.Login, &user.Surname, &user.Name, &user.LastName)
+	if err != nil {
+		logger.ErrorLog.Print("Model did not match the one in database")
+	}
 	return user, err
 }
