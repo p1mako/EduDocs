@@ -21,6 +21,10 @@
     {
       "name": "Request",
       "description": "Manipulations with requests"
+    },
+    {
+      "name": "Templates",
+      "description": "Manipulations with templates"
     }
   ],
   "paths": {
@@ -270,8 +274,11 @@
         }
       }
     },
-    "/templates": {
+    "/templates/get": {
       "get": {
+        "tags": [
+          "Templates"
+        ],
         "summary": "Get all available templates",
         "description": "",
         "operationId": "getAllTemplates",
@@ -289,6 +296,24 @@
               }
             }
           }
+        }
+      }
+    },
+    "/templates/add": {
+      "post": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Add new template",
+        "description": "",
+        "operationId": "addTemplate",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/schemas/Template"
         }
       }
     }
