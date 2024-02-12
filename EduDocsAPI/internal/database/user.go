@@ -19,6 +19,7 @@ func GetUserByLogin(login string) (models.User, error) {
 	}
 	if !query.Next() {
 		logger.ErrorLog.Print("No data was extracted from query")
+		return user, err
 	}
 	err = query.Scan(&user.Uuid, &user.Password, &user.Login, &user.Surname, &user.Name, &user.LastName)
 	if err != nil {

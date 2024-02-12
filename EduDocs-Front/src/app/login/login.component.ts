@@ -17,7 +17,7 @@ export class LoginComponent {
   error = false;
 
   submit() : void{
-    this.backend.authenticate(this.login, this.password). subscribe({
+    this.backend.logIn(this.login, this.password). subscribe({
       next : (user) => {
         this.storage.user = user;
         this.error = false;
