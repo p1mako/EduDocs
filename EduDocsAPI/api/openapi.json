@@ -25,31 +25,23 @@
   ],
   "paths": {
     "/login": {
-      "post": {
+      "get": {
         "tags": [
           "Auth"
         ],
         "summary": "Logs user into the system",
         "description": "",
         "operationId": "loginUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "login": {
-                    "type": "string",
-                    "example": "fpm.Surname"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "ervbi3brhvbeiu1"
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authentication",
+            "schema": {
+              "type": "string",
+              "example": "user:p@ssw0rd"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -76,22 +68,6 @@
           },
           "401": {
             "description": "Invalid request"
-          }
-        }
-      }
-    },
-    "/logout": {
-      "get": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation"
           }
         }
       }
@@ -307,7 +283,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref" : "#/components/schemas/Template"
+                    "$ref": "#/components/schemas/Template"
                   }
                 }
               }
@@ -383,7 +359,10 @@
               },
               "status": {
                 "type": "string",
-                "enum": ["Learning", "AcademicVacation"]
+                "enum": [
+                  "Learning",
+                  "AcademicVacation"
+                ]
               },
               "uniqueNumber": {
                 "type": "number"
@@ -421,7 +400,11 @@
             "properties": {
               "role": {
                 "type": "string",
-                "enum": ["Dean", "EducationalDeputy", "AcademicDeputy"]
+                "enum": [
+                  "Dean",
+                  "EducationalDeputy",
+                  "AcademicDeputy"
+                ]
               },
               "from": {
                 "type": "string",
