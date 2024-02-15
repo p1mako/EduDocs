@@ -6,8 +6,22 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetUserById(uuid uuid.UUID) models.User {
-	panic("not implemented")
+func GetUserById(id uuid.UUID) (models.User, error) {
+	var user models.User
+	query, err := db.Query("SELECT * FROM users WHERE id = $1", id)
+	if err != nil {
+		logger.ErrorLog.Print("Error while extracting user: ", err)
+		return models.User{}, err
+	}
+	if !query.Next() {
+		logger.InfoLog.Printf("No data of user was extracted for %s", id)
+	}
+	err = query.Scan(user.Uuid, user.Password, user.Login, user.LastName, user.Name, user.Surname)
+	if err != nil {
+		logger.ErrorLog.Print("Could not read input from query: ", err)
+		return models.User{}, err
+	}
+	return user, nil
 }
 
 func GetUserByLogin(login string) (models.User, error) {

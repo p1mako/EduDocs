@@ -4,10 +4,11 @@ import (
 	"EduDocsAPI/internal/database"
 	"EduDocsAPI/internal/models"
 	"errors"
+	"github.com/google/uuid"
 )
 
-func GetTemplateById() ([]models.Template, error) {
-	panic("Not implemented")
+func GetTemplateById(id uuid.UUID) (models.Template, error) {
+	return database.GetTemplateById(id)
 }
 
 func GetAllTemplates() ([]models.Template, error) {
