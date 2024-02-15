@@ -9,7 +9,7 @@ func GetAllTemplates() ([]models.Template, error) {
 	var templates []models.Template
 	query, err := db.Query("SELECT * FROM templates")
 	if err != nil {
-		logger.ErrorLog.Print("Could not execute query to get user by login")
+		logger.ErrorLog.Print("Could not execute query to get templates")
 		return templates, err
 	}
 	if !query.Next() {
@@ -25,6 +25,13 @@ func GetAllTemplates() ([]models.Template, error) {
 		}
 		templates = append(templates, template)
 	}
-
 	return templates, err
+}
+
+func AddTemplate(template models.Template) error {
+	_, err := db.Query("INSERT INTO templates(route_to_document, name)  VALUES($1, $2)", template.RouteToDocument, template.Name)
+	if err != nil {
+		logger.ErrorLog.Print("Cannot add new template: ", err)
+	}
+	return err
 }
