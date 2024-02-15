@@ -33,25 +33,11 @@ export class RequestsComponent {
     //TODO: seperate request for list of requests
     console.log(this.requests);
     this.backend.getTemplates();
+
   }
 
   public editTemplates() {
     this.router.navigateByUrl("/templates")
-  }
-
-  public logOut() {
-    this.backend.logOut();
-  }
-
-  isCreateOpened = false;
-  stateCreate = 'initial';
-
-  isExpanded: boolean = false
-  state: string = 'initial'
-
-  expand() {
-    this.isExpanded = !this.isExpanded
-    this.state = this.isExpanded ? 'expanded' : 'initial'
   }
 
   addRequest() {
