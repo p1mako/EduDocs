@@ -7,6 +7,6 @@ type Document struct {
 	Template     Template  `json:"template"`
 	Created      time.Time `json:"created"`
 	ValidThrough time.Time `json:"validThrough"`
-	Author       Admin     `json:"author"`
-	Initiator    User      `json:"initiator"`
+	Author       *Admin    `json:"author"`
+	Initiator    *User     `json:"initiator"`
 }

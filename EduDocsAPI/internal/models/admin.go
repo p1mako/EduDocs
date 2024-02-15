@@ -10,5 +10,5 @@ type Admin struct {
 	Role               enums.AdministrationRole `json:"role"`
 	From               time.Time                `json:"from"`
 	Until              time.Time                `json:"until"`
-	AvailableTemplates Template                 `json:"availableTemplates"`
+	AvailableTemplates *Template                `json:"availableTemplates"`
 }
