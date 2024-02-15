@@ -3,5 +3,5 @@ package models
 import "github.com/google/uuid"
 
 type Entity struct {
-	Uuid *uuid.UUID `json:"uuid"`
+	Uuid uuid.UUID `json:"uuid"`
 }
