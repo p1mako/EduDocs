@@ -44,6 +44,7 @@ export interface User extends Entity{
 export interface Template extends Entity{
   name: string;
   routeToDocument: string;
+  responsibleAdmin: AdministrationRole
 }
 
 export interface Specialization extends Entity{
@@ -101,7 +102,7 @@ export enum RequestStatus {
 }
 
 export enum AdministrationRole {
-  DEAN,
-  EDUCATIONAL_DEPUTY,
-  ACADEMIC_DEPUTY
+  Dean,
+  EducationalDeputy,
+  AcademicDeputy
 }
