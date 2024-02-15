@@ -13,12 +13,11 @@ func GetAllRequests(username string) ([]models.Request, error) {
 		return requests, err
 	}
 	if !query.Next() {
-		logger.ErrorLog.Print("No data was extracted from query")
-		return requests, err
+		return requests, nil
 	}
 	for query.Next() {
 		var request models.Request
-		err = query.Scan(request.Uuid, request.Created, request.Status, request.Document.Uuid, request.Initiator.Uuid, request.Template.Uuid)
+		err = query.Scan(&request.Uuid, &request.Created, &request.Status, &request.Document.Uuid, &request.Initiator.Uuid, &request.Template.Uuid)
 		if err != nil {
 			logger.ErrorLog.Print("Model did not match the one in database")
 			return requests, err

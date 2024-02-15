@@ -16,7 +16,7 @@ func GetDocumentById(id uuid.UUID) (models.Document, error) {
 	if !query.Next() {
 		logger.InfoLog.Printf("No data of document was extracted for %s", id)
 	}
-	err = query.Scan(document.Uuid, document.Template.Uuid, document.ValidThrough, document.Author.Uuid, document.Initiator.Uuid, document.Created)
+	err = query.Scan(&document.Uuid, &document.Template.Uuid, &document.ValidThrough, &document.Author.Uuid, &document.Initiator.Uuid, &document.Created)
 	if err != nil {
 		logger.ErrorLog.Print("Could not read input from query: ", err)
 		return models.Document{}, err

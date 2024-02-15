@@ -16,7 +16,7 @@ func GetTemplateById(id uuid.UUID) (models.Template, error) {
 	if !query.Next() {
 		logger.InfoLog.Printf("No data was extracted for %s", id)
 	}
-	err = query.Scan(template.Uuid, template.RouteToDocument, template.Name)
+	err = query.Scan(&template.Uuid, &template.RouteToDocument, &template.Name)
 	if err != nil {
 		logger.ErrorLog.Print("Could not read input from query: ", err)
 		return models.Template{}, err
@@ -37,7 +37,7 @@ func GetAllTemplates() ([]models.Template, error) {
 	}
 	for query.Next() {
 		var template models.Template
-		err = query.Scan(template.Uuid, template.RouteToDocument, template.Name)
+		err = query.Scan(&template.Uuid, &template.RouteToDocument, &template.Name)
 		if err != nil {
 			logger.ErrorLog.Print("Model did not match the one in database")
 			return templates, err
