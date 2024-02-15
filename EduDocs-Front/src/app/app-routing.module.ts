@@ -1,26 +1,49 @@
-import { Inject, NgModule, inject } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { Router, RouterModule, Routes, UrlTree } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RequestComponent } from './request/request.component';
 import { RequestsComponent } from './requests/requests.component';
 import { MainComponent } from './main/main.component';
 import { BackendService } from './services/backend.service';
-import { StorageService } from './services/storage.service';
+import { TemplatesComponent } from './templates/templates.component';
+import { map, of } from 'rxjs';
 
 var loginGuard = () => { 
   var back = inject(BackendService);
-  var storage = inject(StorageService);
-  if(storage.user != null){
-    return true;
-  }
-  return back.isLoggedIn();
+  var router : Router = inject(Router)
+  console.log("irjmvijrnivjn")
+  return back.isLoggedIn().pipe(
+    map((val) => {
+      if (val == false) {
+        return of([router.parseUrl("/login")])
+      }
+      console.log("irjmvijrnivjn")
+      return true
+    })
+  )
 };
+
+var loggedInGuard = () => {
+  var back = inject(BackendService)
+  var router : Router = inject(Router)
+  return back.isLoggedIn().pipe(
+    map((val) => {
+      if (val == true) {
+        console.log("redirecting to requests")
+        return false
+      }
+      console.log("not logged in")
+      return true
+    })
+  )
+}
 
 const routes: Routes = [
   { path: '', component: MainComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [loggedInGuard] },
   { path: 'request', component: RequestComponent, canActivate: [loginGuard] },
-  { path: 'requests', component: RequestsComponent, canActivate: [loginGuard]}
+  { path: 'requests', component: RequestsComponent, canActivate: [loginGuard]},
+  { path: 'templates', component: TemplatesComponent, canActivate: [loginGuard]}
 ];
 
 @NgModule({

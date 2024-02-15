@@ -13,6 +13,10 @@ func HandleLogin(rw http.ResponseWriter, request *http.Request) {
 	}
 	user := authenticate(rw, request)
 	login, _, _ := request.BasicAuth()
+	if user == nil {
+		logger.InfoLog.Printf("Unauthenticated user with login %s", login)
+		return
+	}
 	userJson, err := json.Marshal(user)
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)

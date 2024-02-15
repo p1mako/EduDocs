@@ -22,10 +22,10 @@ export class RequestsComponent {
   templates: Template[] = [];
   template: number = 1;
 
-  constructor(public storage: StorageService, private router: Router, private backend: BackendService){
+  constructor(public storage: StorageService, private router: Router, private backend: BackendService) {
     //this.requests = storage.user?.availableRequests!;
     //TODO: seperate request for list of requests
-   }
+  }
 
   ngOnInit() {
     console.log(this.storage.user)
@@ -35,9 +35,11 @@ export class RequestsComponent {
     this.backend.getTemplates();
   }
 
+  public editTemplates() {
+    this.router.navigateByUrl("/templates")
+  }
 
-
-  public logOut(){
+  public logOut() {
     this.backend.logOut();
   }
 
@@ -52,7 +54,7 @@ export class RequestsComponent {
     this.state = this.isExpanded ? 'expanded' : 'initial'
   }
 
-  addRequest(){
+  addRequest() {
 
   }
 

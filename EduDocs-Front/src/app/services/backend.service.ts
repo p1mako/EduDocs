@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError, of } from 'rxjs';
 import { Admin, Professor, StorageService, Student, StudentStatus, Template, User } from './storage.service';
-import { Router, UrlTree } from '@angular/router';
-import { Buffer } from "buffer";
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -11,67 +10,36 @@ import { Buffer } from "buffer";
 })
 export class BackendService {
 
-  constructor(private http: HttpClient, private storage: StorageService, private router: Router) { }
+  constructor(private storage: StorageService, private auth: AuthService, private router: Router) { }
 
   private adress = "http://localhost:8080/";
 
-  private login = ""
-  private password = ""
-
-  private getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders(
-      {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': 'Basic ' + Buffer.from(this.login + ':' + this.password).toString('base64')
-      });
-  }
-
-  private authenticate(): Observable<Student | Professor | Admin> {
-    const headers = new HttpHeaders(
-      {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': 'Basic ' + Buffer.from(this.login + ':' + this.password).toString('base64')
-      }
-    )
-    return this.http.get<Student | Professor | Admin>(this.adress + BackendAdresses.login, { headers: this.getAuthHeaders() });
+  private authenticate(): Observable<boolean> {
+    return this.auth.logIn();
   }
 
 
 
-  logIn(login: string, password: string): Observable<Student | Professor | Admin> {
-    this.login = login
-    this.password = password;
-    return this.authenticate();
+  logIn(login: string, password: string): Observable<boolean> {
+    return this.auth.logIn(login, password)
   }
 
   logOut() {
-    this.login = ""
-    this.password = ""
+    this.auth.logOut()
   }
 
-  isLoggedIn(): Observable<boolean | UrlTree> {
-    return new Observable<boolean | UrlTree>(
-      (subscriber) => {
-        this.authenticate().subscribe({
-          complete: () => {
-            subscriber.next(true);
-            subscriber.complete();
-          },
-          error: () => {
-            subscriber.next(this.router.parseUrl("/login"));
-            subscriber.complete();
-          }
-        })
-      }
-    );
+  isLoggedIn(): Observable<boolean> {
+    return this.authenticate();
   }
 
   getTemplates() {
-    this.http.get<Template[]>(this.adress + BackendAdresses.getTemplates, { headers: this.getAuthHeaders() }).pipe(
+    this.auth.get<Template[]>(this.adress + BackendAdresses.getTemplates).pipe(
       catchError((err: { status_code: number, message: string }) => {
         if (err.status_code == 401) {
+          this.auth.loggedIn.next(false)
           this.router.navigateByUrl("/login")
         }
+        this.auth.loggedIn.next(true)
         return of([])
       })
     ).subscribe({
@@ -79,6 +47,10 @@ export class BackendService {
         this.storage.templates = templates
       },
     })
+  }
+
+  addTemplate(template: Template): Observable<void> {
+    return this.auth.post<void>(this.adress + BackendAdresses.addTemplate, template)
   }
 }
 
@@ -89,5 +61,6 @@ enum BackendAdresses {
   createRequest = "request/create",
   getRequests = "request/all",
   updateRequest = "request/update",
-  getTemplates = "templates"
+  getTemplates = "templates/get",
+  addTemplate = "templates/add"
 }
