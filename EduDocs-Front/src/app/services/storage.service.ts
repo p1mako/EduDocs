@@ -7,6 +7,7 @@ export class StorageService {
 
   currentUser: Student | Professor | Admin | null = null;
   templates: Template[] = [];
+  requests: RequestEntity[] = []
 
   constructor() { }
 
@@ -19,6 +20,11 @@ export class StorageService {
     return this.currentUser;
   }
 
+  clean(){
+    this.templates = []
+    this.requests = []
+    this.currentUser = null
+  }
 }
 
 

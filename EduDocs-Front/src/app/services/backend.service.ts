@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, retry, throwError, of } from 'rxjs';
-import { Admin, Professor, StorageService, Student, StudentStatus, Template, User } from './storage.service';
+import { Observable, catchError, retry, throwError, of, map } from 'rxjs';
+import { RequestEntity, StorageService, Template } from './storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
@@ -18,8 +18,6 @@ export class BackendService {
     return this.auth.logIn();
   }
 
-
-
   logIn(login: string, password: string): Observable<boolean> {
     return this.auth.logIn(login, password)
   }
@@ -32,25 +30,24 @@ export class BackendService {
     return this.authenticate();
   }
 
-  getTemplates() {
-    this.auth.get<Template[]>(this.adress + BackendAdresses.getTemplates).pipe(
+  getTemplates(): Observable<Template[]> {
+    return this.auth.get<Template[]>(this.adress + BackendAdresses.getTemplates).pipe<Template[]>(
       catchError((err: { status_code: number, message: string }) => {
         if (err.status_code == 401) {
           this.auth.loggedIn.next(false)
           this.router.navigateByUrl("/login")
         }
-        this.auth.loggedIn.next(true)
-        return of([])
+        return []
       })
-    ).subscribe({
-      next: templates => {
-        this.storage.templates = templates
-      },
-    })
+    )
   }
 
-  addTemplate(template: Template): Observable<void> {
-    return this.auth.post<void>(this.adress + BackendAdresses.addTemplate, template)
+  getRequests(): Observable<RequestEntity[]>{
+    return this.auth.get<RequestEntity[]>(this.adress + BackendAdresses.getRequests)
+  }
+
+  addTemplate(template: Template): Observable<Template[]> {
+    return this.auth.post<Template[]>(this.adress + BackendAdresses.addTemplate, template)
   }
 }
 

@@ -68,6 +68,7 @@ export class AuthService {
     sessionStorage.removeItem("password")
     this.login = ""
     this.password = ""
+    this.storage.clean()
     this.loggedIn.next(false)
   }
 
