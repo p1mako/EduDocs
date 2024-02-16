@@ -17,7 +17,6 @@ export class AuthService {
   private password: string | null = null
 
   private authUser(user: string, password: string): Observable<boolean> {
-    console.log("auth " + user + password)
     var headers = {headers: this.getAuthHeaders(user, password)}
     return new Observable<boolean>((subscriber) => {
       this.http.get<Admin | Professor | Student>("http://localhost:8080/login",
@@ -38,11 +37,11 @@ export class AuthService {
 
   public logIn(login = sessionStorage.getItem("user"), password = sessionStorage.getItem("password")): Observable<boolean> {
     if (login == null || password == null) {
+      this.loggedIn.next(false)
       return new Observable<boolean>((subscriber) => {
         subscriber.next(false)
       })
     }
-    console.log("started " + login + password)
     return this.authUser(login, password).pipe(
       map(
         (val, num) => {
@@ -81,8 +80,6 @@ export class AuthService {
   }
 
   private getAuthHeaders(user = this.login, password = this.password) {
-    console.log(user)
-    console.log(password)
     return new HttpHeaders(
       {
         'Content-Type': 'application/json; charset=utf-8',

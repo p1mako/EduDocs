@@ -16,15 +16,22 @@ export class RequestsComponent {
 
   constructor(protected storage: StorageService, private router: Router, private backend: BackendService, private auth: AuthService) {  }
 
+  private loadData(){
+    this.backend.getTemplates().subscribe({
+      next: (templates) => this.storage.templates = templates
+    })
+    this.backend.getRequests().subscribe({
+      next: (requests) => this.storage.requests = requests
+    })
+  }
+
   ngOnInit() {
+    console.log("ngOnInit")
+    this.loadData()
     this.auth.loggedIn.subscribe((loggedIn) => {
+      console.log("Logged In: ", loggedIn)
       if (loggedIn) {
-        this.backend.getTemplates().subscribe({
-          next: (templates) => this.storage.templates = templates
-        })
-        this.backend.getRequests().subscribe({
-          next: (requests) => this.storage.requests = requests
-        })
+        this.loadData()
       }
     })
   }

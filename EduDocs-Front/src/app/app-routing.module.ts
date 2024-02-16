@@ -11,13 +11,11 @@ import { map, of } from 'rxjs';
 var loginGuard = () => { 
   var back = inject(BackendService);
   var router : Router = inject(Router)
-  console.log("irjmvijrnivjn")
   return back.isLoggedIn().pipe(
     map((val) => {
       if (val == false) {
         return of([router.parseUrl("/login")])
       }
-      console.log("irjmvijrnivjn")
       return true
     })
   )

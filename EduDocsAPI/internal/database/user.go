@@ -44,7 +44,7 @@ func GetUserByLogin(login string) (*models.User, error) {
 
 func GetAdmin(user *models.User) (*models.Admin, error) {
 	query, err := db.Query("SELECT a.assignment_start, a.assignment_end, a.role FROM users JOIN public.admins a on users.id = a.id WHERE a.id = $1", user.Uuid)
-	if err == nil {
+	if err != nil {
 		logger.ErrorLog.Print("Cannot read from db: ", err)
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func GetAdmin(user *models.User) (*models.Admin, error) {
 
 func GetProfessor(user *models.User) (*models.Professor, error) {
 	query, err := db.Query("SELECT p.degree FROM users JOIN public.professors p on users.id = p.id WHERE p.id = $1", user.Uuid)
-	if err == nil {
+	if err != nil {
 		logger.ErrorLog.Print("Cannot read from db: ", err)
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func GetProfessor(user *models.User) (*models.Professor, error) {
 
 func GetStudent(user *models.User) (*models.Student, error) {
 	query, err := db.Query("SELECT s.entry_date, s.group_num, s.specialization, s.status, s.uniquenumber FROM users JOIN public.students s on users.id = s.id WHERE s.id = $1", user.Uuid)
-	if err == nil {
+	if err != nil {
 		logger.ErrorLog.Print("Cannot read from db: ", err)
 		return nil, err
 	}

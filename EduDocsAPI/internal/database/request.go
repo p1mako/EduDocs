@@ -6,11 +6,10 @@ import (
 )
 
 func GetAllAvailableRequestsForAdmin(user *models.Admin) ([]*models.Request, error) {
-	var requests []*models.Request
-	//TODO:extract data from template or duplicate to request
-	query, err := db.Query("SELECT * FROM requests WHERE template")
+	requests := []*models.Request{}
+	query, err := db.Query("SELECT requests.* FROM requests JOIN templates as t on requests.template = t.id WHERE t.responsible_admin = $1", user.Role)
 	if err != nil {
-		logger.ErrorLog.Print("Could not execute query to get requests")
+		logger.ErrorLog.Print("Could not execute query to get requests: ", err)
 		return requests, err
 	}
 	if !query.Next() {
@@ -29,7 +28,7 @@ func GetAllAvailableRequestsForAdmin(user *models.Admin) ([]*models.Request, err
 }
 
 func GetAllAvailableRequestsForUser(user models.User) ([]*models.Request, error) {
-	var requests []*models.Request
+	requests := []*models.Request{}
 	query, err := db.Query("SELECT * FROM requests WHERE initiator = $1", user.Uuid)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get requests")

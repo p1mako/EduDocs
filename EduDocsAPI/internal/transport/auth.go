@@ -44,5 +44,5 @@ func authenticate(writer http.ResponseWriter, request *http.Request) *models.Use
 		http.Error(writer, "Unauthorized", http.StatusUnauthorized)
 		return nil
 	}
-	return &user
+	return user
 }

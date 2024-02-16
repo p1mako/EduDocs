@@ -48,7 +48,7 @@ func startServer(c chan error) {
 func setHandlers() {
 	http.HandleFunc("/login", transport.CorsInterceptor(transport.HandleLogin))
 	http.HandleFunc("/templates/get", transport.CorsInterceptor(transport.BasicAuth(transport.HandleGetTemplates)))
-	http.HandleFunc("/requests/all", transport.CorsInterceptor(transport.BasicAuth(transport.HandleRequests)))
+	http.HandleFunc("/request/all", transport.CorsInterceptor(transport.BasicAuth(transport.HandleRequests)))
 
 }
 

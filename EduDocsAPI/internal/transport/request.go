@@ -4,6 +4,7 @@ import (
 	"EduDocsAPI/internal/logger"
 	"EduDocsAPI/internal/services"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -20,7 +21,9 @@ func handleGetAllRequests(w http.ResponseWriter, r *http.Request) {
 		_ = logger.LogResponseWriteError(w.Write([]byte(err.Error())))
 		return
 	}
+
 	jsonRequests, err := json.Marshal(requests)
+	fmt.Print(string(jsonRequests))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

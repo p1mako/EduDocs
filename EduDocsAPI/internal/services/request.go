@@ -21,6 +21,7 @@ func GetAllRequests(username string) ([]*models.Request, error) {
 	var requests []*models.Request
 	if admin != nil {
 		requests, err = database.GetAllAvailableRequestsForAdmin(admin)
+		logger.InfoLog.Print(requests)
 		if err != nil {
 			logger.ErrorLog.Print("Cannot extract requests for admin in db")
 			return nil, err
