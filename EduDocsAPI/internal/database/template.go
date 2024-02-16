@@ -25,14 +25,14 @@ func GetTemplateById(id uuid.UUID) (*models.Template, error) {
 }
 
 func GetAllTemplates() ([]*models.Template, error) {
-	var templates []*models.Template
+	templates := []*models.Template{}
 	query, err := db.Query("SELECT * FROM templates")
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get templates")
 		return nil, err
 	}
 	if !query.Next() {
-		return nil, err
+		return templates, err
 	}
 	for query.Next() {
 		var template *models.Template
