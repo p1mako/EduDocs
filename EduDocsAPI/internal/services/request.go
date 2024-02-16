@@ -7,8 +7,39 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetAllRequests(username string) ([]models.Request, error) {
-	requests, err := database.GetAllRequests(username)
+func GetAllRequests(username string) ([]*models.Request, error) {
+	user, err := GetUserByLogin(username)
+	if err != nil {
+		logger.ErrorLog.Print("Cannot extract user for requests by login from db")
+
+	}
+	student, professor, admin, err := GetExtendedUser(user)
+	if err != nil {
+		logger.ErrorLog.Print("Cannot extract corresponding role for user from db")
+		return nil, err
+	}
+	var requests []*models.Request
+	if admin != nil {
+		requests, err = database.GetAllAvailableRequestsForAdmin(admin)
+		if err != nil {
+			logger.ErrorLog.Print("Cannot extract requests for admin in db")
+			return nil, err
+		}
+	}
+	if professor != nil {
+		requests, err = database.GetAllAvailableRequestsForUser(professor.User)
+		if err != nil {
+			logger.ErrorLog.Print("Cannot extract requests for admin in db")
+			return nil, err
+		}
+	}
+	if student != nil {
+		requests, err = database.GetAllAvailableRequestsForUser(student.User)
+		if err != nil {
+			logger.ErrorLog.Print("Cannot extract requests for admin in db")
+			return nil, err
+		}
+	}
 	if err != nil {
 		return nil, err
 	}

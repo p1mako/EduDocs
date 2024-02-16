@@ -6,41 +6,40 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetTemplateById(id uuid.UUID) (models.Template, error) {
-	var template models.Template
+func GetTemplateById(id uuid.UUID) (*models.Template, error) {
+	var template *models.Template
 	query, err := db.Query("SELECT * FROM templates WHERE id = $1", id)
 	if err != nil {
 		logger.ErrorLog.Print("Error while extracting template: ", err)
-		return models.Template{}, err
+		return nil, err
 	}
 	if !query.Next() {
-		logger.InfoLog.Printf("No data was extracted for %s", id)
+		return nil, nil
 	}
 	err = query.Scan(&template.Uuid, &template.RouteToDocument, &template.Name, &template.ResponsibleAdmin)
 	if err != nil {
 		logger.ErrorLog.Print("Could not read input from query: ", err)
-		return models.Template{}, err
+		return nil, err
 	}
 	return template, nil
 }
 
-func GetAllTemplates() ([]models.Template, error) {
-	var templates []models.Template
+func GetAllTemplates() ([]*models.Template, error) {
+	var templates []*models.Template
 	query, err := db.Query("SELECT * FROM templates")
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get templates")
-		return templates, err
+		return nil, err
 	}
 	if !query.Next() {
-		logger.ErrorLog.Print("No data was extracted from query")
-		return templates, err
+		return nil, err
 	}
 	for query.Next() {
-		var template models.Template
+		var template *models.Template
 		err = query.Scan(&template.Uuid, &template.RouteToDocument, &template.Name, &template.ResponsibleAdmin)
 		if err != nil {
 			logger.ErrorLog.Print("Model did not match the one in database")
-			return templates, err
+			return nil, err
 		}
 		templates = append(templates, template)
 	}
