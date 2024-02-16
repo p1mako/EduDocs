@@ -29,14 +29,14 @@ func GetAllRequests(username string) ([]*models.Request, error) {
 	if professor != nil {
 		requests, err = database.GetAllAvailableRequestsForUser(professor.User)
 		if err != nil {
-			logger.ErrorLog.Print("Cannot extract requests for admin in db")
+			logger.ErrorLog.Print("Cannot extract requests for professor in db")
 			return nil, err
 		}
 	}
 	if student != nil {
 		requests, err = database.GetAllAvailableRequestsForUser(student.User)
 		if err != nil {
-			logger.ErrorLog.Print("Cannot extract requests for admin in db")
+			logger.ErrorLog.Print("Cannot extract requests for student in db")
 			return nil, err
 		}
 	}
