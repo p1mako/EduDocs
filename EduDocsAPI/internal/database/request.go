@@ -8,6 +8,7 @@ import (
 func GetAllAvailableRequestsForAdmin(user *models.Admin) ([]*models.Request, error) {
 	requests := []*models.Request{}
 	query, err := db.Query("SELECT requests.* FROM requests JOIN templates as t on requests.template = t.id WHERE t.responsible_admin = $1", user.Role)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get requests: ", err)
 		return requests, err
@@ -30,6 +31,7 @@ func GetAllAvailableRequestsForAdmin(user *models.Admin) ([]*models.Request, err
 func GetAllAvailableRequestsForUser(user models.User) ([]*models.Request, error) {
 	requests := []*models.Request{}
 	query, err := db.Query("SELECT * FROM requests WHERE initiator = $1", user.Uuid)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get requests")
 		return requests, err

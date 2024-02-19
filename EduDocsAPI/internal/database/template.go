@@ -9,6 +9,7 @@ import (
 func GetTemplateById(id uuid.UUID) (*models.Template, error) {
 	var template *models.Template
 	query, err := db.Query("SELECT * FROM templates WHERE id = $1", id)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Error while extracting template: ", err)
 		return nil, err
@@ -27,6 +28,7 @@ func GetTemplateById(id uuid.UUID) (*models.Template, error) {
 func GetAllTemplates() ([]*models.Template, error) {
 	templates := []*models.Template{}
 	query, err := db.Query("SELECT * FROM templates")
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get templates")
 		return nil, err
@@ -47,7 +49,8 @@ func GetAllTemplates() ([]*models.Template, error) {
 }
 
 func AddTemplate(template models.Template) error {
-	_, err := db.Query("INSERT INTO templates(route_to_document, name, responsible_admin)  VALUES($1, $2, $3)", template.RouteToDocument, template.Name, template.ResponsibleAdmin)
+	query, err := db.Query("INSERT INTO templates(route_to_document, name, responsible_admin)  VALUES($1, $2, $3)", template.RouteToDocument, template.Name, template.ResponsibleAdmin)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Cannot perform insert operation with template: ", err)
 	}
