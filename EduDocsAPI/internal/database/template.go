@@ -49,7 +49,7 @@ func GetAllTemplates() ([]*models.Template, error) {
 func AddTemplate(template models.Template) error {
 	_, err := db.Query("INSERT INTO templates(route_to_document, name, responsible_admin)  VALUES($1, $2, $3)", template.RouteToDocument, template.Name, template.ResponsibleAdmin)
 	if err != nil {
-		logger.ErrorLog.Print("Cannot add new template: ", err)
+		logger.ErrorLog.Print("Cannot perform insert operation with template: ", err)
 	}
 	return err
 }
