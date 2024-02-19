@@ -1,6 +1,4 @@
-
-
-  <!-- <div class="container w-container">
+<!-- <div class="container w-container">
     <div id="staff">
       <form action="/search" class="search-2 w-form"><input type="search" class="search w-input" maxlength="256"
           name="query" placeholder="Search…" id="search" required=""><input type="submit" value="Search"
@@ -8,4 +6,34 @@
           
       
     </div> -->
-    <router-outlet></router-outlet>
+<div class="nav">
+  <div class="wrap _w-custom structure-nav">
+    <div data-collapse="small" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+      data-doc-height="1" role="banner" class="structure-menu w-nav">
+      <div class="structure-cards-menu"><a routerLink="" class="structure-link">EduDocs</a>
+        <nav role="navigation" class="structure-project-menu w-nav-menu">
+          <div class="structure-menu-items">
+            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
+            <a (click)="requestsCallback()" class="structure-link structure-menu-link">Requests</a>
+            <a href="" class="structure-link structure-menu-link">Forgot password</a>
+            <a (click)="logInCalback()" class="btn btn-outline-dark w-button">{{this.btnText}}</a>
+          </div>
+        </nav>
+        <div mdbDropdownToggle class="structure-cards2-menu-btn w-nav-button" (click)="expand()"><img
+            src="https://uploads-ssl.webflow.com/57d2d032578a8a81597b9f6a/5c8477db7c584b1a11e71704_menu-icon%402x.png"
+            width="18" alt="" class="structurenav-menu"></div>
+      </div>
+      <div class="" data-wf-ignore="">
+        <nav [@expandedPanel]="state" role="navigation" class="structure-project-menu w-nav-menu w--nav-menu-open">
+          <div class="structure-menu-items">
+            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
+            <a (click)="requestsCallback()" class="structure-link structure-menu-link w-hidden-main w-hidden-medium">Requests</a>
+            <a href="" class="structure-link structure-menu-link w-hidden-main w-hidden-medium">Forgot password</a>
+            <a (click)="logInCalback()" class="btn btn-outline-dark w-button w-hidden-main w-hidden-medium">{{this.btnText}}</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

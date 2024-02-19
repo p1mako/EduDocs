@@ -1,31 +1,3 @@
-<div class="nav">
-  <div class="wrap _w-custom structure-nav">
-    <div data-collapse="small" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
-      data-doc-height="1" role="banner" class="structure-menu w-nav">
-      <div class="structure-cards-menu"><a routerLink="" class="structure-link">EduDocs</a>
-        <nav role="navigation" class="structure-project-menu w-nav-menu">
-          <div class="structure-menu-items">
-            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
-            <a href="" class="structure-link structure-menu-link"></a>
-            <a (click)="logOut()" class="btn btn-outline-dark w-button">LOG&nbsp;OUT</a>
-          </div>
-        </nav>
-        <div mdbDropdownToggle class="structure-cards2-menu-btn w-nav-button" (click)="expand()"><img
-            src="https://uploads-ssl.webflow.com/57d2d032578a8a81597b9f6a/5c8477db7c584b1a11e71704_menu-icon%402x.png"
-            width="18" alt="" class="structurenav-menu"></div>
-      </div>
-      <div [@expandedPanel]="state" class="w-nav-overlay" data-wf-ignore="" style="height: 10673px; display: block;">
-        <nav role="navigation" class="structure-project-menu w-nav-menu w--nav-menu-open">
-          <div class="structure-menu-items">
-            <div class="sections-menu-headline structure-menu-mobile w-hidden-main w-hidden-medium">Menu</div>
-            <a href="" class="structure-link structure-menu-link"></a>
-            <a (click)="logOut()" class="btn btn-outline-dark w-button">LOG&nbsp;OUT</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="list-section wf-section">
   <div class="w-dyn-list">
     <div role="list" class="list w-dyn-items">
@@ -34,12 +6,14 @@
           <div class="cta5-option-headline">
             <p class="name">Create new request</p>
           </div>
-          <select [(ngModel)]="template" class="form-select" aria-label="Default select example">
-            <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{item.name}}</option>
-          </select>
+          <span><select [(ngModel)]="template" class="form-select" >
+              <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{item.name}}</option>
+            </select></span>
+          <span><button (click)="editTemplates()" class="button-modify" role="button"><img style="height: 0.5cm;width: 0.5cm;"
+                src="/assets/edit.png" alt=""></button></span>
           <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Create</a></div>
         </div>
-        <div *ngFor="let request of requests;">
+        <div *ngFor="let request of this.storage.requests;">
           <div class="staff-wrap">
             <div class="cta5-option-headline">
               <p class="name">{{request.template.name}}</p>

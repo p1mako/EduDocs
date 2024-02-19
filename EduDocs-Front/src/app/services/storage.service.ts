@@ -7,6 +7,7 @@ export class StorageService {
 
   currentUser: Student | Professor | Admin | null = null;
   templates: Template[] = [];
+  requests: RequestEntity[] = []
 
   constructor() { }
 
@@ -19,6 +20,11 @@ export class StorageService {
     return this.currentUser;
   }
 
+  clean(){
+    this.templates = []
+    this.requests = []
+    this.currentUser = null
+  }
 }
 
 
@@ -38,6 +44,7 @@ export interface User extends Entity{
 export interface Template extends Entity{
   name: string;
   routeToDocument: string;
+  responsibleAdmin: AdministrationRole
 }
 
 export interface Specialization extends Entity{
@@ -46,16 +53,14 @@ export interface Specialization extends Entity{
 }
 
 export interface Student extends User{
-  availableRequests: RequestEntity[];
   entryDate: string;
   group: number;
   status: StudentStatus;
   uniqueNumber: number;
-  specizlization: Specialization;
+  specialization: Specialization;
 }
 
 export interface Admin extends User{
-  availableRequests: RequestEntity[];
   role: AdministrationRole;
   from: string;
   until: string;
@@ -63,13 +68,12 @@ export interface Admin extends User{
 }
 
 export interface Professor extends User{
-  availableRequests: RequestEntity[];
   degree: string;
 }
 
 export interface Document extends Entity{
   template: Template;
-  cerated: string;
+  created: string;
   validThrough: string;
   author: Admin;
   inititator: User;
@@ -98,7 +102,7 @@ export enum RequestStatus {
 }
 
 export enum AdministrationRole {
-  DEAN,
-  EDUCATIONAL_DEPUTY,
-  ACADEMIC_DEPUTY
+  Dean,
+  EducationalDeputy,
+  AcademicDeputy
 }
