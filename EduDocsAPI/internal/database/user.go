@@ -7,7 +7,7 @@ import (
 )
 
 func GetUserById(id uuid.UUID) (*models.User, error) {
-	var user *models.User
+	var user = new(models.User)
 	query, err := db.Query("SELECT * FROM users WHERE id = $1", id)
 	defer closeQuery(query)
 	if err != nil {

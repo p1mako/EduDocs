@@ -4,6 +4,7 @@ import (
 	"EduDocsAPI/internal/database"
 	"EduDocsAPI/internal/logger"
 	"EduDocsAPI/internal/models"
+	"errors"
 	"github.com/google/uuid"
 )
 
@@ -12,6 +13,9 @@ func GetAllRequests(username string) ([]*models.Request, error) {
 	if err != nil {
 		logger.ErrorLog.Print("Cannot extract user for requests by login from db")
 
+	}
+	if user == nil {
+		logger.ErrorLog.Print("Cannot get user for login: " + username)
 	}
 	student, professor, admin, err := GetExtendedUser(user)
 	if err != nil {
@@ -64,4 +68,21 @@ func GetAllRequests(username string) ([]*models.Request, error) {
 		}
 	}
 	return requests, nil
+}
+
+func AddRequest(request models.Request) (error, []*models.Request) {
+	if request.Initiator == nil || request.Template == nil {
+		logger.ErrorLog.Print("Empty or unacceptable input for addition of request")
+		return errors.New("empty or unacceptable input"), nil
+	}
+	err := database.AddRequest(request)
+	if err != nil {
+		logger.ErrorLog.Print("Could not add template to database")
+		return err, nil
+	}
+	requests, err := GetAllRequests(request.Initiator.Login)
+	if err != nil {
+		return err, nil
+	}
+	return err, requests
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func GetTemplateById(id uuid.UUID) (*models.Template, error) {
-	var template *models.Template
+	var template = new(models.Template)
 	query, err := db.Query("SELECT * FROM templates WHERE id = $1", id)
 	defer closeQuery(query)
 	if err != nil {
@@ -33,11 +33,8 @@ func GetAllTemplates() ([]*models.Template, error) {
 		logger.ErrorLog.Print("Could not execute query to get templates")
 		return nil, err
 	}
-	if !query.Next() {
-		return templates, err
-	}
 	for query.Next() {
-		var template *models.Template
+		var template = new(models.Template)
 		err = query.Scan(&template.Uuid, &template.RouteToDocument, &template.Name, &template.ResponsibleAdmin)
 		if err != nil {
 			logger.ErrorLog.Print("Model did not match the one in database")
