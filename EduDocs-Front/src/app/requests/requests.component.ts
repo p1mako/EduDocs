@@ -1,57 +1,58 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { RequestEntity, StorageService, Template } from '../services/storage.service';
+import { RequestEntity, RequestStatus, StorageService, Template } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { BackendService } from '../services/backend.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
   styleUrls: ['./requests.component.css', '../main/main.component.css'],
-  animations: [
-    trigger('expandedPanel', [
-      state('initial', style({ height: 0 })),
-      state('expanded', style({ height: '*' })),
-      transition('initial <=> expanded', animate('0.2s')),
-    ]),
-  ]
 })
 export class RequestsComponent {
 
-  requests: RequestEntity[] = [];
-  templates: Template[] = [];
   template: number = 1;
+  requests: RequestEntity[] = []
 
-  constructor(public storage: StorageService, private router: Router, private backend: BackendService){
-    this.requests = storage.user?.availableRequests!;
-   }
+  constructor(protected storage: StorageService, private router: Router, private backend: BackendService, private auth: AuthService) { }
+
+  private loadData() {
+    this.backend.getTemplates().subscribe({
+      next: (templates) => this.storage.templates = templates
+    })
+    this.backend.getRequests().subscribe({
+      next: (requests) => this.storage.requests.next(requests)
+    })
+  }
 
   ngOnInit() {
-    console.log(this.storage.user)
-    this.requests = this.storage.user?.availableRequests!;
-    console.log(this.requests);
-    this.backend.getTemplates();
+    console.log("ngOnInit")
+    this.storage.requests.subscribe({
+      next: (requests: RequestEntity[]) => {
+        this.requests = requests
+      }
+    })
+    //TODO:Make templates also a subject
+    this.loadData()
+    this.auth.loggedIn.subscribe((loggedIn) => {
+      console.log("Logged In: ", loggedIn)
+      if (loggedIn) {
+        this.loadData()
+      }
+    })
   }
 
-
-
-  public logOut(){
-    this.backend.logOut();
+  public editTemplates() {
+    this.router.navigateByUrl("/templates")
   }
 
-  isCreateOpened = false;
-  stateCreate = 'initial';
-
-  isExpanded: boolean = false
-  state: string = 'initial'
-
-  expand() {
-    this.isExpanded = !this.isExpanded
-    this.state = this.isExpanded ? 'expanded' : 'initial'
+  addRequest() {
+    console.log("lslsls")
+    console.log({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
+    this.backend.addRequest({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
   }
 
-  addRequest(){
-
+  protected identifyRequest(index:number, request: RequestEntity){
+    return request.id
   }
-
 }

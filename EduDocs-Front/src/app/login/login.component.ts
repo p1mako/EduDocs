@@ -17,18 +17,18 @@ export class LoginComponent {
   error = false;
 
   submit() : void{
-    this.backend.authenticate(this.login, this.password). subscribe({
-      next : (user) => {
-        this.storage.user = user;
-        this.error = false;
+    this.backend.logIn(this.login, this.password).subscribe({
+      next : (val) => {
+        this.error = val;
+        if (val) {
+          this.router.navigateByUrl("/requests")
+        }
       },
       error : (err) =>  {
         this.error = true;
-        
       },
       complete : () => {
         this.router.navigateByUrl("/requests");
-
       },
     });
   }

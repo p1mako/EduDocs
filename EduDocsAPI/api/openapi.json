@@ -1,0 +1,556 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "EduDocs",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Operations about user"
+    },
+    {
+      "name": "Auth",
+      "description": "Manipulations with user data"
+    },
+    {
+      "name": "Request",
+      "description": "Manipulations with requests"
+    },
+    {
+      "name": "Templates",
+      "description": "Manipulations with templates"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authentication",
+            "schema": {
+              "type": "string",
+              "example": "user:p@ssw0rd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Admin"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Student"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Professor"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          },
+          "401": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/user/update": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates info about user",
+        "description": "",
+        "operationId": "updateUser",
+        "requestBody": {
+          "description": "User object with changed information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Admin"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Student"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Professor"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Admin"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Student"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Professor"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong data"
+          }
+        }
+      }
+    },
+    "/user/create": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Creates new user",
+        "description": "",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "User object to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Admin"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Student"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Professor"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Admin"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Student"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Professor"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong data"
+          }
+        }
+      }
+    },
+    "/request/create": {
+      "post": {
+        "tags": [
+          "Request"
+        ],
+        "summary": "Creates new request",
+        "description": "",
+        "operationId": "createRequest",
+        "requestBody": {
+          "description": "Request object to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Request"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Wrong data"
+          }
+        }
+      }
+    },
+    "/request/all": {
+      "get": {
+        "tags": [
+          "Request"
+        ],
+        "summary": "Get all available requests",
+        "description": "",
+        "operationId": "getAllRequests",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/request/update": {
+      "post": {
+        "tags": [
+          "Request"
+        ],
+        "summary": "Updates request info",
+        "description": "",
+        "operationId": "updateRequest",
+        "requestBody": {
+          "description": "Request object to be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Wrong data"
+          }
+        }
+      }
+    },
+    "/templates/get": {
+      "get": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Get all available templates",
+        "description": "",
+        "operationId": "getAllTemplates",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/templates/add": {
+      "post": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Add new template",
+        "description": "",
+        "operationId": "addTemplate",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/schemas/Template"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Entity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "df3305c3-c8ef-4eeb-8538-6666e9a4d010"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "login",
+          "password"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "properties": {
+              "login": {
+                "type": "string",
+                "example": "fpm.******"
+              },
+              "password": {
+                "type": "string",
+                "format": "password",
+                "example": "9iuo8nvw65n98e5"
+              },
+              "name": {
+                "type": "string",
+                "example": "John"
+              },
+              "surname": {
+                "type": "string",
+                "example": "James"
+              },
+              "lastname": {
+                "type": "string",
+                "example": "Andreevich"
+              }
+            }
+          }
+        ]
+      },
+      "Student": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "properties": {
+              "entryDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "group": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Learning",
+                  "AcademicVacation"
+                ]
+              },
+              "uniqueNumber": {
+                "type": "number"
+              },
+              "specialization": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      },
+      "Professor": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "properties": {
+              "degree": {
+                "type": "string",
+                "example": "Старший преподаватель"
+              }
+            }
+          }
+        ]
+      },
+      "Admin": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "properties": {
+              "role": {
+                "type": "string",
+                "enum": [
+                  "Dean",
+                  "EducationalDeputy",
+                  "AcademicDeputy"
+                ]
+              },
+              "from": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "until": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "availableTemplates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Template"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Request": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Sent",
+                  "BeingProcessed",
+                  "CanBeTaken",
+                  "Received",
+                  "Declined",
+                  "Removed"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "document": {
+                "$ref": "#/components/schemas/Document"
+              },
+              "template": {
+                "$ref": "#/components/schemas/Template"
+              },
+              "initiator": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        ]
+      },
+      "Template": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "routeToDocument": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Document": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "properties": {
+              "template": {
+                "$ref": "#/components/schemas/Template"
+              },
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "validThrough": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "author": {
+                "$ref": "#/components/schemas/Admin"
+              },
+              "initiator": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        ]
+      },
+      "Specialization": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Информатика"
+              },
+              "registerNumber": {
+                "type": "number"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

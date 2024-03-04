@@ -12,6 +12,7 @@ import { RequestComponent } from './request/request.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
 import { NgFor } from '@angular/common';
+import { TemplatesComponent } from './templates/templates.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NgFor } from '@angular/common';
     RequestsComponent,
     RequestComponent,
     MainComponent,
+    TemplatesComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Admin, Professor, StorageService, Student, StudentStatus, Template, User } from './storage.service';
-import { Router, UrlTree } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { Observable, catchError, retry, throwError, of, map } from 'rxjs';
+import { RequestEntity, StorageService, Template } from './storage.service';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -10,53 +10,62 @@ import { Router, UrlTree } from '@angular/router';
 })
 export class BackendService {
 
-  constructor(private http: HttpClient, private storage: StorageService, private router: Router) { }
+  constructor(private storage: StorageService, private auth: AuthService, private router: Router) { }
 
-  private adress = "http://localhost:8080/EduDocsAPI/";
+  private adress = "http://localhost:8080/";
 
-  authenticate(login: string, password: string): Observable<Student | Professor | Admin> {
-    var postHttp = this.http.post<Student | Professor | Admin>(this.adress + BackendAdresses.login, {
-      login: login,
-      password: password
-    });
-    return postHttp;
+  private authenticate(): Observable<boolean> {
+    return this.auth.logIn();
+  }
+
+  logIn(login: string, password: string): Observable<boolean> {
+    return this.auth.logIn(login, password)
   }
 
   logOut() {
-    this.http.get<null>(this.adress + BackendAdresses.logout).subscribe(() => { this.router.navigateByUrl("/login") });
+    this.auth.logOut()
   }
 
-  isLoggedIn(): Observable<boolean | UrlTree> {
-    return new Observable<boolean | UrlTree>(
-      (subscriber) => {
-        this.http.get<Student | Professor | Admin>(this.adress + BackendAdresses.login, { responseType: "json" }).subscribe({
-          complete: () => {
-            subscriber.next(true);
-            subscriber.complete;
-          },
-          error: () => {
-            subscriber.next(this.router.parseUrl("/login"));
-            subscriber.complete();
-          }
-        })
-      }
-    );
+  isLoggedIn(): Observable<boolean> {
+    return this.authenticate();
   }
 
-  getTemplates() {
-    this.http.get<Template[]>(this.adress + BackendAdresses.getTemplates).subscribe((templates) => {
-      this.storage.templates = templates;
+  getTemplates(): Observable<Template[]> {
+    return this.auth.get<Template[]>(this.adress + BackendAdresses.templates).pipe<Template[]>(
+      catchError((err: { status_code: number, message: string }) => {
+        if (err.status_code == 401) {
+          this.auth.loggedIn.next(false)
+          this.router.navigateByUrl("/login")
+        }
+        return []
+      })
+    )
+  }
+
+  getRequests(): Observable<RequestEntity[]>{
+    return this.auth.get<RequestEntity[]>(this.adress + BackendAdresses.getRequests)
+  }
+
+  addTemplate(template: Template): Observable<Template[]> {
+    return this.auth.post<Template[]>(this.adress + BackendAdresses.templates, template)
+  }
+
+  addRequest(request: RequestEntity){
+    console.log("asasas")
+    return this.auth.post<RequestEntity[]>(this.adress + BackendAdresses.createRequest, request).subscribe({
+      next :(requests)=> {
+        this.storage.requests.next(requests)
+      },
     })
   }
 }
 
 enum BackendAdresses {
   login = "login",
-  logout = "logout",
   changeUser = "user/update",
   createUser = "user/create",
   createRequest = "request/create",
-  getRequests = "request/all",
+  getRequests = "requests",
   updateRequest = "request/update",
-  getTemplates = "templates"
+  templates = "templates",
 }
