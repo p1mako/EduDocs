@@ -7,8 +7,9 @@ import (
 )
 
 func GetUserById(id uuid.UUID) (*models.User, error) {
-	var user *models.User
+	var user = new(models.User)
 	query, err := db.Query("SELECT * FROM users WHERE id = $1", id)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Error while extracting user: ", err)
 		return nil, err
@@ -27,6 +28,7 @@ func GetUserById(id uuid.UUID) (*models.User, error) {
 func GetUserByLogin(login string) (*models.User, error) {
 	user := new(models.User)
 	query, err := db.Query("SELECT * FROM users WHERE login = $1", login)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Could not execute query to get user by login")
 		return nil, err
@@ -44,6 +46,7 @@ func GetUserByLogin(login string) (*models.User, error) {
 
 func GetAdmin(user *models.User) (*models.Admin, error) {
 	query, err := db.Query("SELECT a.assignment_start, a.assignment_end, a.role FROM users JOIN public.admins a on users.id = a.id WHERE a.id = $1", user.Uuid)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Cannot read from db: ", err)
 		return nil, err
@@ -63,6 +66,7 @@ func GetAdmin(user *models.User) (*models.Admin, error) {
 
 func GetProfessor(user *models.User) (*models.Professor, error) {
 	query, err := db.Query("SELECT p.degree FROM users JOIN public.professors p on users.id = p.id WHERE p.id = $1", user.Uuid)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Cannot read from db: ", err)
 		return nil, err

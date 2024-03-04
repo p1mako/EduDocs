@@ -1,1 +1,24 @@
-<p>templates works!</p>
+<form name="tamplate-form">
+  <div class="form-group">
+    <label for="templates">Шаблон</label>
+    <select [(ngModel)]="currentTemplateIndex" (ngModelChange)="onTemplateChange()" class="form-control" name="teampltes">
+      <option *ngFor="let template of this.storage.templates">{{template.name}}</option>
+      <option>Создать новый шаблон</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="name">Название</label>
+    <input [(ngModel)]="this.name" class="form-control" name="name">
+  </div>
+  <div class="form-group">
+    <label for="adminRole">Должность выпускающего</label>
+    <select [(ngModel)]="this.respAdmin" class="form-control" name="adminRole">
+      <option *ngFor="let admin of this.adminRoles">{{admin}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="name">Путь до файла с шаблоном документа</label>
+    <input [(ngModel)]="this.routeToDocument" class="form-control" name="routeToDocument">
+  </div>
+  <button type="button" class="btn btn-primary" (click)="submit()">Сохранить</button>
+</form>

@@ -7,8 +7,9 @@ import (
 )
 
 func GetDocumentById(id uuid.UUID) (*models.Document, error) {
-	var document *models.Document
+	var document = new(models.Document)
 	query, err := db.Query("SELECT * FROM users WHERE id = $1", id)
+	defer closeQuery(query)
 	if err != nil {
 		logger.ErrorLog.Print("Error while extracting document: ", err)
 		return nil, err

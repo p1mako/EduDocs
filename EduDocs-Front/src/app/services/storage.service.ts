@@ -1,39 +1,41 @@
-import { Injectable } from '@angular/core';
+import { getLocaleId } from '@angular/common';
+import { Injectable, InjectionToken, LOCALE_ID, inject } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  currentUser: Student | Professor | Admin | null = null;
+  currentUser: Student | Professor | Admin | undefined = undefined;
   templates: Template[] = [];
-  requests: RequestEntity[] = []
+  requests: Subject<RequestEntity[]> = new Subject<RequestEntity[]>()
 
   constructor() { }
 
-  public set user(currentUser : Student | Professor | Admin | null) {
+  public set user(currentUser: Student | Professor | Admin | undefined) {
     this.currentUser = currentUser;
   }
 
 
-  public get user() : Student | Professor | Admin | null {
+  public get user(): Student | Professor | Admin | undefined {
     return this.currentUser;
   }
 
-  clean(){
+  clean() {
     this.templates = []
-    this.requests = []
-    this.currentUser = null
+    this.requests.next([])
+    this.currentUser = undefined
   }
 }
 
 
 
-export interface Entity{
-  id: string | null;
+export interface Entity {
+  id: string | undefined;
 }
 
-export interface User extends Entity{
+export interface User extends Entity {
   login: string;
   password: string;
   name: string;
@@ -41,18 +43,18 @@ export interface User extends Entity{
   lastName: string | null;
 }
 
-export interface Template extends Entity{
+export interface Template extends Entity {
   name: string;
   routeToDocument: string;
   responsibleAdmin: AdministrationRole
 }
 
-export interface Specialization extends Entity{
+export interface Specialization extends Entity {
   name: string;
   registerNumber: string;
 }
 
-export interface Student extends User{
+export interface Student extends User {
   entryDate: string;
   group: number;
   status: StudentStatus;
@@ -60,18 +62,18 @@ export interface Student extends User{
   specialization: Specialization;
 }
 
-export interface Admin extends User{
+export interface Admin extends User {
   role: AdministrationRole;
   from: string;
   until: string;
   availableTemplates: [Template];
 }
 
-export interface Professor extends User{
+export interface Professor extends User {
   degree: string;
 }
 
-export interface Document extends Entity{
+export interface Document extends Entity {
   template: Template;
   created: string;
   validThrough: string;
@@ -79,7 +81,7 @@ export interface Document extends Entity{
   inititator: User;
 }
 
-export interface RequestEntity extends Entity{
+export interface RequestEntity extends Entity {
   status: RequestStatus;
   created: string | null;
   document: Document | null;
@@ -87,7 +89,7 @@ export interface RequestEntity extends Entity{
   initiator: User;
 }
 
-export enum StudentStatus{
+export enum StudentStatus {
   Learning,
   AcademicVacation,
 }
@@ -104,5 +106,36 @@ export enum RequestStatus {
 export enum AdministrationRole {
   Dean,
   EducationalDeputy,
-  AcademicDeputy
+  AcademicDeputy,
+}
+
+export class Locale {
+
+  static getLocaleAdministartionRoles(): string[] {
+    var locale = inject(LOCALE_ID)
+    console.log(locale)
+    if (getLocaleId(locale) == 'ru') {
+      return ["Декан",
+        "Зам. декана по учебной работе",
+        "Зам. декана по воспитательной работе"]
+    } else {
+      return ["Dean",
+        "Educational deputy",
+        "Academic deputy"]
+    }
+  }
+}
+
+export function getLocaleAdministartionRoles(): string[] {
+  var locale = inject(LOCALE_ID)
+  console.log(locale)
+  if (getLocaleId(locale) == 'ru') {
+    return ["Декан",
+      "Зам. декана по учебной работе",
+      "Зам. декана по воспитательной работе"]
+  } else {
+    return ["Dean",
+      "Educational deputy",
+      "Academic deputy"]
+  }
 }

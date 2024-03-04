@@ -28,5 +28,9 @@ func AddTemplate(template models.Template) error {
 	if template.RouteToDocument == "" || template.Name == "" {
 		return errors.New("empty input")
 	}
-	return database.AddTemplate(template)
+	err := database.AddTemplate(template)
+	if err != nil {
+		logger.ErrorLog.Print("Could not add template to database")
+	}
+	return err
 }
