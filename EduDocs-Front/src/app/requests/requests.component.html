@@ -6,26 +6,27 @@
           <div class="cta5-option-headline">
             <p class="name">Create new request</p>
           </div>
-          <span><select [(ngModel)]="template" class="form-select" >
-              <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{item.name}}</option>
+          <span><select [(ngModel)]="template" class="form-select">
+              <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{ item.name }}</option>
             </select></span>
-          <span><button (click)="editTemplates()" class="button-modify" role="button"><img style="height: 0.5cm;width: 0.5cm;"
-                src="/assets/edit.png" alt=""></button></span>
+          <span><button (click)="editTemplates()" class="button-modify" role="button"><img
+            style="height: 0.5cm;width: 0.5cm;"
+            src="/assets/edit.png" alt=""></button></span>
           <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Create</a></div>
         </div>
-        <div *ngFor="let request of this.requests; trackBy: identifyRequest" >
+        <div *ngFor="let request of this.requests; trackBy: identifyRequest">
           <div class="staff-wrap">
             <div class="cta5-option-headline">
-              <p class="name">{{request.template.name}}</p>
+              <p class="name">{{ request.template.name }}</p>
               <div class="label">
-                <div class="phone">{{request.created}}</div>
+                <div class="phone">{{ request.created }}</div>
               </div>
-              <div class="label label-aqua">{{request.created}}</div>
+              <div class="label label-aqua">{{ request.created }}</div>
               <div [hidden]="request.document == null" class="label label-grey">
-                <div class="position">{{request.document?.author?.name}}</div>
+                <div class="position">{{ request.document?.author?.name }}</div>
               </div>
               <div [style.background-color]="request.status" class="label-2 label-red">
-                <div class="location">{{request.status.toString()}}</div>
+                <div class="location">{{ request.status.toString() }}</div>
               </div>
             </div>
             <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>
