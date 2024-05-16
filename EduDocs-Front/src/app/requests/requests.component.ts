@@ -20,11 +20,7 @@ export class RequestsComponent {
     this.backend.getTemplates().subscribe({
       next: (templates) => this.storage.templates = templates
     })
-    this.backend.getRequests().subscribe({
-      next: (requests) => {
-        this.storage.requests.next(requests)
-      }
-    })
+    this.backend.getRequests();
   }
 
   ngOnInit() {

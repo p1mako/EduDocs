@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, assertPlatform } from '@angular/core';
 import { Buffer } from "buffer";
 import { Observable, Subject, asyncScheduler, catchError, map, of, scheduled } from 'rxjs';
 import { Admin, Professor, StorageService, Student } from './storage.service';
@@ -17,16 +17,22 @@ export class AuthService {
   private password: string | null = null
 
   private authUser(user: string, password: string): Observable<boolean> {
-    var headers = {headers: this.getAuthHeaders(user, password)}
+    var headers = { headers: this.getAuthHeaders(user, password) }
     return new Observable<boolean>((subscriber) => {
-      this.http.get<Admin | Professor | Student>("http://localhost:8080/login",
+      this.http.get("http://localhost:8080/login",
         headers).subscribe({
           error: () => {
             subscriber.next(false)
             this.loggedIn.next(false)
           },
           next: (val) => {
-            this.storage.currentUser = val
+            if ((val as Admin).from) {
+              this.storage.admin = val as Admin
+            } else if (val as Professor) {
+              this.storage.professor = val as Professor
+            } else if (val as Student) {
+              this.storage.student = val as Student
+            }
             this.loggedIn.next(true)
             subscriber.next(true)
           },

@@ -7,18 +7,50 @@ import { Subject } from 'rxjs';
 })
 export class StorageService {
 
-  currentUser: Student | Professor | Admin | undefined = undefined;
+  private currentRole : Roles = Roles.Undefined
+  private currentUser : User | undefined = undefined
   templates: Template[] = [];
   requests: Subject<RequestEntity[]> = new Subject<RequestEntity[]>()
 
   constructor() { }
 
-  public set user(currentUser: Student | Professor | Admin | undefined) {
-    this.currentUser = currentUser;
+  public get admin() : Admin | undefined {
+    if (this.currentRole != Roles.Admin){
+      return undefined
+    }
+    return this.currentUser as Admin
   }
 
+  public set admin(admin: Admin | undefined ) {
+    this.currentRole = Roles.Admin
+    this.currentUser = admin
+  }
 
-  public get user(): Student | Professor | Admin | undefined {
+  public get professor() : Professor | undefined {
+    if (this.currentRole != Roles.Professor){
+      return undefined
+    }
+    return this.currentUser as Professor
+  }
+
+  public set professor(professor: Professor | undefined ) {
+    this.currentRole = Roles.Professor
+    this.currentUser = professor
+  }
+
+  public get student() : Student | undefined {
+    if (this.currentRole != Roles.Student){
+      return undefined
+    }
+    return this.currentUser as Student
+  }
+
+  public set student(student: Student | undefined ) {
+    this.currentRole = Roles.Student
+    this.currentUser = student
+  }
+
+  public get user(): User | undefined {
     return this.currentUser;
   }
 
@@ -124,6 +156,26 @@ export class Locale {
         "Academic deputy"]
     }
   }
+
+  static getLocaleRequestStatuses(): string[] {
+    var locale = inject(LOCALE_ID)
+    console.log(locale)
+    if (getLocaleId(locale) == 'ru') {
+      return ["Отправлено",
+        "В обработке",
+        "Готово к выдаче",
+        "Выдано",
+        "Отклонено",
+        "Удалено",]
+    } else {
+      return ["Sent",
+      "In process",
+      "To be taken",
+      "Received",
+      "Declined",
+      "Removed"]
+    }
+  }
 }
 
 export function getLocaleAdministartionRoles(): string[] {
@@ -138,4 +190,12 @@ export function getLocaleAdministartionRoles(): string[] {
       "Educational deputy",
       "Academic deputy"]
   }
+}
+
+
+export enum Roles {
+  Undefined,
+  Admin,
+  Professor,
+  Student
 }

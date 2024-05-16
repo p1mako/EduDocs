@@ -42,8 +42,12 @@ export class BackendService {
     )
   }
 
-  getRequests(): Observable<RequestEntity[]>{
-    return this.auth.get<RequestEntity[]>(this.adress + BackendAdresses.getRequests)
+  getRequests() {
+    this.auth.get<RequestEntity[]>(this.adress + BackendAdresses.getRequests).subscribe({
+      next: (requests) => {
+        this.storage.requests.next(requests)
+      }
+    })
   }
 
   addTemplate(template: Template): Observable<Template[]> {
@@ -53,6 +57,14 @@ export class BackendService {
   addRequest(request: RequestEntity){
     console.log("asasas")
     return this.auth.post<RequestEntity[]>(this.adress + BackendAdresses.createRequest, request).subscribe({
+      next :(requests)=> {
+        this.storage.requests.next(requests)
+      },
+    })
+  }
+
+  updateRequest(request: RequestEntity) {
+    this.auth.post<RequestEntity[]>(this.adress + BackendAdresses.updateRequest, request).subscribe({
       next :(requests)=> {
         this.storage.requests.next(requests)
       },
