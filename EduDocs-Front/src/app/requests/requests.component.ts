@@ -52,7 +52,7 @@ export class RequestsComponent {
     this.backend.addRequest({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
   }
 
-  protected identifyRequest(index:number, request: RequestEntity){
+  protected identifyRequest(index: number, request: RequestEntity) {
     return request.id
   }
 }

@@ -19,14 +19,14 @@
             <div class="cta5-option-headline">
               <p class="name">{{ request.template.name }}</p>
               <div class="label">
-                <div class="phone">{{ request.created }}</div>
+                <div class="phone">created: {{ request.created | date : 'dd/MM/yyyy, HH:mm'}}</div>
               </div>
-              <div class="label label-aqua">{{ request.created }}</div>
-              <div [hidden]="request.document == null" class="label label-grey">
+              <div class="label label-aqua">{{ request.initiator.name }} {{request.initiator.surname}}</div>
+              <div [hidden]="request.document == null || request.document.author == null" class="label label-grey">
                 <div class="position">{{ request.document?.author?.name }}</div>
               </div>
               <div [style.background-color]="request.status" class="label-2 label-red">
-                <div class="location">{{ request.status.toString() }}</div>
+                <div class="location">{{ request.status | status }}</div>
               </div>
             </div>
             <div class="staff-button-wrap"><a routerLink="/request" class="btn w-button">Open</a></div>

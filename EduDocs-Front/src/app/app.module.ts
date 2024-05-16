@@ -13,6 +13,7 @@ import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
 import { NgFor } from '@angular/common';
 import { TemplatesComponent } from './templates/templates.component';
+import { StatusPipe } from './pipes/status.pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { TemplatesComponent } from './templates/templates.component';
     RequestComponent,
     MainComponent,
     TemplatesComponent,
+    StatusPipe,
   ],
   imports: [
     BrowserModule,
