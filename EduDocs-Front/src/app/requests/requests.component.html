@@ -4,15 +4,20 @@
       <div role="listitem" class="w-dyn-item">
         <div class="staff-wrap">
           <div class="cta5-option-headline">
-            <p class="name">Create new request</p>
+            <p class="name">Создать новый запрос</p>
           </div>
           <span><select [(ngModel)]="template" class="form-select">
               <option *ngFor="let item of this.storage.templates; index as i" value="{{i}}">{{ item.name }}</option>
             </select></span>
-          <span><button (click)="editTemplates()" class="button-modify" role="button"><img
-            style="height: 0.5cm;width: 0.5cm;"
-            src="/assets/edit.png" alt=""></button></span>
-          <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Create</a></div>
+          <span><button (click)="editTemplates()" [hidden]="storage.admin == undefined" class="button-modify"
+              role="button"><img style="height: 0.5cm;width: 0.5cm;" src="/assets/edit.png" alt=""></button></span>
+          <div class="staff-button-wrap"><a (click)="addRequest()" class="btn w-button">Создать</a></div>
+        </div>
+        <div>
+          <label for="adminRole">Фильтр</label>
+          <select [(ngModel)]="status" (ngModelChange)="onStatusChange()" class="form-control" name="status">
+            <option *ngFor="let status of this.statuses">{{status}}</option>
+          </select>
         </div>
         <div *ngFor="let request of this.requests; trackBy: identifyRequest">
           <div class="staff-wrap">
@@ -29,7 +34,8 @@
                 <div class="location">{{ request.status | status }}</div>
               </div>
             </div>
-            <div class="staff-button-wrap"><a [routerLink]="['/request', request.uuid]" class="btn w-button">Open</a></div>
+            <div class="staff-button-wrap"><a [routerLink]="['/request', request.uuid]" class="btn w-button">Открыть</a>
+            </div>
           </div>
         </div>
       </div>

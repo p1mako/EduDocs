@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { RequestEntity, RequestStatus, StorageService, Template } from '../services/storage.service';
+import { Locale, RequestEntity, RequestStatus, StorageService, Template } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { BackendService } from '../services/backend.service';
 import { AuthService } from '../services/auth.service';
+import { findIndex } from 'rxjs';
 
 @Component({
   selector: 'app-requests',
@@ -12,9 +13,29 @@ import { AuthService } from '../services/auth.service';
 export class RequestsComponent {
 
   template: number = 1;
+  allRequests: RequestEntity[] = []
   requests: RequestEntity[] = []
 
-  constructor(protected storage: StorageService, private router: Router, private backend: BackendService, private auth: AuthService) { }
+  protected statuses: string[] = ["Все"]
+  protected status = this.statuses[0];
+  constructor(protected storage: StorageService, private router: Router, private backend: BackendService, private auth: AuthService) { 
+    this.statuses = this.statuses.concat(Locale.getLocaleRequestStatuses());
+  }
+
+  protected onStatusChange() {
+    if (this.status == this.statuses[0]) {
+      this.requests = this.allRequests
+      return
+    }
+    var tempRequests: RequestEntity[] = []
+    for (var i = 0; i < this.allRequests.length; i++) {
+      if (this.allRequests[i].status == this.statuses.indexOf(this.status) - 1) {
+        tempRequests.push(this.allRequests[i])
+      }
+    }
+    this.requests = tempRequests
+    console.log(this.requests)
+  }
 
   private loadData() {
     this.backend.getTemplates().subscribe({
@@ -27,7 +48,8 @@ export class RequestsComponent {
     console.log("ngOnInit")
     this.storage.requests.subscribe({
       next: (requests: RequestEntity[]) => {
-        this.requests = requests
+        this.allRequests = requests
+        this.onStatusChange()
       }
     })
     //TODO:Make templates also a subject

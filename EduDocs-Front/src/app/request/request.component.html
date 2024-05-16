@@ -6,7 +6,7 @@
     <div class="form-group">
         <label for="adminRole">Статус запроса</label>
         <select [(ngModel)]="status" class="form-control" name="status">
-            <option *ngFor="let admin of this.statuses">{{admin}}</option>
+            <option *ngFor="let status of this.statuses">{{status}}</option>
         </select>
     </div>
     <div class="form-group">
