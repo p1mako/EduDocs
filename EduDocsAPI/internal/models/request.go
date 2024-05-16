@@ -6,7 +6,7 @@ import (
 )
 
 type Request struct {
-	Entity    `json:"entity"`
+	Entity
 	Status    enums.RequestStatus `json:"status"`
 	Created   time.Time           `json:"created"`
 	Document  *Document           `json:"document"`
