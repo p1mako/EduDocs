@@ -5,6 +5,7 @@ import (
 	"EduDocsAPI/internal/logger"
 	"EduDocsAPI/internal/models"
 	"errors"
+
 	"github.com/google/uuid"
 )
 
@@ -77,7 +78,24 @@ func AddRequest(request models.Request) (error, []*models.Request) {
 	}
 	err := database.AddRequest(request)
 	if err != nil {
-		logger.ErrorLog.Print("Could not add template to database")
+		logger.ErrorLog.Print("Could not add request to database")
+		return err, nil
+	}
+	requests, err := GetAllRequests(request.Initiator.Login)
+	if err != nil {
+		return err, nil
+	}
+	return err, requests
+}
+
+func UpdateRequest(request models.Request) (error, []*models.Request) {
+	if request.Initiator == nil || request.Template == nil || request.Uuid == uuid.Nil {
+		logger.ErrorLog.Print("Empty or unacceptable input for update of the request")
+		return errors.New("empty or unacceptable input"), nil
+	}
+	err := database.UpdateRequest(request)
+	if err != nil {
+		logger.ErrorLog.Print("Could not update request in database")
 		return err, nil
 	}
 	requests, err := GetAllRequests(request.Initiator.Login)

@@ -59,7 +59,19 @@ func AddRequest(request models.Request) error {
 	query, err := db.Query("INSERT INTO requests(status, initiator, template)  VALUES($1, $2, $3)", request.Status, request.Initiator.Uuid, request.Template.Uuid)
 	defer closeQuery(query)
 	if err != nil {
-		logger.ErrorLog.Print("Cannot perform insert operation with template: ", err)
+		logger.ErrorLog.Print("Cannot perform insert operation with request: ", err)
+	}
+	return err
+}
+
+func UpdateRequest(request models.Request) error {
+	fmt.Print(request.Status)
+	fmt.Print(request.Initiator.Uuid)
+	fmt.Print(request.Template.Uuid)
+	query, err := db.Query("UPDATE requests SET status = $1, initiator = $2, template = $3 WHERE id = $4", request.Status, request.Initiator.Uuid, request.Template.Uuid, request.Uuid)
+	defer closeQuery(query)
+	if err != nil {
+		logger.ErrorLog.Print("Cannot perform update operation with request: ", err)
 	}
 	return err
 }
