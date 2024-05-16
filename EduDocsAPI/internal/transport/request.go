@@ -34,6 +34,7 @@ func handleUpdateRequest(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		_ = logger.LogResponseWriteError(w.Write([]byte(err.Error())))
 		return
 	}
 	err, requests := services.UpdateRequest(request)

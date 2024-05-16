@@ -16,7 +16,7 @@ func isAllowedOrigin(origin string) bool {
 
 func CorsInterceptor(next http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		logger.InfoLog.Printf("Got %s request from %s", request.Method, request.Header.Get("Origin"))
+		logger.InfoLog.Printf("Got %s request from %s to the %s", request.Method, request.Header.Get("Origin"), request.RequestURI)
 		if isAllowedOrigin(request.Header.Get("Origin")) {
 			logger.InfoLog.Print("Setting headers for allowed referrer")
 			writer.Header().Set("Access-Control-Allow-Origin", request.Header.Get("Origin"))

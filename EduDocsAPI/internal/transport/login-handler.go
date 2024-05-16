@@ -2,6 +2,7 @@ package transport
 
 import (
 	"EduDocsAPI/internal/logger"
+	"EduDocsAPI/internal/services"
 	"encoding/json"
 	"net/http"
 )
@@ -12,12 +13,20 @@ func HandleLogin(rw http.ResponseWriter, request *http.Request) {
 		return
 	}
 	user := authenticate(rw, request)
+	student, professor, admin, err := services.GetExtendedUser(user)
 	login, _, _ := request.BasicAuth()
 	if user == nil {
 		logger.InfoLog.Printf("Unauthenticated user with login %s", login)
 		return
 	}
-	userJson, err := json.Marshal(user)
+	var userJson []byte
+	if student != nil {
+		userJson, err = json.Marshal(student)
+	} else if admin != nil {
+		userJson, err = json.Marshal(admin)
+	} else {
+		userJson, err = json.Marshal(professor)
+	}
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 		logger.ErrorLog.Print("Could not encode the answer for client: ", err)

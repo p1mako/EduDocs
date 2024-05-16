@@ -50,6 +50,7 @@ func setHandlers() {
 	http.HandleFunc("/templates", transport.CorsInterceptor(transport.BasicAuth(transport.HandleTemplates)))
 	http.HandleFunc("/requests", transport.CorsInterceptor(transport.BasicAuth(transport.HandleRequests)))
 	http.HandleFunc("/request/create", transport.CorsInterceptor(transport.BasicAuth(transport.HandleAddRequest)))
+	http.HandleFunc("/request/update", transport.CorsInterceptor(transport.BasicAuth(transport.HandleUpdateRequest)))
 }
 
 func afterServerEnded() {
