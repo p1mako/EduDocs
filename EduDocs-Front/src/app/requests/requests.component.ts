@@ -46,7 +46,7 @@ export class RequestsComponent {
 
   addRequest() {
     console.log("lslsls")
-    console.log({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
+    console.log({ uuid: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
     this.backend.addRequest({ uuid: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
   }
 

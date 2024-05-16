@@ -1,17 +1,17 @@
 <form name="tamplate-form">
     <div class="form-group">
-      <label for="name">Название</label>
-      <input disabled="true" [(ngModel)]="this.request!.template!.name" class="form-control" name="name">
+        <label for="name">Название</label>
+        <input disabled="true" [(ngModel)]="this.request!.template!.name" name="name" class="form-control" name="name">
     </div>
     <div class="form-group">
-      <label for="adminRole">Статус запроса</label>
-      <select [(ngModel)]="this.status" class="form-control" name="adminRole">
-        <option *ngFor="let admin of this.statuses">{{admin}}</option>
-      </select>
+        <label for="adminRole">Статус запроса</label>
+        <select [(ngModel)]="status" class="form-control" name="status">
+            <option *ngFor="let admin of this.statuses">{{admin}}</option>
+        </select>
     </div>
     <div class="form-group">
-      <label for="name">Срок действия</label>
-      <input [(ngModel)]="this.validThrough" class="form-control" name="routeToDocument">
+        <label for="name">Срок действия</label>
+        <input [(ngModel)]="validThrough" name="validThrough" type='datetime-local' class="form-control" />
     </div>
     <button type="button" class="btn btn-primary" (click)="submit()">Сохранить</button>
-  </form>
+</form>

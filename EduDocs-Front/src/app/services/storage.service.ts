@@ -107,7 +107,7 @@ export interface Professor extends User {
 
 export interface Document extends Entity {
   template: Template;
-  created: string;
+  created: string | undefined;
   validThrough: string;
   author: Admin;
   inititator: User;

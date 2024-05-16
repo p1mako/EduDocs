@@ -26,11 +26,15 @@ export class AuthService {
             this.loggedIn.next(false)
           },
           next: (val) => {
+            console.log(val)
             if ((val as Admin).from) {
+              console.log("Admin")
               this.storage.admin = val as Admin
-            } else if (val as Professor) {
+            } else if ((val as Professor).degree) {
+              console.log("Professor")
               this.storage.professor = val as Professor
-            } else if (val as Student) {
+            } else if ((val as Student).specialization) {
+              console.log("Student")
               this.storage.student = val as Student
             }
             this.loggedIn.next(true)

@@ -11,7 +11,7 @@ import { BackendService } from '../services/backend.service';
 
 export class RequestComponent {
 
-  protected status: number = 0;
+  protected status: string = "";
   protected document: string = "";
   protected validThrough: string = "";
   protected statuses: string[] = Locale.getLocaleRequestStatuses()
@@ -37,17 +37,26 @@ export class RequestComponent {
   }
 
   onRequestChange() {
-    this.request!.status = this.status
-        this.request!.document = {
-          uuid: undefined,
-          created: "",
-          inititator: this.request!.initiator,
-          template: this.request!.template,
-          validThrough: this.validThrough,
-          author: this.storage.admin!
-        }
+    this.request!.status = this.statuses.indexOf(this.status)
+    this.request!.document = {
+      uuid: undefined,
+      created: undefined,
+      inititator: this.request!.initiator,
+      template: this.request!.template,
+      validThrough: this.validThrough,
+      author: this.storage.admin!
+    }
   }
   submit() {
+    this.request!.status = this.statuses.indexOf(this.status)
+    this.request!.document = {
+      uuid: undefined,
+      created: undefined,
+      inititator: this.request!.initiator,
+      template: this.request!.template,
+      validThrough: this.validThrough,
+      author: this.storage.admin!
+    }
     this.backend.updateRequest(this.request!)
   }
 }
