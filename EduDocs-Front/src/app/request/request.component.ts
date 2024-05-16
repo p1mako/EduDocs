@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-request',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./request.component.css']
 })
 export class RequestComponent {
+  private id : string = ""
 
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.params.subscribe(params => {
+      this.id = params['id'];      
+      });
+  }
 }

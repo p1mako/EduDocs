@@ -32,7 +32,7 @@ export class StorageService {
 
 
 export interface Entity {
-  id: string | undefined;
+  uuid: string | undefined;
 }
 
 export interface User extends Entity {

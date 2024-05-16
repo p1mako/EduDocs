@@ -39,7 +39,7 @@ var loggedInGuard = () => {
 const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'login', component: LoginComponent, canActivate: [loggedInGuard] },
-  { path: 'request', component: RequestComponent, canActivate: [loginGuard] },
+  { path: 'request/:id', component: RequestComponent, canActivate: [loginGuard] },
   { path: 'requests', component: RequestsComponent, canActivate: [loginGuard]},
   { path: 'templates', component: TemplatesComponent, canActivate: [loginGuard]}
 ];

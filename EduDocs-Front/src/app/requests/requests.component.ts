@@ -21,7 +21,9 @@ export class RequestsComponent {
       next: (templates) => this.storage.templates = templates
     })
     this.backend.getRequests().subscribe({
-      next: (requests) => this.storage.requests.next(requests)
+      next: (requests) => {
+        this.storage.requests.next(requests)
+      }
     })
   }
 
@@ -49,10 +51,10 @@ export class RequestsComponent {
   addRequest() {
     console.log("lslsls")
     console.log({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
-    this.backend.addRequest({ id: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
+    this.backend.addRequest({ uuid: undefined, created: null, document: null, initiator: this.storage.user!, status: RequestStatus.Sent, template: this.storage.templates[this.template] })
   }
 
   protected identifyRequest(index: number, request: RequestEntity) {
-    return request.id
+    return request.uuid
   }
 }

@@ -28,7 +28,7 @@ export class TemplatesComponent {
   onTemplateChange() {
     var template = this.storage.templates[this.currentTemplateIndex]
     if (template != undefined) {
-      this.id = template.id
+      this.id = template.uuid
       this.name = template.name
       this.routeToDocument = template.routeToDocument
       this.respAdmin = Locale.getLocaleAdministartionRoles()[template.responsibleAdmin]
@@ -36,7 +36,7 @@ export class TemplatesComponent {
   }
 
   submit() {
-    var template: Template = { id: this.id, name: this.name, responsibleAdmin: this.adminRoles.indexOf(this.respAdmin), routeToDocument: this.routeToDocument }
+    var template: Template = { uuid: this.id, name: this.name, responsibleAdmin: this.adminRoles.indexOf(this.respAdmin), routeToDocument: this.routeToDocument }
     console.log(template)
     this.backend.addTemplate(template).subscribe(
       {
